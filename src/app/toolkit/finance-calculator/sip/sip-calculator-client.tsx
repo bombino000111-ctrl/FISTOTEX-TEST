@@ -44,13 +44,13 @@ export default function SIPCalculatorClient() {
                 <Input
                   id="monthly-investment"
                   type="number"
-                  value={monthlyInvestment.toString()}
+                  value={String(monthlyInvestment)}
                   onChange={(e) => setMonthlyInvestment(Math.max(0, Number(e.target.value)))}
                   min={0}
                 />
                 <Slider
-                  value={[monthlyInvestment]}
-                  onValueChange={([v]: number[]) => setMonthlyInvestment(v)}
+                  value={monthlyInvestment}
+                  onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
                   min={0}
                   max={100000}
                   step={500}
@@ -63,14 +63,14 @@ export default function SIPCalculatorClient() {
                 <Input
                   id="annual-return"
                   type="number"
-                  value={annualReturn.toString()}
+                  value={String(annualReturn)}
                   onChange={(e) => setAnnualReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
                   min={0}
                   max={30}
                 />
                 <Slider
-                  value={[annualReturn]}
-                  onValueChange={([v]: number[]) => setAnnualReturn(v)}
+                  value={annualReturn}
+                  onChange={(e) => setAnnualReturn(Number(e.target.value))}
                   min={0}
                   max={30}
                   step={0.5}
@@ -83,14 +83,14 @@ export default function SIPCalculatorClient() {
                 <Input
                   id="years"
                   type="number"
-                  value={years.toString()}
+                  value={String(years)}
                   onChange={(e) => setYears(Math.max(1, Math.min(40, Number(e.target.value))))}
                   min={1}
                   max={40}
                 />
                 <Slider
-                  value={[years]}
-                  onValueChange={([v]: number[]) => setYears(v)}
+                  value={years}
+                  onChange={(e) => setYears(Number(e.target.value))}
                   min={1}
                   max={40}
                   step={1}

@@ -1,16 +1,19 @@
 /**
  * Site Configuration
- * Centralized configuration for FinanceHub
+ * Centralized configuration for Fistotex
  */
 
 export const siteConfig = {
-  name: "FinanceHub",
-  description: "Smarter Financial Decisions Start Here - Stay informed with the latest financial news and use powerful calculators to plan your money with confidence.",
+  name: "Fistotex",
+  description: "Your trusted financial companion. Expert financial news, powerful calculators, and smart money tools for informed decisions.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ogImage: "/og-image.png",
-  contactEmail: process.env.CONTACT_EMAIL || "contact@example.com",
-  ownerName: process.env.SITE_OWNER_NAME || "FinanceHub",
+  contactEmail: process.env.CONTACT_EMAIL || "contact@fistotex.com",
+  ownerName: process.env.SITE_OWNER_NAME || "Fistotex",
   businessAddress: process.env.BUSINESS_ADDRESS || "",
+
+  // GA4 Configuration
+  gaId: process.env.NEXT_PUBLIC_GA_ID || "",
   
   // Currency settings
   currency: "INR" as const,

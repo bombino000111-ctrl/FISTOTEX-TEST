@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { NewsArticle } from "@/types/news";
@@ -9,7 +11,7 @@ interface NewsCardProps {
 
 export function NewsCard({ article }: NewsCardProps) {
   return (
-    <article className="group relative flex flex-col h-full rounded-xl border bg-card p-4 shadow-sm transition-all hover:shadow-md">
+    <article className="group relative flex flex-col h-full rounded-xl border bg-card p-4 shadow-sm transition-all hover:shadow-md cursor-pointer">
       <div className="flex flex-col gap-3 flex-1">
         {/* Source & Category */}
         <div className="flex items-center justify-between gap-2">

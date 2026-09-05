@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fistotex OG Image Generator</title>
+  <style>
+    body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #0f172a; }
+    canvas { border: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="1200" height="630"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Background gradient
+    const bgGradient = ctx.createLinearGradient(0, 0, 1200, 630);
+    bgGradient.addColorStop(0, '#0f172a');
+    bgGradient.addColorStop(0.5, '#1e293b');
+    bgGradient.addColorStop(1, '#0f172a');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, 1200, 630);
+    
+    // Decorative circles
+    const accentGradient = ctx.createLinearGradient(0, 0, 200, 0);
+    accentGradient.addColorStop(0, '#22d3ee');
+    accentGradient.addColorStop(1, '#3b82f6');
+    
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = accentGradient;
+    ctx.beginPath();
+    ctx.arc(100, 100, 80, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.globalAlpha = 0.08;
+    ctx.beginPath();
+    ctx.arc(1100, 530, 120, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.globalAlpha = 0.05;
+    ctx.beginPath();
+    ctx.arc(1150, 80, 60, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    
+    // Grid pattern
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 0.5;
+    ctx.globalAlpha = 0.03;
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(1200, 630);
+    ctx.moveTo(0, 630); ctx.lineTo(1200, 0);
+    ctx.moveTo(600, 0); ctx.lineTo(600, 630);
+    ctx.moveTo(0, 315); ctx.lineTo(1200, 315);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    
+    // Main content
+    ctx.translate(600, 315);
+    
+    // Logo/Icon - Trending up
+    const iconGradient = ctx.createLinearGradient(-40, -140, 40, -60);
+    iconGradient.addColorStop(0, '#22d3ee');
+    iconGradient.addColorStop(1, '#3b82f6');
+    
+    ctx.strokeStyle = iconGradient;
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-40, 40);
+    ctx.lineTo(-40, 0);
+    ctx.lineTo(0, -40);
+    ctx.stroke();
+    
+    ctx.fillStyle = iconGradient;
+    ctx.beginPath();
+    ctx.arc(-40, 40, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, -40, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#22d3ee';
+    ctx.beginPath();
+    ctx.arc(-40, 0, 6, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Title
+    const textGradient = ctx.createLinearGradient(-300, 0, 300, 0);
+    textGradient.addColorStop(0, '#ffffff');
+    textGradient.addColorStop(1, '#e2e8f0');
+    
+    ctx.font = 'bold 56px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillStyle = textGradient;
+    ctx.textAlign = 'center';
+    ctx.fillText('Fistotex', 0, -60);
+    
+    // Tagline
+    ctx.font = '400 24px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('Your Trusted Financial Companion', 0, 10);
+    
+    // Subtitle
+    ctx.font = '500 20px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('Expert News \u2022 Powerful Calculators \u2022 Smart Money Tools', 0, 50);
+    
+    // Feature badges
+    const badges = [
+      { text: '14+ Calculators', x: -180 },
+      { text: 'Live News', x: -10 },
+      { text: 'India Focused', x: 110 }
+    ];
+    
+    badges.forEach(badge => {
+      ctx.fillStyle = '#1e293b';
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      const width = badge.text === '14+ Calculators' ? 120 : 100;
+      ctx.beginPath();
+      ctx.roundRect(badge.x, 110, width, 40, 20);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.font = '600 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.textAlign = 'center';
+      ctx.fillText(badge.text, badge.x + width/2, 137);
+    });
+    
+    // Website URL
+    ctx.font = '500 18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillStyle = '#475569';
+    ctx.textAlign = 'center';
+    ctx.fillText('www.fistotex.com', 0, 190);
+    
+    // Bottom accent bar
+    const bottomGradient = ctx.createLinearGradient(0, 580, 1200, 630);
+    bottomGradient.addColorStop(0, '#22d3ee');
+    bottomGradient.addColorStop(1, '#3b82f6');
+    ctx.fillStyle = bottomGradient;
+    ctx.globalAlpha = 0.3;
+    ctx.fillRect(-600, 265, 1200, 50);
+    
+    // Trigger download
+    const link = document.createElement('a');
+    link.download = 'og-image.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  </script>
+</body>
+</html>

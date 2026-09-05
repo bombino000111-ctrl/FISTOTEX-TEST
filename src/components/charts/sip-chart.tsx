@@ -33,9 +33,13 @@ export function SIPChart({ totalInvested, estimatedReturns }: SIPChartProps) {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip 
-          formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`}
-        />
+        <Tooltip
+                  formatter={(value) => {
+                    const num = Array.isArray(value) ? value[0] : value;
+                    if (num === undefined) return "";
+                    return typeof num === "number" ? `₹${num.toLocaleString("en-IN")}` : String(num);
+                  }}
+                />
         <Legend />
       </PieChart>
     </ResponsiveContainer>

@@ -1,8 +1,8 @@
 "use client";
 
 import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
 
 declare global {
@@ -15,33 +15,24 @@ declare global {
 export function GA4() {
   const gaId = siteConfig.gaId;
 
-  if (!gaId) {
-    if (process.env.NODE_ENV === "development") {
-      console.log("GA4: No Measurement ID configured. Set NEXT_PUBLIC_GA_ID to enable.");
-    }
-    return null;
-  }
+  if (!gaId) return null;
 
   return (
     <>
-      {/* Google Tag Manager / GA4 Script - loads early */}
       <Script
-        id="ga4-script"
+        id="ga4-init"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${gaId}', {
-              send_page_view: false
-            });
+            gtag('config', '${gaId}', { send_page_view: false });
           `,
         }}
       />
-      {/* External GA4 script */}
       <Script
-        id="ga4-external"
+        id="ga4-lib"
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
       />
@@ -49,22 +40,39 @@ export function GA4() {
   );
 }
 
+/**
+ * Sends a GA4 page_view on every client-side route change.
+ *
+ * Reads the query string from window instead of useSearchParams so pages
+ * are not forced into dynamic rendering — keeps everything static and fast.
+ */
 export function GA4PageView() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const gaId = siteConfig.gaId;
+  const lastPath = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!gaId || !window.gtag) return;
+    const gaId = siteConfig.gaId;
+    if (!gaId) return;
 
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
-    
-    window.gtag("event", "page_view", {
-      page_path: url,
-      page_title: document.title,
-      page_location: window.location.href,
-    });
-  }, [pathname, searchParams, gaId]);
+    const url = pathname + (window.location.search || "");
+    if (lastPath.current === url) return;
+    lastPath.current = url;
+
+    // gtag may not be ready on first paint; retry briefly.
+    let attempts = 0;
+    const send = () => {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "page_view", {
+          page_path: url,
+          page_title: document.title,
+          page_location: window.location.href,
+        });
+        return;
+      }
+      if (attempts++ < 20) setTimeout(send, 150);
+    };
+    send();
+  }, [pathname]);
 
   return null;
 }

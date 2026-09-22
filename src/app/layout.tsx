@@ -2,18 +2,21 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
-import { GA4 } from "@/components/analytics/GA4";
-import { GA4Provider } from "@/lib/analytics";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { GA4, GA4PageView } from "@/components/analytics/GA4";
 import { StructuredData } from "@/components/seo/StructuredData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,12 +26,15 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   keywords: [
     "finance",
     "financial calculator",
     "investment calculator",
     "SIP calculator",
     "EMI calculator",
+    "FD calculator",
+    "PPF calculator",
     "mutual fund",
     "stock market",
     "personal finance",
@@ -54,7 +60,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: siteConfig.url,
-    title: siteConfig.name,
+    title: `${siteConfig.name} — Financial News, Calculators & Money Tools`,
     description: siteConfig.description,
     siteName: siteConfig.name,
     images: [
@@ -68,26 +74,19 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
+    title: `${siteConfig.name} — Financial News, Calculators & Money Tools`,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: "@fistotex",
-  },
-  verification: {
-    google: "google-site-verification-code", // Replace with actual code from Search Console
   },
   alternates: {
     canonical: siteConfig.url,
-    types: {
-      "application/rss+xml": `${siteConfig.url}/rss.xml`,
-    },
   },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#F8FAFC" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1220" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -106,14 +105,29 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-foreground"
+        >
+          Skip to content
+        </a>
+
         <GA4 />
-        <GA4Provider>{children}</GA4Provider>
+        <GA4PageView />
+        <Header />
+
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+
+        <Footer />
+
+        {/* Site-wide structured data, emitted once */}
         <StructuredData type="WebSite" />
         <StructuredData type="Organization" />
       </body>

@@ -5,8 +5,9 @@
 
 export const siteConfig = {
   name: "Fistotex",
-  description: "Your trusted financial companion. Expert financial news, powerful calculators, and smart money tools for informed decisions.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  description:
+    "Your trusted financial companion. Expert financial news, powerful calculators, and smart money tools for informed decisions.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.fistotex.com",
   ogImage: "/og-image.png",
   contactEmail: process.env.CONTACT_EMAIL || "contact@fistotex.com",
   ownerName: process.env.SITE_OWNER_NAME || "Fistotex",
@@ -14,12 +15,12 @@ export const siteConfig = {
 
   // GA4 Configuration
   gaId: process.env.NEXT_PUBLIC_GA_ID || "",
-  
+
   // Currency settings
   currency: "INR" as const,
   currencySymbol: "₹",
   locale: "en-IN" as const,
-  
+
   // Calculator defaults
   calculators: {
     sip: {
@@ -35,38 +36,53 @@ export const siteConfig = {
     ppf: {
       defaultAnnualInvestment: 50000,
       defaultYears: 15,
-      defaultRate: 7.1, // Configurable - subject to government notification
+      defaultRate: 7.1,
     },
     nps: {
       defaultAnnuityPercentage: 40,
       defaultAnnuityRate: 6,
     },
   },
-  
+
   // News settings
   news: {
-    cacheRevalidation: 300, // 5 minutes
-    itemsPerPage: 20,
+    cacheRevalidation: 300,
+    itemsPerPage: 9,
+    maxArticles: 60,
     sources: [
+      {
+        id: "economic-times",
+        name: "Economic Times",
+        url: "https://economictimes.indiatimes.com",
+        rssUrl: "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms",
+        enabled: true,
+      },
       {
         id: "mint",
         name: "Mint",
         url: "https://www.livemint.com",
-        rssUrl: "https://www.livemint.com/rss/feed",
+        rssUrl: "https://www.livemint.com/rss/markets",
         enabled: true,
       },
       {
         id: "moneycontrol",
         name: "Moneycontrol",
         url: "https://www.moneycontrol.com",
-        rssUrl: "https://www.moneycontrol.com/rss/",
+        rssUrl: "https://www.moneycontrol.com/rss/latestnews.xml",
         enabled: true,
       },
       {
-        id: "economic-times",
-        name: "Economic Times",
-        url: "https://economictimes.indiatimes.com",
-        rssUrl: "https://economictimes.indiatimes.com/rssfeedstopstories.cms",
+        id: "business-standard",
+        name: "Business Standard",
+        url: "https://www.business-standard.com",
+        rssUrl: "https://www.business-standard.com/rss/markets-106.rss",
+        enabled: true,
+      },
+      {
+        id: "businessline",
+        name: "The Hindu BusinessLine",
+        url: "https://www.thehindubusinessline.com",
+        rssUrl: "https://www.thehindubusinessline.com/news/feeder/default.rss",
         enabled: true,
       },
     ],
@@ -85,7 +101,7 @@ export const siteConfig = {
       { id: "global-markets", name: "Global Markets" },
     ],
   },
-  
+
   // Social links (placeholders)
   social: {
     twitter: "",

@@ -59,13 +59,18 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
   const { articles, sources, lastUpdated, unavailable } = await getNews();
   const filtered = filterNews(articles, { category, source, search: q });
 
+  const hasFilters = Boolean(q) || category !== "all" || source !== "all";
+
+  // Unfiltered page 1 opens with a full-width lead story, so it carries one
+  // extra article to keep the grid rows even.
   const perPage = siteConfig.news.itemsPerPage;
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const firstPage = hasFilters ? perPage : perPage + 1;
+  const totalPages = Math.max(1, 1 + Math.ceil(Math.max(0, filtered.length - firstPage) / perPage));
   const safePage = Math.min(page, totalPages);
-  const slice = filtered.slice((safePage - 1) * perPage, safePage * perPage);
+  const start = safePage === 1 ? 0 : firstPage + (safePage - 2) * perPage;
+  const slice = filtered.slice(start, safePage === 1 ? firstPage : start + perPage);
 
   const activeSources = sources.filter((s) => s.count > 0);
-  const hasFilters = Boolean(q) || category !== "all" || source !== "all";
   const current = { q, category: sp.category || "", source: sp.source || "" };
 
   const updatedLabel = new Date(lastUpdated).toLocaleString("en-IN", {
@@ -96,12 +101,17 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
 
       <PageHeader
         eyebrow="Financial news"
-        title="Financial News, Without the Noise"
+        title={
+          <>
+            Market news, <span className="text-accent">without the noise</span>
+          </>
+        }
         description="Headlines curated from India's leading financial publications. Every story links to its original source."
         crumbs={[{ name: "News" }]}
       >
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-2">
+            <span className="relative flex h-2 w-2"><span className="relative inline-flex h-2 w-2 rounded-full bg-accent" /></span>
             <Rss className="h-4 w-4 text-accent" />
             {activeSources.length} source{activeSources.length === 1 ? "" : "s"} live
           </span>
@@ -113,7 +123,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
       </PageHeader>
 
       {/* Filters */}
-      <section className="border-b border-border bg-background py-6">
+      <section className="sticky top-16 z-30 border-b border-border bg-background py-5 md:top-[72px]">
         <div className="container mx-auto space-y-5 px-4">
           <form action="/news" method="get" className="flex flex-col gap-3 sm:flex-row">
             {category !== "all" && <input type="hidden" name="category" value={category} />}
@@ -129,19 +139,19 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                 type="search"
                 defaultValue={q}
                 placeholder="Search headlines, e.g. RBI, SIP, Nifty…"
-                className="h-11 w-full rounded-md border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                className="h-11 w-full rounded-lg border border-input bg-card pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25"
               />
             </div>
             <button
               type="submit"
-              className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              className="btn-brand h-11 px-6 text-sm"
             >
               Search
             </button>
             {hasFilters && (
               <Link
                 href="/news"
-                className="inline-flex h-11 items-center justify-center rounded-md border border-border px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="btn-ghost h-11 px-5 text-sm"
               >
                 Clear
               </Link>
@@ -149,13 +159,13 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
           </form>
 
           {/* Category chips */}
-          <div className="flex flex-wrap gap-2">
+          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
             <Link
               href={buildHref(current, { category: "all", page: 1 })}
               className={cn(
-                "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
                 category === "all"
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-transparent bg-foreground text-background"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
@@ -166,9 +176,9 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                 key={c.id}
                 href={buildHref(current, { category: c.id, page: 1 })}
                 className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                  "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
                   category === c.id
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? "border-transparent bg-foreground text-background"
                     : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
@@ -179,14 +189,14 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
 
           {/* Source chips */}
           {activeSources.length > 1 && (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="eyebrow">Sources</span>
+            <div className="no-scrollbar -mx-4 flex items-center gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
+              <span className="eyebrow eyebrow-plain shrink-0">Sources</span>
               <Link
                 href={buildHref(current, { source: "all", page: 1 })}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-xs transition-colors",
+                  "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                   source === "all"
-                    ? "border-primary text-foreground"
+                    ? "border-brand bg-brand/10 text-foreground"
                     : "border-border text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -197,9 +207,9 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                   key={s.id}
                   href={buildHref(current, { source: s.id, page: 1 })}
                   className={cn(
-                    "rounded-full border px-3 py-1 text-xs transition-colors",
+                    "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                     source === s.id
-                      ? "border-primary text-foreground"
+                      ? "border-brand bg-brand/10 text-foreground"
                       : "border-border text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -237,14 +247,14 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                 {hasFilters && (
                   <Link
                     href="/news"
-                    className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground"
+                    className="btn-brand h-10 px-5 text-sm"
                   >
                     Clear filters
                   </Link>
                 )}
                 <Link
                   href="/toolkit/finance-calculator"
-                  className="inline-flex h-10 items-center justify-center rounded-md border border-border px-5 text-sm font-medium text-foreground hover:bg-muted"
+                  className="btn-ghost h-10 px-5 text-sm"
                 >
                   Browse calculators
                 </Link>
@@ -253,8 +263,10 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
           ) : (
             <>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {slice.map((article) => (
-                  <NewsCard key={article.id} article={article} />
+                {slice.map((article, i) => (
+                  <NewsCard key={article.id} article={article} featured={i === 0 && safePage === 1 && !hasFilters}
+                    className={i === 0 && safePage === 1 && !hasFilters ? "md:col-span-2 lg:col-span-3" : undefined}
+                  />
                 ))}
               </div>
 
@@ -270,7 +282,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                     {safePage > 1 ? (
                       <Link
                         href={buildHref(current, { page: safePage - 1 })}
-                        className="inline-flex h-9 items-center gap-1 rounded-md border border-border px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        className="btn-ghost h-10 gap-1 px-4 text-sm"
                       >
                         <ChevronLeft className="h-4 w-4" />
                         Previous
@@ -285,7 +297,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                     {safePage < totalPages ? (
                       <Link
                         href={buildHref(current, { page: safePage + 1 })}
-                        className="inline-flex h-9 items-center gap-1 rounded-md border border-border px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        className="btn-ghost h-10 gap-1 px-4 text-sm"
                       >
                         Next
                         <ChevronRight className="h-4 w-4" />

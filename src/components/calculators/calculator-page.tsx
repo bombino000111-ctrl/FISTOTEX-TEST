@@ -1,8 +1,10 @@
+import type * as React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Calculator as CalculatorIcon } from "lucide-react";
+import { ArrowRight, Calculator as CalculatorIcon, Sigma, ListChecks, Plus } from "lucide-react";
 import { PageHeader, Section } from "@/components/layout/section";
 import { CalculatorRunner } from "@/components/calculators/calculator-runner";
+import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { getCalculator, calculators, categories } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
@@ -50,7 +52,11 @@ export function CalculatorPage({ id }: { id: string }) {
       <PageHeader
         eyebrow={category?.name ?? "Finance calculator"}
         title={def.name}
-        description={def.tagline}
+        description={
+          <>
+            {def.tagline} Move the sliders or type exact numbers — results update instantly.
+          </>
+        }
         crumbs={[
           { name: "Toolkit", href: "/toolkit" },
           { name: "Finance Calculator", href: "/toolkit/finance-calculator" },
@@ -59,7 +65,7 @@ export function CalculatorPage({ id }: { id: string }) {
       />
 
       {/* Calculator */}
-      <Section className="pt-12 md:pt-14">
+      <Section className="pt-10 md:pt-12">
         <CalculatorRunner id={def.id} />
       </Section>
 
@@ -71,9 +77,12 @@ export function CalculatorPage({ id }: { id: string }) {
         description="The exact formula and assumptions behind the numbers above."
       >
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="surface p-6">
-            <p className="eyebrow mb-3">Formula</p>
-            <p className="tnum overflow-x-auto whitespace-pre-wrap rounded-md bg-muted px-4 py-3 font-mono text-sm text-foreground">
+          <div className="surface p-6 md:p-8">
+            <p className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+              <span className="icon-tile h-9 w-9"><Sigma className="h-4 w-4" /></span>
+              Formula
+            </p>
+            <p className="tnum overflow-x-auto whitespace-pre-wrap rounded-lg border border-border bg-muted px-4 py-4 font-mono text-sm text-foreground">
               {def.formula.expression}
             </p>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -81,8 +90,11 @@ export function CalculatorPage({ id }: { id: string }) {
             </p>
           </div>
 
-          <div className="surface p-6">
-            <p className="eyebrow mb-4">Assumptions</p>
+          <div className="surface p-6 md:p-8" style={{ "--tint": "#6366F1" } as React.CSSProperties}>
+            <p className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+              <span className="icon-tile h-9 w-9"><ListChecks className="h-4 w-4" /></span>
+              Assumptions
+            </p>
             <ul className="space-y-3">
               {def.steps.map((step) => (
                 <li key={step} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
@@ -98,16 +110,13 @@ export function CalculatorPage({ id }: { id: string }) {
       {/* FAQ */}
       {def.faqs.length > 0 && (
         <Section eyebrow="Questions" title="Frequently asked questions">
-          <div className="max-w-3xl divide-y divide-border border-y border-border">
+          <div className="max-w-3xl space-y-3">
             {def.faqs.map((faq) => (
-              <details key={faq.q} className="group py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-foreground">
+              <details key={faq.q} className="surface group px-5 py-4 open:border-brand/40">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-foreground">
                   {faq.q}
-                  <span
-                    aria-hidden="true"
-                    className="text-muted-foreground transition-transform group-open:rotate-45"
-                  >
-                    +
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform group-open:rotate-45 group-open:bg-brand group-open:text-white">
+                    <Plus className="h-4 w-4" />
                   </span>
                 </summary>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
@@ -126,7 +135,7 @@ export function CalculatorPage({ id }: { id: string }) {
           action={
             <Link
               href="/toolkit/finance-calculator"
-              className="inline-flex h-10 items-center gap-2 rounded-md border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              className="btn-ghost h-11 px-5 text-sm"
             >
               All calculators
               <ArrowRight className="h-4 w-4" />
@@ -134,28 +143,9 @@ export function CalculatorPage({ id }: { id: string }) {
           }
         >
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {suggestions.map((c) => {
-              const Icon = c.icon;
-              return (
-                <Link
-                  key={c.id}
-                  href={`/toolkit/finance-calculator/${c.id}`}
-                  className="surface surface-link group flex flex-col p-6"
-                >
-                  <span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-foreground">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="font-semibold text-foreground">{c.name}</h3>
-                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                    {c.tagline}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    Open
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
-              );
-            })}
+            {suggestions.map((c) => (
+              <CalculatorCard key={c.id} calc={c} />
+            ))}
           </div>
         </Section>
       )}

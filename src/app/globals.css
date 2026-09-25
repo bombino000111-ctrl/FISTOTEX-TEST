@@ -1,58 +1,70 @@
 @import "tailwindcss";
 
+/* Dark mode follows [data-theme="dark"] on <html>, set before paint by the
+   inline script in layout.tsx (stored choice, else system preference). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ─────────────────────────────────────────────────────────────
-   FistoTex design tokens
-   Light-first, editorial finance aesthetic. Dark mode supported.
+   Fistotex design tokens
+   Emerald brand with an indigo/violet counterpoint. Light + dark.
    ───────────────────────────────────────────────────────────── */
 :root {
-  --background: #F8FAFC;
-  --foreground: #0F172A;
+  --background: #F7F5F0;
+  --foreground: #16181B;
   --card: #FFFFFF;
-  --card-foreground: #0F172A;
+  --card-foreground: #16181B;
   --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
-  --primary: #0F172A;
+  --popover-foreground: #16181B;
+  --primary: #16181B;
   --primary-foreground: #FFFFFF;
-  --secondary: #1E3A8A;
+  --secondary: #34507F;
   --secondary-foreground: #FFFFFF;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #16A34A;
+  --muted: #EFECE5;
+  --muted-foreground: #5C6066;
+  --accent: #0B6E4F;
   --accent-foreground: #FFFFFF;
-  --success: #15803D;
+  --brand: #0B6E4F;
+  --brand-2: #C46A12;
+  --brand-3: #34507F;
+  --panel: #0F2E24;
+  --success: #0B6E4F;
   --success-foreground: #FFFFFF;
-  --destructive: #DC2626;
+  --destructive: #B42318;
   --destructive-foreground: #FFFFFF;
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #94A3B8;
-  --radius: 0.75rem;
+  --border: #E2DDD3;
+  --input: #D6D0C4;
+  --ring: #0B6E4F;
+  --radius: 0.625rem;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0B1220;
-    --foreground: #F1F5F9;
-    --card: #111C2E;
-    --card-foreground: #F1F5F9;
-    --popover: #111C2E;
-    --popover-foreground: #F1F5F9;
-    --primary: #F1F5F9;
-    --primary-foreground: #0B1220;
-    --secondary: #1E3A8A;
-    --secondary-foreground: #FFFFFF;
-    --muted: #16233A;
-    --muted-foreground: #94A3B8;
-    --accent: #22C55E;
-    --accent-foreground: #04210F;
-    --success: #4ADE80;
-    --success-foreground: #04210F;
-    --destructive: #F87171;
-    --destructive-foreground: #2A0606;
-    --border: #22304A;
-    --input: #22304A;
-    --ring: #475569;
-  }
+[data-theme="dark"] {
+  --background: #111315;
+  --foreground: #ECEAE4;
+  --card: #181B1E;
+  --card-foreground: #ECEAE4;
+  --popover: #181B1E;
+  --popover-foreground: #ECEAE4;
+  --primary: #ECEAE4;
+  --primary-foreground: #111315;
+  --secondary: #8FA7D6;
+  --secondary-foreground: #111315;
+  --muted: #1F2326;
+  --muted-foreground: #9A9EA3;
+  --accent: #3FB68B;
+  --accent-foreground: #0B1F17;
+  --brand: #3FB68B;
+  --brand-2: #E39A4B;
+  --brand-3: #8FA7D6;
+  --panel: #0F2E24;
+  --success: #3FB68B;
+  --success-foreground: #0B1F17;
+  --destructive: #F0746B;
+  --destructive-foreground: #2A0606;
+  --border: #2A2F33;
+  --input: #353B40;
+  --ring: #3FB68B;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -70,6 +82,10 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-panel: var(--panel);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-destructive: var(--destructive);
@@ -79,14 +95,29 @@
   --color-ring: var(--ring);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.25rem);
+  --radius-2xl: calc(var(--radius) + 0.625rem);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 /* ── Base ──────────────────────────────────────────────────── */
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -108,78 +139,174 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 26%, transparent);
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
   color: var(--foreground);
 }
 
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* Numeric alignment for money figures */
 .tnum { font-variant-numeric: tabular-nums; }
 
-/* ── Small reusable pieces ─────────────────────────────────── */
+/* Component classes live in the components layer so Tailwind utilities
+   (hidden, sticky, absolute…) can still override them. */
+@layer components {
+  /* ── Brand pieces ──────────────────────────────────────────── */
 
-/* Uppercase section label — makes section boundaries obvious */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--muted-foreground);
+  /* Headline font */
+  .font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; }
+
+  /* Primary call-to-action */
+  .btn-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: var(--accent-foreground);
+    background: var(--accent);
+    transition: background-color 150ms ease;
+  }
+  .btn-brand:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+
+  /* Secondary button */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: var(--foreground);
+    border: 1px solid var(--input);
+    background: var(--card);
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+  .btn-ghost:hover { border-color: var(--foreground); }
+
+  /* Uppercase section label */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.25rem;
+    height: 2px;
+    background: var(--accent);
+  }
+  .eyebrow.eyebrow-plain::before { display: none; }
+
+  /* Pill badge */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* Card surface */
+  .surface {
+    position: relative;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: var(--radius);
+  }
+
+  .surface-link { transition: border-color 150ms ease, box-shadow 150ms ease; }
+  .surface-link:hover {
+    border-color: var(--foreground);
+    box-shadow: 0 2px 0 0 var(--foreground);
+  }
+
+  /* Icon tile with per-category colour: set --tint on the element */
+  .icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    color: var(--tint, var(--accent));
+    background: color-mix(in srgb, var(--tint, var(--accent)) 12%, var(--card));
+  }
+
+  /* ── Range slider ─────────────────────────────────────────── */
+  .range {
+    --pct: 50%;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent) var(--pct), var(--muted) var(--pct));
+    cursor: pointer;
+    outline: none;
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #fff;
+    border: 3px solid var(--accent);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+    transition: transform 120ms ease;
+  }
+  .range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: #fff;
+    border: 3px solid var(--accent);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+  }
+  .range:focus-visible::-webkit-slider-thumb { outline: 3px solid color-mix(in srgb, var(--ring) 45%, transparent); }
+
+  /* ── Long-form legal / editorial text ─────────────────────── */
+  .legal-copy h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .legal-copy p,
+  .legal-copy li {
+    color: var(--muted-foreground);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .legal-copy ul { list-style: disc; padding-left: 1.25rem; }
+  .legal-copy a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
 }
 
-.eyebrow::before {
-  content: "";
-  width: 1.5rem;
-  height: 1px;
-  background: color-mix(in srgb, var(--muted-foreground) 50%, transparent);
-}
-
-/* Consistent card surface with a calm hover lift */
-.surface {
-  border: 1px solid var(--border);
-  background: var(--card);
-  border-radius: var(--radius);
-}
-
-.surface-link {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-}
-
-.surface-link:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
-  box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--primary) 45%, transparent);
-}
-
-/* Long-form legal / editorial text */
-.legal-copy h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.legal-copy p,
-.legal-copy li {
-  color: var(--muted-foreground);
-  line-height: 1.7;
-  margin-bottom: 0.75rem;
-}
-
-.legal-copy ul { list-style: disc; padding-left: 1.25rem; }
-
-/* Nice thin scrollbars in result tables */
+/* Thin scrollbars */
 .thin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .thin-scroll::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
   border-radius: 999px;
 }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* FAQ disclosure */
+details > summary::-webkit-details-marker { display: none; }

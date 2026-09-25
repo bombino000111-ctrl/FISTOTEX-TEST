@@ -45,7 +45,12 @@ function stripTags(input: string): string {
 function clean(input: string): string {
   let out = input;
   out = out.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
-  out = decodeEntities(out);
+  // Some feeds double-encode (e.g. "&amp;nbsp;"), so decode until stable
+  for (let i = 0; i < 3; i++) {
+    const next = decodeEntities(out);
+    if (next === out) break;
+    out = next;
+  }
   out = stripTags(out);
   out = out.replace(/\s+/g, " ").trim();
   return out;
@@ -156,8 +161,12 @@ async function fetchFeed(source: {
 
   const articles: NewsArticle[] = [];
 
+  // Google News appends " - Publisher" to titles; drop it since we show the source
+  const escapedName = source.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const suffix = new RegExp(`\\s+[-–|]\\s+${escapedName}\\s*$`, "i");
+
   for (const block of blocks) {
-    const title = pick(block, ["title"]);
+    const title = pick(block, ["title"]).replace(suffix, "");
     if (!title) continue;
 
     let link = pick(block, ["link"]);
@@ -170,7 +179,9 @@ async function fetchFeed(source: {
       block.match(/<content:encoded(?:\s[^>]*)?>([\s\S]*?)<\/content:encoded>/i)?.[1] ??
       "";
 
-    const summary = clean(rawDescription).slice(0, 320);
+    let summary = clean(rawDescription).replace(suffix, "").slice(0, 320);
+    // Aggregator descriptions often just repeat the headline — hide those
+    if (summary.toLowerCase().startsWith(title.toLowerCase().slice(0, 40))) summary = "";
 
     const dateRaw = pick(block, ["pubDate", "published", "updated", "dc:date"]);
     const parsed = dateRaw ? new Date(dateRaw) : new Date();

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ShieldCheck, AlertTriangle, Scale, BookOpen, Calculator, TrendingUp } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { PageHeader } from "@/components/layout/section";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-const lastUpdated = new Date().toLocaleDateString("en-IN", {
+// Update this date whenever the policy text changes.
+const lastUpdated = new Date("2026-09-26").toLocaleDateString("en-IN", {
   year: "numeric",
   month: "long",
   day: "numeric",
@@ -217,39 +219,34 @@ const sections = [
 
 export default function DisclaimerPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <StructuredData type="WebPage" data={{ title: "Disclaimer", description: "Fistotex Disclaimer - Important legal disclaimers regarding financial calculators, news content, and educational information." }} />
 
-      {/* Hero Section */}
-      <section className="py-12 md:py-16 bg-gradient-to-b from-primary/5 to-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-4">
-              Disclaimer
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Last updated: {lastUpdated}
-            </p>
-            <p className="text-red-600 font-medium mt-2">
-              <strong>Please read this carefully before using our calculators or relying on any information from this Site.</strong>
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Legal"
+        title="Disclaimer"
+        description={
+          <>
+            <span className="block">Last updated: {lastUpdated}</span>
+            <span className="block"><strong>Please read this carefully before using our calculators or relying on any information from this Site.</strong></span>
+          </>
+        }
+        crumbs={[{ name: "Disclaimer" }]}
+      />
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="prose prose-lg max-w-none">
+            <div className="legal-copy surface p-6 md:p-10">
               {sections.map((section) => (
-                <section key={section.id} id={section.id} className="mb-12 pb-8 border-b last:border-0">
+                <section key={section.id} id={section.id} className="mb-10 border-b border-border pb-8 last:mb-0 last:border-0 last:pb-0">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-primary/5 text-primary">
+                    <div className="icon-tile h-10 w-10">
                       <section.icon className="h-5 w-5" />
                     </div>
-                    <h2 className="text-2xl font-bold text-primary">{section.title}</h2>
+                    <h2 className="!m-0 text-xl font-bold text-foreground md:text-2xl">{section.title}</h2>
                   </div>
-                  <div className="ml-10 space-y-4 text-muted-foreground leading-relaxed">
+                  <div className="space-y-4 md:ml-[52px] text-muted-foreground leading-relaxed">
                     {section.content.split('\n\n').map((paragraph, i) => (
                       <div key={i} dangerouslySetInnerHTML={{ __html: paragraph.trim() }} />
                     ))}
@@ -259,7 +256,7 @@ export default function DisclaimerPage() {
             </div>
 
             {/* Key Takeaways Box */}
-            <div className="mt-12 p-6 rounded-xl bg-red-50 border border-red-200">
+            <div className="mt-12 p-6 rounded-lg bg-red-50 border border-red-200">
               <h3 className="font-semibold text-red-800 mb-4 flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5" /> Key Takeaways
               </h3>
@@ -270,7 +267,7 @@ export default function DisclaimerPage() {
                 <li>✗ Mutual fund investments carry <strong>market risk</strong> - read scheme documents</li>
                 <li>✗ Tax information may be <strong>outdated</strong> - consult a CA</li>
                 <li>✗ We are <strong>not SEBI/RBI/IRDAI registered</strong></li>
-                <li>✓ Use our tools for <strong>education and planning</strong> - then consult a professional</li>
+                <li className="flex gap-2"><span className="text-accent">✓</span> Use our tools for <strong>education and planning</strong> - then consult a professional</li>
               </ul>
             </div>
           </div>

@@ -50,41 +50,49 @@ export interface Category {
   name: string;
   icon: LucideIcon;
   blurb: string;
+  /** Accent colour used for this category's icon tiles */
+  tint: string;
 }
 
 export const categories: Category[] = [
   {
     id: "investment",
+    tint: "#10B981",
     name: "Investments",
     icon: TrendingUp,
     blurb: "Project what regular or one-time investing could grow into.",
   },
   {
     id: "loans",
+    tint: "#6366F1",
     name: "Loans",
     icon: Landmark,
     blurb: "Understand EMIs, interest cost and repayment schedules.",
   },
   {
     id: "savings",
+    tint: "#F59E0B",
     name: "Savings",
     icon: PiggyBank,
     blurb: "Fixed deposits, recurring deposits and small-savings schemes.",
   },
   {
     id: "retirement",
+    tint: "#EC4899",
     name: "Retirement",
     icon: ShieldCheck,
     blurb: "Work out the corpus you need and how much to set aside.",
   },
   {
     id: "fixed-income",
+    tint: "#06B6D4",
     name: "Fixed income",
     icon: ChartBar,
     blurb: "Bond pricing, yield and income from debt instruments.",
   },
   {
     id: "planning",
+    tint: "#8B5CF6",
     name: "Planning",
     icon: Calculator,
     blurb: "Everyday planning tools for costs and purchasing power.",
@@ -110,6 +118,8 @@ export interface CalcOutput {
   kind: "currency" | "percent" | "number" | "years";
   tone?: "default" | "positive";
   emphasis?: boolean;
+  /** Marks the two parts shown in the result donut: base (e.g. invested) vs gain (e.g. returns) */
+  split?: "base" | "gain";
 }
 
 export interface ChartPoint {
@@ -127,6 +137,8 @@ export interface CalculatorDef {
   fields: CalcField[];
   defaults: Record<string, number | string>;
   compute: (v: Record<string, number | string>) => CalcOutput[];
+  /** Returns a message when the inputs don't make sense together */
+  validate?: (v: Record<string, number | string>) => string | null;
   chart?: (v: Record<string, number | string>) => ChartPoint[];
   chartSeriesLabels?: { invested: string; value: string };
   formula: { expression: string; note: string };
@@ -184,8 +196,8 @@ const sip: CalculatorDef = {
       years: num(v.years),
     });
     return [
-      { label: "Total invested", value: r.totalInvested, kind: "currency" },
-      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive" },
+      { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
+      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive", split: "gain" },
       { label: "Maturity value", value: r.futureValue, kind: "currency", emphasis: true },
     ];
   },
@@ -226,8 +238,8 @@ const lumpsum: CalculatorDef = {
       years: num(v.years),
     });
     return [
-      { label: "Amount invested", value: r.initialInvestment, kind: "currency" },
-      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive" },
+      { label: "Amount invested", value: r.initialInvestment, kind: "currency", split: "base" },
+      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive", split: "gain" },
       { label: "Final value", value: r.finalValue, kind: "currency", emphasis: true },
     ];
   },
@@ -277,16 +289,16 @@ const mutualFund: CalculatorDef = {
     if (str(v.mode) === "lumpsum") {
       const r = calculateLumpsum({ initialInvestment: amount, annualReturn, years });
       return [
-        { label: "Amount invested", value: r.initialInvestment, kind: "currency" },
-        { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive" },
+        { label: "Amount invested", value: r.initialInvestment, kind: "currency", split: "base" },
+        { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive", split: "gain" },
         { label: "Final value", value: r.finalValue, kind: "currency", emphasis: true },
       ];
     }
 
     const r = calculateSIP({ monthlyInvestment: amount, annualReturn, years });
     return [
-      { label: "Total invested", value: r.totalInvested, kind: "currency" },
-      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive" },
+      { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
+      { label: "Estimated returns", value: r.estimatedReturns, kind: "currency", tone: "positive", split: "gain" },
       { label: "Maturity value", value: r.futureValue, kind: "currency", emphasis: true },
     ];
   },
@@ -322,6 +334,8 @@ const cagr: CalculatorDef = {
     { key: "years", label: "Number of years", kind: "years", min: 1, max: 50, step: 1 },
   ],
   defaults: { initialValue: 100000, finalValue: 250000, years: 5 },
+  validate: (v) =>
+    num(v.initialValue) <= 0 || num(v.finalValue) <= 0 ? "Both values must be greater than zero." : null,
   compute: (v) => {
     const r = calculateCAGR({
       initialValue: num(v.initialValue),
@@ -365,28 +379,27 @@ const xirr: CalculatorDef = {
     const months = Math.max(1, Math.round(years * 12));
 
     const flows: Array<{ date: string; amount: number }> = [];
-    const start = new Date();
-    start.setMonth(start.getMonth() - months);
+    // Fixed reference dates: XIRR depends only on the gaps between flows, and
+    // a fixed calendar keeps server and browser renders identical.
+    const at = (monthIndex: number) =>
+      new Date(Date.UTC(2000, monthIndex, 1)).toISOString().slice(0, 10);
     for (let i = 0; i < months; i++) {
-      const d = new Date(start);
-      d.setMonth(start.getMonth() + i);
-      flows.push({ date: d.toISOString().slice(0, 10), amount: -monthly });
+      flows.push({ date: at(i), amount: -monthly });
     }
-    const end = new Date();
-    flows.push({ date: end.toISOString().slice(0, 10), amount: num(v.currentValue) });
+    flows.push({ date: at(months), amount: num(v.currentValue) });
 
     const r = calculateXIRR({ cashFlows: flows });
 
     if (r.xirr === null) {
       return [
-        { label: "Total invested", value: r.totalInvested, kind: "currency" },
+        { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
         { label: "Current value", value: r.currentValue, kind: "currency" },
         { label: "XIRR", value: r.error ? "Could not solve" : "—", kind: "number" },
       ];
     }
 
     return [
-      { label: "Total invested", value: r.totalInvested, kind: "currency" },
+      { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
       { label: "Current value", value: r.currentValue, kind: "currency" },
       { label: "Absolute return", value: r.absoluteReturn, kind: "percent", tone: "positive" },
       { label: "XIRR", value: r.xirr, kind: "percent", emphasis: true },
@@ -426,7 +439,8 @@ const emi: CalculatorDef = {
       tenureYears: num(v.tenureYears),
     });
     return [
-      { label: "Total interest", value: r.totalInterest, kind: "currency" },
+      { label: "Principal amount", value: num(v.loanAmount), kind: "currency", split: "base" },
+      { label: "Total interest", value: r.totalInterest, kind: "currency", split: "gain" },
       { label: "Total payment", value: r.totalPayment, kind: "currency" },
       { label: "Monthly EMI", value: r.monthlyEMI, kind: "currency", emphasis: true },
     ];
@@ -440,24 +454,20 @@ const emi: CalculatorDef = {
     const emiValue =
       r === 0 ? loan / months : (loan * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
 
-    const out: ChartPoint[] = [];
+    const out: ChartPoint[] = [{ label: "0Y", invested: 0, value: 0 }];
     let balance = loan;
-    for (let y = 0; y <= years; y++) {
-      const paid = Math.min(months, y * 12);
-      const outstanding = Math.max(0, balance);
-      out.push({
-        label: `${y}Y`,
-        invested: loan - outstanding,
-        value: loan,
-      });
-      for (let m = 0; m < 12 && paid + m < months; m++) {
-        const interest = balance * r;
-        balance = balance - (emiValue - interest);
+    let paidTotal = 0;
+    for (let m = 1; m <= months; m++) {
+      const interest = balance * r;
+      balance = Math.max(0, balance - (emiValue - interest));
+      paidTotal += emiValue;
+      if (m % 12 === 0 || m === months) {
+        out.push({ label: `${Math.ceil(m / 12)}Y`, invested: loan - balance, value: paidTotal });
       }
     }
     return out;
   },
-  chartSeriesLabels: { invested: "Principal repaid", value: "Loan amount" },
+  chartSeriesLabels: { invested: "Principal repaid", value: "Total paid (principal + interest)" },
   formula: {
     expression: "EMI = P × r × (1 + r)ⁿ ÷ ((1 + r)ⁿ − 1)",
     note: "P = principal, r = annual rate ÷ 12 ÷ 100, n = tenure in months.",
@@ -498,8 +508,9 @@ const loan: CalculatorDef = {
     const totalInterest = totalPayment - principal;
 
     return [
-      { label: "Total interest", value: totalInterest, kind: "currency" },
+      { label: "Total interest", value: totalInterest, kind: "currency", split: "gain" },
       { label: "Total payment", value: totalPayment, kind: "currency" },
+      { label: "Principal you can borrow", value: principal, kind: "currency", split: "base" },
       { label: "Estimated loan amount", value: principal, kind: "currency", emphasis: true },
     ];
   },
@@ -541,8 +552,8 @@ const fd: CalculatorDef = {
         | "yearly",
     });
     return [
-      { label: "Deposit amount", value: r.principal, kind: "currency" },
-      { label: "Interest earned", value: r.interestEarned, kind: "currency", tone: "positive" },
+      { label: "Deposit amount", value: r.principal, kind: "currency", split: "base" },
+      { label: "Interest earned", value: r.interestEarned, kind: "currency", tone: "positive", split: "gain" },
       { label: "Maturity amount", value: r.maturityAmount, kind: "currency", emphasis: true },
     ];
   },
@@ -592,8 +603,8 @@ const rd: CalculatorDef = {
       tenureYears: num(v.tenureYears),
     });
     return [
-      { label: "Total deposits", value: r.totalDeposits, kind: "currency" },
-      { label: "Interest earned", value: r.interestEarned, kind: "currency", tone: "positive" },
+      { label: "Total deposits", value: r.totalDeposits, kind: "currency", split: "base" },
+      { label: "Interest earned", value: r.interestEarned, kind: "currency", tone: "positive", split: "gain" },
       { label: "Maturity value", value: r.maturityValue, kind: "currency", emphasis: true },
     ];
   },
@@ -644,8 +655,8 @@ const ppf: CalculatorDef = {
       interestRate: num(v.interestRate),
     });
     return [
-      { label: "Total contributed", value: r.totalContribution, kind: "currency" },
-      { label: "Interest earned", value: r.estimatedInterest, kind: "currency", tone: "positive" },
+      { label: "Total contributed", value: r.totalContribution, kind: "currency", split: "base" },
+      { label: "Interest earned", value: r.estimatedInterest, kind: "currency", tone: "positive", split: "gain" },
       { label: "Maturity amount", value: r.maturityAmount, kind: "currency", emphasis: true },
     ];
   },
@@ -693,6 +704,10 @@ const nps: CalculatorDef = {
     { key: "expectedAnnuityRate", label: "Annuity rate", kind: "percent", min: 1, max: 12, step: 0.5 },
   ],
   defaults: { currentAge: 30, retirementAge: 60, monthlyContribution: 10000, expectedReturn: 10, annuityPercentage: 40, expectedAnnuityRate: 6 },
+  validate: (v) =>
+    num(v.retirementAge) <= num(v.currentAge)
+      ? "Retirement age must be later than your current age."
+      : null,
   compute: (v) => {
     const r = calculateNPS({
       currentAge: num(v.currentAge),
@@ -703,7 +718,7 @@ const nps: CalculatorDef = {
       expectedAnnuityRate: num(v.expectedAnnuityRate),
     });
     return [
-      { label: "Total contributed", value: r.totalContribution, kind: "currency" },
+      { label: "Total contributed", value: r.totalContribution, kind: "currency", split: "base" },
       { label: "Lump sum available", value: r.lumpSumWithdrawal, kind: "currency" },
       { label: "Annuity corpus", value: r.annuityCorpus, kind: "currency" },
       { label: "Estimated monthly pension", value: r.estimatedMonthlyPension, kind: "currency", emphasis: true },
@@ -756,6 +771,11 @@ const retirement: CalculatorDef = {
     expectedReturnBeforeRetirement: 11,
     expectedReturnAfterRetirement: 7,
   },
+  validate: (v) => {
+    if (num(v.retirementAge) <= num(v.currentAge)) return "Retirement age must be later than your current age.";
+    if (num(v.lifeExpectancy) <= num(v.retirementAge)) return "Life expectancy must be later than your retirement age.";
+    return null;
+  },
   compute: (v) => {
     const r = calculateRetirement({
       currentAge: num(v.currentAge),
@@ -779,7 +799,7 @@ const retirement: CalculatorDef = {
   },
   formula: {
     expression: "Required corpus = PV of inflation-adjusted expenses over the retirement years",
-    note: "Uses the real (post-inflation) return during retirement to discount future expenses back to retirement date.",
+    note: "Expenses are paid at the start of each retirement year and grow with inflation, so they are discounted at the real return: (1 + return) ÷ (1 + inflation) − 1.",
   },
   steps: [
     "Expenses are inflated to your retirement date first.",
@@ -853,7 +873,7 @@ const inflation: CalculatorDef = {
       years: num(v.years),
     });
     return [
-      { label: "Purchasing power today of that amount", value: r.purchasingPowerEquivalent, kind: "currency" },
+      { label: "What that amount will be worth (in today's money)", value: r.purchasingPowerEquivalent, kind: "currency" },
       { label: "Inflation factor", value: r.inflationFactor, kind: "number" },
       { label: "Cost in the future", value: r.futureCost, kind: "currency", emphasis: true },
     ];

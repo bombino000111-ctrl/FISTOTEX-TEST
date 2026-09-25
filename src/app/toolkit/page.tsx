@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader, Section } from "@/components/layout/section";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { calculators, categories, calculatorsByCategory } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 
@@ -28,7 +29,11 @@ export default function ToolkitPage() {
 
       <PageHeader
         eyebrow="Toolkit"
-        title="Financial Toolkit"
+        title={
+          <>
+            Your financial <span className="text-accent">toolkit</span>
+          </>
+        }
         description="Everything you need to plan with numbers instead of guesses. Each calculator shows its formula and the assumptions behind the result."
         crumbs={[{ name: "Toolkit" }]}
       >
@@ -37,7 +42,7 @@ export default function ToolkitPage() {
             <a
               key={cat.id}
               href={`#${cat.id}`}
-              className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="rounded-full border border-border bg-card/70 px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
             >
               {cat.name}
             </a>
@@ -49,30 +54,11 @@ export default function ToolkitPage() {
         const items = calculatorsByCategory(cat.id);
         if (items.length === 0) return null;
         return (
-          <Section key={cat.id} id={cat.id} eyebrow={cat.name} title={cat.name} description={cat.blurb}>
+          <Section key={cat.id} id={cat.id} eyebrow={`${items.length} tools`} title={cat.name} description={cat.blurb}>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((calc) => {
-                const CalcIcon = calc.icon;
-                return (
-                  <Link
-                    key={calc.id}
-                    href={`/toolkit/finance-calculator/${calc.id}`}
-                    className="surface surface-link group flex flex-col p-6"
-                  >
-                    <span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-foreground">
-                      <CalcIcon className="h-5 w-5" />
-                    </span>
-                    <h3 className="font-semibold text-foreground">{calc.name}</h3>
-                    <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                      {calc.tagline}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
-                      Calculate
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </Link>
-                );
-              })}
+              {items.map((calc) => (
+                <CalculatorCard key={calc.id} calc={calc} />
+              ))}
             </div>
           </Section>
         );
@@ -85,12 +71,12 @@ export default function ToolkitPage() {
               {calculators.length} calculators, always free
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              No sign-up, no paywall, no data collection.
+              No sign-up, no paywall — calculations run in your browser.
             </p>
           </div>
           <Link
             href="/toolkit/finance-calculator"
-            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            className="btn-brand h-11 shrink-0 px-5 text-sm"
           >
             Browse all
             <ArrowRight className="h-4 w-4" />

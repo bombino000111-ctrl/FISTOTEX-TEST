@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="container mx-auto flex min-h-[60vh] items-center px-4 py-20">
       <div className="mx-auto max-w-xl text-center">
-        <p className="eyebrow mb-4 justify-center">Error 404</p>
+        <p className="font-display text-8xl text-accent md:text-9xl">404</p>
         <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
           Page not found
         </h1>
@@ -17,14 +17,14 @@ export default function NotFound() {
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            className="btn-brand h-11 px-6 text-sm"
           >
             <Home className="h-4 w-4" />
             Go home
           </Link>
           <Link
             href="/toolkit/finance-calculator"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-background px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className="btn-ghost h-11 px-6 text-sm"
           >
             <Calculator className="h-4 w-4" />
             Explore calculators

@@ -314,8 +314,10 @@ export function calculatePPF(input: {
     balance: number;
   }> = [];
   
+  // Deposit made at the start of the financial year (before 5 April) earns
+  // interest for the full year, matching the India Post / bank convention.
   for (let year = 1; year <= years; year++) {
-    const interest = balance * rate;
+    const interest = (balance + annualInvestment) * rate;
     balance += annualInvestment + interest;
     
     yearlyBreakdown.push({
@@ -431,33 +433,55 @@ export function calculateXIRR(input: {
   // Newton-Raphson iteration
   let rate = 0.1; // Initial guess of 10%
   const maxIterations = 100;
-  const tolerance = 1e-6;
-  
+  const tolerance = 1e-7;
+  // NPV tolerance scales with the size of the cash flows
+  const npvTolerance = Math.max(0.01, (totalInvested + currentValue) * 1e-8);
+
   for (let i = 0; i < maxIterations; i++) {
     const npvValue = npv(rate);
     const dnpvValue = dnpv(rate);
-    
-    if (Math.abs(dnpvValue) < tolerance) {
+
+    if (!Number.isFinite(npvValue) || !Number.isFinite(dnpvValue) || Math.abs(dnpvValue) < 1e-12) {
       break;
     }
-    
+
     const newRate = rate - npvValue / dnpvValue;
-    
+
     if (Math.abs(newRate - rate) < tolerance) {
       rate = newRate;
       break;
     }
-    
+
     rate = newRate;
-    
+
     // Keep rate within reasonable bounds
     if (rate < -0.99) rate = -0.99;
     if (rate > 10) rate = 10;
   }
-  
+
+  // Newton can stall or overshoot on awkward inputs — fall back to bisection,
+  // which always converges when the root is bracketed.
+  if (!Number.isFinite(npv(rate)) || Math.abs(npv(rate)) > npvTolerance) {
+    let lo = -0.99;
+    let hi = 10;
+    if (npv(lo) * npv(hi) < 0) {
+      for (let i = 0; i < 300; i++) {
+        const mid = (lo + hi) / 2;
+        const v = npv(mid);
+        if (Math.abs(v) <= npvTolerance) {
+          lo = hi = mid;
+          break;
+        }
+        if (npv(lo) * v < 0) hi = mid;
+        else lo = mid;
+      }
+      rate = (lo + hi) / 2;
+    }
+  }
+
   // Verify the result
   const finalNpv = npv(rate);
-  if (Math.abs(finalNpv) > 0.01) {
+  if (!Number.isFinite(finalNpv) || Math.abs(finalNpv) > npvTolerance) {
     return {
       xirr: null,
       error: "XIRR could not converge. Please check your cash flows.",
@@ -559,14 +583,19 @@ export function calculateRetirement(input: {
   const estimatedMonthlyRetirementExpense = currentMonthlyExpenses * inflationFactor;
   const annualExpense = estimatedMonthlyRetirementExpense * 12;
   
-  // Calculate required corpus (present value of annuity)
-  const realRate = (expectedReturnAfterRetirement - expectedInflation) / 100;
+  // Required corpus = present value of an inflation-growing annuity paid at
+  // the start of each retirement year, discounted at the exact real rate.
+  const realRate =
+    (1 + expectedReturnAfterRetirement / 100) / (1 + expectedInflation / 100) - 1;
   let requiredRetirementCorpus: number;
-  
-  if (realRate <= 0) {
+
+  if (Math.abs(realRate) < 1e-9) {
     requiredRetirementCorpus = annualExpense * yearsInRetirement;
   } else {
-    requiredRetirementCorpus = (annualExpense / realRate) * (1 - Math.pow(1 + realRate, -yearsInRetirement));
+    requiredRetirementCorpus =
+      annualExpense *
+      ((1 - Math.pow(1 + realRate, -yearsInRetirement)) / realRate) *
+      (1 + realRate);
   }
   
   // Calculate projected current savings at retirement

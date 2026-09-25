@@ -266,7 +266,7 @@ export default function DisclaimerPage() {
               <ul className="space-y-2 text-sm text-red-700">
                 <li>✗ This Site does <strong>not</strong> provide financial advice</li>
                 <li>✗ Calculator results are <strong>estimates only</strong> - not guaranteed</li>
-                <li>✗ News content is from <strong>third-party sources</strong> - we don't verify accuracy</li>
+                <li>✗ News content is from <strong>third-party sources</strong> - we don&apos;t verify accuracy</li>
                 <li>✗ Mutual fund investments carry <strong>market risk</strong> - read scheme documents</li>
                 <li>✗ Tax information may be <strong>outdated</strong> - consult a CA</li>
                 <li>✗ We are <strong>not SEBI/RBI/IRDAI registered</strong></li>

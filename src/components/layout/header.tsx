@@ -19,11 +19,6 @@ export function Header() {
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
 
-  // Close the mobile menu whenever the route changes
-  React.useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
   // Lock body scroll while the mobile menu is open
   React.useEffect(() => {
     if (!open) return;
@@ -57,6 +52,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpen(false)}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={cn(
                   "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
@@ -105,6 +101,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpen(false)}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={cn(
                   "rounded-md px-3 py-3 text-base font-medium transition-colors",
@@ -118,6 +115,7 @@ export function Header() {
             ))}
             <Link
               href="/toolkit/finance-calculator"
+              onClick={() => setOpen(false)}
               className="mt-3 inline-flex h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
             >
               Browse all calculators

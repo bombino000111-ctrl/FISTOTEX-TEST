@@ -48,8 +48,6 @@ export default function ToolkitPage() {
       {categories.map((cat) => {
         const items = calculatorsByCategory(cat.id);
         if (items.length === 0) return null;
-        const Icon = cat.icon;
-
         return (
           <Section key={cat.id} id={cat.id} eyebrow={cat.name} title={cat.name} description={cat.blurb}>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

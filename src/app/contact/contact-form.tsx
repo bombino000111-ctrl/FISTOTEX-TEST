@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { Mail, MapPin, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -118,7 +119,7 @@ export default function ContactForm() {
               Contact Us
             </h1>
             <p className="text-lg text-muted-foreground">
-              Have questions, feedback, or ideas? We'd love to hear from you.
+              Have questions, feedback, or ideas? We&apos;d love to hear from you.
             </p>
           </div>
         </div>
@@ -168,22 +169,22 @@ export default function ContactForm() {
                 <CardContent className="pt-6 space-y-4">
                   <h3 className="text-xl font-semibold text-primary">Quick Links</h3>
                   <div className="space-y-3">
-                    <a href="/toolkit/finance-calculator" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <Link href="/toolkit/finance-calculator" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                       <Send className="h-4 w-4" />
                       Explore Calculators
-                    </a>
-                    <a href="/news" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    </Link>
+                    <Link href="/news" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                       <Send className="h-4 w-4" />
                       Read Latest News
-                    </a>
-                    <a href="/about" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    </Link>
+                    <Link href="/about" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                       <Send className="h-4 w-4" />
                       Learn About Us
-                    </a>
-                    <a href="/disclaimer" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    </Link>
+                    <Link href="/disclaimer" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                       <Send className="h-4 w-4" />
                       Read Disclaimer
-                    </a>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -307,9 +308,9 @@ export default function ContactForm() {
 
                     <p className="text-xs text-muted-foreground text-center">
                       By submitting this form, you agree to our{" "}
-                      <a href="/privacy-policy" className="underline hover:text-primary">Privacy Policy</a>
+                      <Link href="/privacy-policy" className="underline hover:text-primary">Privacy Policy</Link>
                       {" "}and{" "}
-                      <a href="/terms-and-conditions" className="underline hover:text-primary">Terms of Service</a>
+                      <Link href="/terms-and-conditions" className="underline hover:text-primary">Terms of Service</Link>
                     </p>
                   </form>
                 </CardContent>

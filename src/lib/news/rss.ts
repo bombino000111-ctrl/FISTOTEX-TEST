@@ -134,11 +134,10 @@ function normaliseUrl(url: string): string {
 async function fetchFeed(source: {
   id: string;
   name: string;
-  rssUrl?: string;
-}): Promise<NewsArticle[]> {
-  if (!source.rssUrl) return [];
+}, feedUrl?: string): Promise<NewsArticle[]> {
+  if (!feedUrl) return [];
 
-  const res = await fetch(source.rssUrl, {
+  const res = await fetch(feedUrl, {
     headers: {
       "User-Agent": USER_AGENT,
       Accept: "application/rss+xml, application/xml, text/xml, */*",
@@ -197,6 +196,36 @@ async function fetchFeed(source: {
   return articles;
 }
 
+/** Try the publisher feed first, then a source-filtered Google News RSS feed.
+ * Some publishers return HTTP 403 to server-side requests even though their
+ * public RSS feed works in a browser. The fallback keeps attribution intact
+ * while avoiding HTML scraping and preserving direct source filtering.
+ */
+async function fetchSource(source: {
+  id: string;
+  name: string;
+  rssUrl?: string;
+  fallbackRssUrl?: string;
+}): Promise<NewsArticle[]> {
+  const feedUrls = [source.rssUrl, source.fallbackRssUrl].filter(
+    (url): url is string => Boolean(url)
+  );
+  let lastError: unknown;
+
+  for (const feedUrl of feedUrls) {
+    try {
+      const articles = await fetchFeed(source, feedUrl);
+      if (articles.length > 0) return articles;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error(`${source.name}: no articles returned`);
+}
+
 export interface NewsResult {
   articles: NewsArticle[];
   sources: Array<{ id: string; name: string; count: number }>;
@@ -208,7 +237,7 @@ export interface NewsResult {
 /** Fetch and merge every enabled feed. One failing source never breaks the page. */
 export async function getNews(): Promise<NewsResult> {
   const sources = siteConfig.news.sources.filter((s) => s.enabled);
-  const settled = await Promise.allSettled(sources.map((s) => fetchFeed(s)));
+  const settled = await Promise.allSettled(sources.map((s) => fetchSource(s)));
 
   const articles: NewsArticle[] = [];
   const unavailable: string[] = [];

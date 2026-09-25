@@ -258,7 +258,6 @@ export function calculateRD(input: {
   // This is a simplified approximation; actual bank calculations may vary
   
   const quarterlyRate = interestRate / 4 / 100;
-  const quarters = Math.floor(months / 3);
   
   // Calculate using compound interest for each deposit
   let maturityValue = 0;
@@ -689,7 +688,7 @@ export function calculateBond(input: {
   premiumOrDiscount: number;
   isPremium: boolean;
 } {
-  const { faceValue, couponRate, marketPrice, yearsToMaturity, couponFrequency } = input;
+  const { faceValue, couponRate, marketPrice, yearsToMaturity } = input;
   
   if (faceValue <= 0 || marketPrice <= 0 || yearsToMaturity <= 0) {
     return {

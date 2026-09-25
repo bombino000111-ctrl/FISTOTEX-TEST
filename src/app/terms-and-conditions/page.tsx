@@ -276,7 +276,7 @@ export default function TermsPage() {
                 <li>✓ News content belongs to respective publishers</li>
                 <li>✗ No scraping, bots, or automated access without permission</li>
                 <li>✗ No commercial use of calculator outputs as advisory service</li>
-                <li>✗ We're not liable for your financial decisions</li>
+                <li>✗ We&apos;re not liable for your financial decisions</li>
                 <li>✓ Governed by Indian law</li>
               </ul>
             </div>

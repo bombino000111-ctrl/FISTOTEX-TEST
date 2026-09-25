@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import ContactForm from "./contact-form";
 

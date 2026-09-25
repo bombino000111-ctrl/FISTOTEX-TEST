@@ -111,7 +111,7 @@ export default function AboutPage() {
                 In a country where financial literacy remains low but aspirations run high, <strong>{siteConfig.name}</strong> was born from a simple belief: <em>every Indian deserves access to reliable financial tools and information.</em>
               </p>
               <p className="mb-6">
-                We noticed a gap. On one side, complex financial products with hidden terms. On the other, generic advice that doesn't account for Indian realities - our tax laws, our investment options, our economic context.
+                We noticed a gap. On one side, complex financial products with hidden terms. On the other, generic advice that doesn&apos;t account for Indian realities - our tax laws, our investment options, our economic context.
               </p>
               <p className="mb-6">
                 {siteConfig.name} bridges this gap. We provide:
@@ -123,11 +123,11 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">✓</span>
-                  <span><strong>Trusted news aggregation</strong> from India's leading financial publications</span>
+                  <span><strong>Trusted news aggregation</strong> from India&apos;s leading financial publications</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">✓</span>
-                  <span><strong>Educational content</strong> that explains the 'why' behind every calculation</span>
+                  <span><strong>Educational content</strong> that explains the &apos;why&apos; behind every calculation</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary mt-1">✓</span>
@@ -135,7 +135,7 @@ export default function AboutPage() {
                 </li>
               </ul>
               <p className="font-medium">
-                We don't give financial advice. We give you the tools to make your own informed decisions.
+                We don&apos;t give financial advice. We give you the tools to make your own informed decisions.
               </p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function AboutPage() {
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Have Questions?</h2>
             <p className="text-muted-foreground mb-8">
-              We'd love to hear from you. Whether it's feedback, suggestions, or partnership inquiries.
+              We&apos;d love to hear from you. Whether it&apos;s feedback, suggestions, or partnership inquiries.
             </p>
             <Button asChild size="lg">
               <Link href="/contact">

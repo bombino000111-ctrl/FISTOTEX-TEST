@@ -107,7 +107,7 @@ export default async function Home() {
             <dl className="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-border pt-8 sm:grid-cols-4">
               {[
                 { k: `${calculators.length}`, v: "Calculators" },
-                { k: "5", v: "News sources" },
+                { k: "4", v: "News sources" },
                 { k: "₹0", v: "Cost to use" },
                 { k: "INR", v: "Built for India" },
               ].map((stat) => (
@@ -125,7 +125,7 @@ export default async function Home() {
       <Section
         eyebrow="Curated read"
         title="Latest financial news"
-        description="Headlines from Mint, Economic Times, Moneycontrol, Business Standard and BusinessLine — each linked to the original."
+        description="Live headlines from Mint, Economic Times, Moneycontrol and Business Standard — each linked to the original."
         action={
           <Link
             href="/news"

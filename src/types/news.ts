@@ -16,6 +16,7 @@ export interface NewsSource {
   name: string;
   url: string;
   rssUrl?: string;
+  fallbackRssUrl?: string;
   enabled: boolean;
 }
 

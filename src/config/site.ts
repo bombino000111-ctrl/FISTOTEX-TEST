@@ -69,6 +69,8 @@ export const siteConfig = {
         name: "Moneycontrol",
         url: "https://www.moneycontrol.com",
         rssUrl: "https://www.moneycontrol.com/rss/latestnews.xml",
+        fallbackRssUrl:
+          "https://news.google.com/rss/search?q=site%3Amoneycontrol.com%20(stock%20OR%20market%20OR%20Nifty%20OR%20Sensex)&hl=en-IN&gl=IN&ceid=IN%3Aen",
         enabled: true,
       },
       {
@@ -76,13 +78,8 @@ export const siteConfig = {
         name: "Business Standard",
         url: "https://www.business-standard.com",
         rssUrl: "https://www.business-standard.com/rss/markets-106.rss",
-        enabled: true,
-      },
-      {
-        id: "businessline",
-        name: "The Hindu BusinessLine",
-        url: "https://www.thehindubusinessline.com",
-        rssUrl: "https://www.thehindubusinessline.com/news/feeder/default.rss",
+        fallbackRssUrl:
+          "https://news.google.com/rss/search?q=site%3Abusiness-standard.com%20(stock%20OR%20market%20OR%20Nifty%20OR%20Sensex)&hl=en-IN&gl=IN&ceid=IN%3Aen",
         enabled: true,
       },
     ],

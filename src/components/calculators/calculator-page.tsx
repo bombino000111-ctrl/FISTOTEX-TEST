@@ -86,7 +86,11 @@ export function CalculatorPage({ id }: { id: string }) {
         <p className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <BadgeCheck className="h-4 w-4 text-accent" />
-            Formula reviewed by the {siteConfig.name} team
+            Formula checked by{" "}
+            <Link href="/about#founder" className="font-medium text-foreground underline-offset-4 hover:underline">
+              {siteConfig.founder.name}
+            </Link>
+            , {siteConfig.name} founder
           </span>
           <span>
             Last updated <time dateTime={siteConfig.contentReviewed}>{reviewedLabel}</time>

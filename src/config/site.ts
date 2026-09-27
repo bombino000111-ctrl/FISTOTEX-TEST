@@ -11,13 +11,15 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   contactEmail: process.env.CONTACT_EMAIL || "contact@fistotex.com",
   ownerName: process.env.SITE_OWNER_NAME || "Fistotex",
+  founder: { name: "Naman", role: "Founder" },
   businessAddress: process.env.BUSINESS_ADDRESS || "",
 
   // Date the calculator formulas and guide copy were last checked (YYYY-MM-DD)
   contentReviewed: "2026-09-27",
 
   // GA4 Configuration
-  gaId: process.env.NEXT_PUBLIC_GA_ID || "",
+  // GA4 measurement IDs are public (they ship in every page); the env var can override it.
+  gaId: process.env.NEXT_PUBLIC_GA_ID || "G-8HWMYEEZ3Z",
 
   // Currency settings
   currency: "INR" as const,

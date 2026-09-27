@@ -157,8 +157,46 @@ export default function AboutPage() {
         </div>
       </Section>
 
+      {/* Founder */}
+      <Section id="founder" tone="muted" eyebrow="Who we are" title="The person behind Fistotex">
+        <div className="surface grid gap-8 p-7 md:grid-cols-[auto_1fr] md:p-9">
+          <span
+            aria-hidden="true"
+            className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
+          >
+            {siteConfig.founder.name.charAt(0)}
+          </span>
+          <div>
+            <h3 className="text-2xl font-bold text-foreground">{siteConfig.founder.name}</h3>
+            <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
+              {siteConfig.founder.role}, {siteConfig.name}
+            </p>
+            <div className="mt-5 space-y-4 text-base leading-relaxed text-muted-foreground">
+              <p>
+                {siteConfig.founder.name} started {siteConfig.name} to make everyday money maths simple and
+                transparent for Indian savers and investors, building and maintaining the calculators,
+                checking every formula against standard financial methods and curating the news sources.
+              </p>
+              <p className="rounded-lg border border-border bg-muted px-4 py-3 text-sm">
+                <strong className="text-foreground">Please note:</strong> {siteConfig.founder.name} is not a
+                SEBI-registered investment adviser or research analyst. Nothing on {siteConfig.name} is a
+                recommendation to buy or sell any security or financial product. For personal advice, consult a
+                SEBI-registered adviser.
+              </p>
+            </div>
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="btn-ghost mt-6 h-11 px-5 text-sm"
+            >
+              Contact {siteConfig.founder.name}
+            </a>
+          </div>
+        </div>
+      </Section>
+
       {/* Features */}
-      <Section tone="muted" eyebrow="What we offer" title="Everything in one place">
+      <Section eyebrow="What we offer" title="Everything in one place">
+
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f) => {
             const Icon = f.icon;
@@ -177,6 +215,7 @@ export default function AboutPage() {
 
       {/* Values */}
       <Section
+        tone="muted"
         eyebrow="Our values"
         title="Principles we build by"
         description="These guide every tool we ship and every decision we make."
@@ -198,7 +237,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Disclaimer */}
-      <Section tone="muted" className="py-14 md:py-16">
+      <Section className="py-14 md:py-16">
         <div className="surface mx-auto max-w-3xl p-7 md:p-9">
           <h2 className="text-2xl font-bold text-foreground">Important disclaimer</h2>
           <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">

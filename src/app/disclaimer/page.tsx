@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ShieldCheck, AlertTriangle, Scale, BookOpen, Calculator, TrendingUp } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Disclaimer",
-  description: "Fistotex Disclaimer - Important legal disclaimers regarding financial calculators, news content, and educational information provided on this platform.",
-  openGraph: {
-    title: "Disclaimer | Fistotex",
-    description: "Important legal disclaimers for Fistotex financial calculators and news content.",
-    type: "website",
-  },
-};
+  description:
+    "Fistotex calculators and news are for education only, not investment, tax or legal advice. Read how estimates are made and what they can and cannot tell you.",
+  path: "/disclaimer",
+});
 
 // Update this date whenever the policy text changes.
 const lastUpdated = new Date("2026-09-26").toLocaleDateString("en-IN", {
@@ -220,7 +218,7 @@ const sections = [
 export default function DisclaimerPage() {
   return (
     <div className="flex flex-col">
-      <StructuredData type="WebPage" data={{ title: "Disclaimer", description: "Fistotex Disclaimer - Important legal disclaimers regarding financial calculators, news content, and educational information." }} />
+      <StructuredData type="WebPage" data={{ title: "Disclaimer", url: "/disclaimer", description: "Fistotex Disclaimer - Important legal disclaimers regarding financial calculators, news content, and educational information." }} />
 
       <PageHeader
         eyebrow="Legal"

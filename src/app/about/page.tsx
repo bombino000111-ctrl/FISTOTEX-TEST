@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -19,47 +20,41 @@ import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader, Section } from "@/components/layout/section";
 import { calculators } from "@/lib/calculators/registry";
 
-export const metadata: Metadata = {
-  title: "About Fistotex",
+export const metadata: Metadata = pageMetadata({
+  title: "About Us",
   description:
-    "Learn about Fistotex — transparent financial calculators and attributed market news built for Indian investors.",
-  alternates: { canonical: `${siteConfig.url.replace(/\/$/, "")}/about` },
-  openGraph: {
-    title: "About Fistotex",
-    description: "Transparent financial calculators and attributed market news built for Indian investors.",
-    type: "website",
-    images: [{ url: siteConfig.ogImage, width: 1200, height: 630 }],
-  },
-};
+    "Fistotex builds free, transparent financial calculators and curates attributed market news for Indian investors. Learn who we are and how we check our numbers.",
+  path: "/about",
+});
 
 const values = [
   {
     icon: Target,
-    tint: "#10B981",
+    tint: "#0B6E4F",
     title: "Accuracy first",
     description: "Calculators use standard, published formulas, and every news story links back to its original publisher.",
   },
   {
     icon: ShieldCheck,
-    tint: "#6366F1",
+    tint: "#34507F",
     title: "Transparency",
     description: "Formulas and assumptions are shown on every calculator, so you can see exactly how a number was reached.",
   },
   {
     icon: Users,
-    tint: "#F59E0B",
+    tint: "#A2560B",
     title: "Built for people",
     description: "Plain language, fast pages and no sign-up walls. Tools that respect your time and your privacy.",
   },
   {
     icon: Lightbulb,
-    tint: "#EC4899",
+    tint: "#7A3E6C",
     title: "Education over advice",
     description: "We explain the numbers; you make the decision. We never push products or give personal recommendations.",
   },
   {
     icon: BookOpen,
-    tint: "#06B6D4",
+    tint: "#0F6A80",
     title: "Always improving",
     description: "We refine tools as rates, rules and your feedback change. Tell us what you'd like to see next.",
   },
@@ -68,25 +63,25 @@ const values = [
 const features = [
   {
     icon: Calculator,
-    tint: "#10B981",
+    tint: "#0B6E4F",
     title: `${calculators.length} financial calculators`,
     description: "SIP, lumpsum, EMI, FD, RD, PPF, NPS, retirement, CAGR, XIRR, bonds, inflation and more.",
   },
   {
     icon: Newspaper,
-    tint: "#06B6D4",
+    tint: "#0F6A80",
     title: "Curated market news",
     description: "Live headlines from Mint, Economic Times, Moneycontrol and Business Standard, always attributed.",
   },
   {
     icon: IndianRupee,
-    tint: "#F59E0B",
+    tint: "#A2560B",
     title: "Made for India",
     description: "Rupee formatting, lakh/crore figures and Indian products like PPF, NPS and recurring deposits.",
   },
   {
     icon: Sigma,
-    tint: "#6366F1",
+    tint: "#34507F",
     title: "Working shown",
     description: "Every calculator explains its formula, assumptions and common questions alongside the result.",
   },

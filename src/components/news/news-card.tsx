@@ -1,21 +1,22 @@
+import type * as React from "react";
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import type { NewsArticle } from "@/types/news";
 import { formatRelativeTime, cn } from "@/lib/utils";
 
 /** Tint per news category so the grid scans at a glance. */
 const categoryTint: Record<string, string> = {
-  markets: "#10B981",
-  stocks: "#06B6D4",
-  "mutual-funds": "#8B5CF6",
-  "personal-finance": "#F59E0B",
-  banking: "#3B82F6",
-  economy: "#EF4444",
-  business: "#64748B",
-  ipo: "#EC4899",
-  tax: "#F97316",
-  insurance: "#14B8A6",
-  cryptocurrency: "#A855F7",
-  "global-markets": "#6366F1",
+  markets: "#0B6E4F",
+  stocks: "#0F6A80",
+  "mutual-funds": "#5B4FA0",
+  "personal-finance": "#A2560B",
+  banking: "#1F4E8C",
+  economy: "#9B2C2C",
+  business: "#4A5563",
+  ipo: "#7A3E6C",
+  tax: "#9A4A12",
+  insurance: "#11695F",
+  cryptocurrency: "#6B3FA0",
+  "global-markets": "#34507F",
 };
 
 interface NewsCardProps {
@@ -26,7 +27,7 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ article, featured = false, className }: NewsCardProps) {
-  const tint = categoryTint[article.category ?? ""] ?? "#10B981";
+  const tint = categoryTint[article.category ?? ""] ?? "#0B6E4F";
 
   return (
     // `relative` scopes the stretched link below to this card only.
@@ -56,7 +57,7 @@ export function NewsCard({ article, featured = false, className }: NewsCardProps
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <Newspaper className="h-10 w-10 opacity-40" style={{ color: tint }} />
+            <Newspaper className="tint-text h-10 w-10 opacity-40" style={{ "--tint": tint } as React.CSSProperties} />
           </div>
         )}
         <span className="absolute left-3 top-3 inline-flex items-center rounded bg-black/75 px-2 py-0.5 text-[11px] font-semibold text-white">
@@ -67,10 +68,10 @@ export function NewsCard({ article, featured = false, className }: NewsCardProps
       <div className={cn("flex flex-1 flex-col gap-3 p-5", featured && "md:p-7")}>
         {article.category && (
           <span
-            className="inline-flex w-fit items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider"
-            style={{ color: tint }}
+            className="tint-text inline-flex w-fit items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider"
+            style={{ "--tint": tint } as React.CSSProperties}
           >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: tint }} />
+            <span className="h-1.5 w-1.5 rounded-full bg-current" />
             {article.category.replace(/-/g, " ")}
           </span>
         )}

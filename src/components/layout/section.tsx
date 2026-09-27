@@ -82,7 +82,7 @@ export function PageHeader({ eyebrow, title, description, crumbs, children, asid
     <div className="border-b border-border bg-card">
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div className={cn(aside && "grid items-center gap-10 lg:grid-cols-[1.3fr_1fr]")}>
-          <div className="animate-fade-up">
+          <div>
             {crumbs && <Breadcrumbs items={crumbs} className="mb-6" />}
             {eyebrow && <p className="eyebrow mb-4">{eyebrow}</p>}
             <h1 className="font-display max-w-3xl text-4xl text-foreground md:text-5xl lg:text-[3.5rem] lg:leading-[1.08]">

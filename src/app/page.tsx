@@ -22,25 +22,34 @@ import { getNews } from "@/lib/news/rss";
 import type { NewsArticle } from "@/types/news";
 import { calculators, calculatorsByCategory, categories } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
+import { pageMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Fistotex: Free SIP, EMI & FD Calculators + Market News",
+  description: siteConfig.description,
+  path: "/",
+  absoluteTitle: true,
+});
 
 export const revalidate = 600;
 
 const values = [
   {
     icon: Newspaper,
-    tint: "#06B6D4",
+    tint: "#0F6A80",
     title: "Attributed news",
     body: "Headlines from established Indian financial publishers, each linked to the original story. We aggregate; we don't rewrite.",
   },
   {
     icon: Calculator,
-    tint: "#10B981",
+    tint: "#0B6E4F",
     title: "Transparent maths",
     body: "Every result shows the formula and the assumptions behind it, so you can check the numbers yourself.",
   },
   {
     icon: Lock,
-    tint: "#6366F1",
+    tint: "#34507F",
     title: "Private by design",
     body: "Calculations run entirely in your browser. No accounts, no paywall and nothing you type is stored.",
   },
@@ -109,7 +118,7 @@ export default async function Home() {
       <section className="border-b border-border bg-card">
         <div className="container mx-auto px-4 pb-16 pt-10 md:pb-20 md:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-            <div className="animate-fade-up">
+            <div>
               <span className="chip">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand" />
                 {calculators.length} free calculators · live market news

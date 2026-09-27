@@ -168,7 +168,7 @@ export default function ContactForm() {
               {[
                 {
                   icon: Mail,
-                  tint: "#10B981",
+                  tint: "#0B6E4F",
                   title: "Email",
                   body: (
                     <a href={`mailto:${siteConfig.contactEmail}`} className="break-all hover:text-accent">
@@ -176,8 +176,8 @@ export default function ContactForm() {
                     </a>
                   ),
                 },
-                { icon: Clock, tint: "#6366F1", title: "Response time", body: "Within 1–2 business days" },
-                { icon: MapPin, tint: "#F59E0B", title: "Based in", body: siteConfig.businessAddress || "India" },
+                { icon: Clock, tint: "#34507F", title: "Response time", body: "Within 1–2 business days" },
+                { icon: MapPin, tint: "#A2560B", title: "Based in", body: siteConfig.businessAddress || "India" },
               ].map((item) => {
                 const Icon = item.icon;
                 return (

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ShieldCheck, Eye, Database, Lock, Mail, Truck, Globe, UserCheck, Calendar } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "Fistotex Privacy Policy - How we collect, use, and protect your personal information when you use our financial calculators and news platform.",
-  openGraph: {
-    title: "Privacy Policy | Fistotex",
-    description: "How we collect, use, and protect your personal information.",
-    type: "website",
-  },
-};
+  description:
+    "How Fistotex handles your data: calculators run in your browser, we store no inputs, and analytics are limited to anonymous usage. Read the full privacy policy.",
+  path: "/privacy-policy",
+});
 
 // Update this date whenever the policy text changes.
 const lastUpdated = new Date("2026-09-26").toLocaleDateString("en-IN", {
@@ -175,7 +173,7 @@ const sections = [
 export default function PrivacyPolicyPage() {
   return (
     <div className="flex flex-col">
-      <StructuredData type="WebPage" data={{ title: "Privacy Policy", description: "Fistotex Privacy Policy - How we collect, use, and protect your personal information." }} />
+      <StructuredData type="WebPage" data={{ title: "Privacy Policy", url: "/privacy-policy", description: "Fistotex Privacy Policy - How we collect, use, and protect your personal information." }} />
 
       <PageHeader
         eyebrow="Legal"

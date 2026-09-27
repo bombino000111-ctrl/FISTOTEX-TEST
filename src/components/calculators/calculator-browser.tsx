@@ -61,7 +61,7 @@ export function CalculatorBrowser() {
         </div>
 
         <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1">
-          {[{ id: "all" as const, name: "All", tint: "#10B981" }, ...categories].map((c) => {
+          {[{ id: "all" as const, name: "All", tint: "#0B6E4F" }, ...categories].map((c) => {
             const active = cat === c.id;
             return (
               <button

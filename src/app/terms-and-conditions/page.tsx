@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ShieldCheck, FileText, Gavel, Globe, Calendar, UserCheck, AlertTriangle, Calculator } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms and Conditions",
-  description: "Fistotex Terms and Conditions - Legal terms governing the use of our financial calculators, news platform, and website.",
-  openGraph: {
-    title: "Terms and Conditions | Fistotex",
-    description: "Legal terms governing the use of Fistotex financial calculators and news platform.",
-    type: "website",
-  },
-};
+  description:
+    "The terms that govern your use of Fistotex, including our free financial calculators, aggregated market news and educational content for Indian investors.",
+  path: "/terms-and-conditions",
+});
 
 // Update this date whenever the policy text changes.
 const lastUpdated = new Date("2026-09-26").toLocaleDateString("en-IN", {
@@ -232,7 +230,7 @@ const sections = [
 export default function TermsPage() {
   return (
     <div className="flex flex-col">
-      <StructuredData type="WebPage" data={{ title: "Terms and Conditions", description: "Fistotex Terms and Conditions - Legal terms governing the use of our financial calculators, news platform, and website." }} />
+      <StructuredData type="WebPage" data={{ title: "Terms and Conditions", url: "/terms-and-conditions", description: "Fistotex Terms and Conditions - Legal terms governing the use of our financial calculators, news platform, and website." }} />
 
       <PageHeader
         eyebrow="Legal"

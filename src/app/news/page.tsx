@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search, Rss, AlertTriangle } from "lucide-react";
 import { PageHeader } from "@/components/layout/section";
@@ -10,18 +11,12 @@ import { cn } from "@/lib/utils";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "Latest Financial News",
+export const metadata: Metadata = pageMetadata({
+  title: "Latest Stock Market & Financial News India",
   description:
-    "Stay updated with the latest financial news from trusted Indian sources. Markets, stocks, mutual funds, personal finance and more.",
-  alternates: { canonical: `${siteConfig.url.replace(/\/$/, "")}/news` },
-  openGraph: {
-    title: "Latest Financial News | Fistotex",
-    description: "Stay updated with the latest financial news from trusted Indian sources.",
-    type: "website",
-    images: [{ url: siteConfig.ogImage, width: 1200, height: 630 }],
-  },
-};
+    "Today's Indian stock market and financial news from Mint, Economic Times, Moneycontrol and Business Standard: Sensex, Nifty, IPOs, mutual funds and the economy.",
+  path: "/news",
+});
 
 type SearchParams = Promise<{
   q?: string;

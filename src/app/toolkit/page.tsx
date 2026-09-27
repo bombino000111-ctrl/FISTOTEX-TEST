@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader, Section } from "@/components/layout/section";
@@ -7,12 +8,12 @@ import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { calculators, categories, calculatorsByCategory } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 
-export const metadata: Metadata = {
-  title: "Financial Toolkit",
+export const metadata: Metadata = pageMetadata({
+  title: "Free Financial Planning Toolkit for India",
   description:
-    "Simple, powerful calculators to help you understand investments, loans, savings and long-term financial planning.",
-  alternates: { canonical: `${siteConfig.url.replace(/\/$/, "")}/toolkit` },
-};
+    "A free toolkit of financial calculators for Indian investors: SIP, EMI, FD, PPF, NPS, retirement, CAGR, XIRR and more. Formulas shown, no sign-up.",
+  path: "/toolkit",
+});
 
 export default function ToolkitPage() {
   return (

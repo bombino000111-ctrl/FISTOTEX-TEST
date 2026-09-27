@@ -38,6 +38,10 @@
   color-scheme: light;
 }
 
+/* Readable ink for per-category tints (see .tint-text) */
+* { --tint-ink: var(--tint, var(--accent)); }
+[data-theme="dark"] * { --tint-ink: color-mix(in srgb, var(--tint, var(--accent)) 45%, #fff); }
+
 [data-theme="dark"] {
   --background: #111315;
   --foreground: #ECEAE4;
@@ -236,14 +240,19 @@ body {
     box-shadow: 0 2px 0 0 var(--foreground);
   }
 
-  /* Icon tile with per-category colour: set --tint on the element */
+  /* Per-category colour: set --tint on the element (or an ancestor).
+     Tints are deep, AA-contrast tones on light surfaces; dark mode lifts them
+     toward white so small labels stay readable. */
+  .tint-text { color: var(--tint-ink); }
+
+  /* Icon tile with per-category colour */
   .icon-tile {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 0.5rem;
-    color: var(--tint, var(--accent));
-    background: color-mix(in srgb, var(--tint, var(--accent)) 12%, var(--card));
+    color: var(--tint-ink);
+    background: color-mix(in srgb, var(--tint, var(--accent)) 10%, var(--card));
   }
 
   /* ── Range slider ─────────────────────────────────────────── */

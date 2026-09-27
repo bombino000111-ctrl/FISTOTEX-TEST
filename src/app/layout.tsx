@@ -68,7 +68,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: siteConfig.url,
     title: `${siteConfig.name} — Financial News, Calculators & Money Tools`,
     description: siteConfig.description,
     siteName: siteConfig.name,
@@ -87,9 +86,9 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
-  alternates: {
-    canonical: siteConfig.url,
-  },
+  // No site-wide canonical: each page sets its own via pageMetadata(), so
+  // pages can never inherit the homepage URL by accident.
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {
@@ -109,7 +108,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="en-IN"
       className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
       suppressHydrationWarning
     >

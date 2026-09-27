@@ -6,7 +6,7 @@ import { categories, type CalculatorDef } from "@/lib/calculators/registry";
 export function CalculatorCard({ calc }: { calc: CalculatorDef }) {
   const Icon = calc.icon;
   const category = categories.find((c) => c.id === calc.category);
-  const tint = category?.tint ?? "#10B981";
+  const tint = category?.tint ?? "#0B6E4F";
 
   return (
     <Link
@@ -22,7 +22,7 @@ export function CalculatorCard({ calc }: { calc: CalculatorDef }) {
           <ArrowUpRight className="h-4 w-4" />
         </span>
       </div>
-      <p className="relative text-[11px] font-bold uppercase tracking-wider" style={{ color: tint }}>
+      <p className="tint-text relative text-[11px] font-bold uppercase tracking-wider">
         {category?.name}
       </p>
       <h3 className="relative mt-1 text-lg font-bold text-foreground">{calc.name}</h3>

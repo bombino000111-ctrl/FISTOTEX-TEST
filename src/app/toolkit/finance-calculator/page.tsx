@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader, Section } from "@/components/layout/section";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { CalculatorBrowser } from "@/components/calculators/calculator-browser";
 import { calculators } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 
-export const metadata: Metadata = {
-  title: "Finance Calculators",
+export const metadata: Metadata = pageMetadata({
+  title: "All Finance Calculators: SIP, EMI, FD, PPF & More",
   description:
-    "Free finance calculators for SIP, EMI, FD, PPF, NPS, retirement, CAGR, XIRR, bonds and inflation. Clear formulas, transparent assumptions, no sign-up.",
-  alternates: { canonical: `${siteConfig.url.replace(/\/$/, "")}/toolkit/finance-calculator` },
-};
+    "Free online finance calculators for India: SIP, lumpsum, EMI, FD, RD, PPF, NPS, retirement, CAGR, XIRR, bond and inflation. Every formula shown.",
+  path: "/toolkit/finance-calculator",
+});
 
 export default function FinanceCalculatorPage() {
   return (

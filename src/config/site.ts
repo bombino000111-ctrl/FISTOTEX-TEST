@@ -6,12 +6,15 @@
 export const siteConfig = {
   name: "Fistotex",
   description:
-    "Your trusted financial companion. Expert financial news, powerful calculators, and smart money tools for informed decisions.",
+    "Free SIP, EMI, FD, PPF, NPS and retirement calculators for India with every formula shown, plus live stock market news from India's leading publishers.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.fistotex.com",
   ogImage: "/og-image.png",
   contactEmail: process.env.CONTACT_EMAIL || "contact@fistotex.com",
   ownerName: process.env.SITE_OWNER_NAME || "Fistotex",
   businessAddress: process.env.BUSINESS_ADDRESS || "",
+
+  // Date the calculator formulas and guide copy were last checked (YYYY-MM-DD)
+  contentReviewed: "2026-09-27",
 
   // GA4 Configuration
   gaId: process.env.NEXT_PUBLIC_GA_ID || "",

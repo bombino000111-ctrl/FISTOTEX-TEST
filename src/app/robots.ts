@@ -1,24 +1,35 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/config/site";
+import { baseUrl } from "@/lib/seo";
+
+/**
+ * AI search and assistant crawlers are explicitly welcome: being readable by
+ * them is what gets Fistotex cited in ChatGPT, Perplexity, Claude, Gemini and
+ * Google AI Overviews. To opt out of one, change its rule to `disallow: "/"`.
+ */
+const aiCrawlers = [
+  "GPTBot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Applebot-Extended",
+  "Bingbot",
+  "CCBot",
+  "Meta-ExternalAgent",
+];
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = siteConfig.url.replace(/\/$/, "");
-
   return {
     rules: [
-      {
-        // Crawlers must be able to fetch /_next/ CSS & JS to render pages, and
-        // /sitemap.xml itself — so only private endpoints are blocked.
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/api/"],
-      },
-      // Opt out of AI model-training crawlers. Remove an entry to allow it.
-      { userAgent: "GPTBot", disallow: "/" },
-      { userAgent: "CCBot", disallow: "/" },
-      { userAgent: "Google-Extended", disallow: "/" },
+      // Crawlers must be able to fetch /_next/ CSS & JS to render pages, so
+      // only private endpoints are blocked.
+      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      { userAgent: aiCrawlers, allow: "/", disallow: ["/api/"] },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
   };
 }

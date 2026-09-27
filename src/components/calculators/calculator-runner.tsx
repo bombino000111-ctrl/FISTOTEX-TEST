@@ -2,27 +2,13 @@
 
 import * as React from "react";
 import { RotateCcw, Link2, Check, AlertTriangle } from "lucide-react";
-import { getCalculator, type CalcField, type CalcOutput } from "@/lib/calculators/registry";
+import { getCalculator, type CalcField } from "@/lib/calculators/registry";
 import { GrowthChart } from "@/components/calculators/growth-chart";
-import { formatCurrency, formatCompactCurrency, cn } from "@/lib/utils";
+import { formatCompactCurrency, cn } from "@/lib/utils";
+import { formatOutput } from "@/lib/calculators/format";
 import { trackEvent } from "@/lib/analytics";
 
 type Values = Record<string, number | string>;
-
-function formatOutput(value: number | string, kind: CalcOutput["kind"]) {
-  if (typeof value === "string") return value;
-  if (!Number.isFinite(value)) return "—";
-  switch (kind) {
-    case "currency":
-      return formatCurrency(value);
-    case "percent":
-      return `${value.toLocaleString("en-IN", { maximumFractionDigits: 2 })}%`;
-    case "years":
-      return `${value.toLocaleString("en-IN")} years`;
-    default:
-      return value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
-  }
-}
 
 const noopSubscribe = () => () => {};
 

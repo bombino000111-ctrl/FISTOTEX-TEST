@@ -6,6 +6,7 @@ import { PageHeader, Section } from "@/components/layout/section";
 import { CalculatorRunner } from "@/components/calculators/calculator-runner";
 import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { AdUnit } from "@/components/ads/ad-unit";
 import { getCalculator, calculators, categories } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 import { calculatorSeo } from "@/lib/calculators/seo-content";
@@ -189,6 +190,12 @@ export function CalculatorPage({ id }: { id: string }) {
         </div>
       </Section>
 
+      {/* In-content ad: sits after the method explainer, so a visitor has
+          reached real content before meeting an ad. */}
+      <Section className="py-0">
+        <AdUnit format="in-article" minHeight={200} />
+      </Section>
+
       {/* FAQ */}
       {faqs.length > 0 && (
         <Section tone="muted" eyebrow="Questions" title="Frequently asked questions">
@@ -207,6 +214,11 @@ export function CalculatorPage({ id }: { id: string }) {
           </div>
         </Section>
       )}
+
+      {/* Ad above the related-calculator grid */}
+      <Section className="py-8">
+        <AdUnit format="display" minHeight={280} />
+      </Section>
 
       {/* Related */}
       {suggestions.length > 0 && (

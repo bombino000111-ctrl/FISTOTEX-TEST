@@ -17,6 +17,33 @@ export const siteConfig = {
   // Date the calculator formulas and guide copy were last checked (YYYY-MM-DD)
   contentReviewed: "2026-09-27",
 
+  // Google AdSense
+  // The publisher ID is public (it ships in every page). Ad slot IDs are
+  // created in the AdSense dashboard and pasted into `slots` below; a slot
+  // left empty renders nothing, so pages stay clean until it exists.
+  adsense: {
+    clientId: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-1157495262514467",
+    /** Master switch. Set NEXT_PUBLIC_ADSENSE_ENABLED=false to pull all ads. */
+    enabled: process.env.NEXT_PUBLIC_ADSENSE_ENABLED !== "false",
+    /**
+     * Ad units are suppressed on these paths. /news aggregates third-party
+     * headlines, so it carries no ads: AdSense policy prohibits monetising
+     * content you do not own. Legal pages and the 404 stay ad-free too, since
+     * ads on low-content pages are a policy risk.
+     */
+    excludedPaths: [
+      "/news",
+      "/privacy-policy",
+      "/terms-and-conditions",
+      "/disclaimer",
+    ],
+    /** Slot IDs from AdSense → Ads → By ad unit. Empty = not yet created. */
+    slots: {
+      inArticle: process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_ARTICLE || "",
+      display: process.env.NEXT_PUBLIC_ADSENSE_SLOT_DISPLAY || "",
+    },
+  },
+
   // GA4 Configuration
   // GA4 measurement IDs are public (they ship in every page); the env var can override it.
   gaId: process.env.NEXT_PUBLIC_GA_ID || "G-8HWMYEEZ3Z",

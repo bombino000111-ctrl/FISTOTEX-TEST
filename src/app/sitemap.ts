@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const legalUpdated = new Date("2026-09-26");
 
   const staticPages: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    { url: baseUrl, lastModified: reviewed, changeFrequency: "daily", priority: 1.0 },
     { url: `${baseUrl}/toolkit/finance-calculator`, lastModified: reviewed, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/toolkit`, lastModified: reviewed, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/news`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.8 },

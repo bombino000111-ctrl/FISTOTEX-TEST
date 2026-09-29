@@ -77,7 +77,11 @@ export function StructuredData({ type, data = {} }: StructuredDataProps) {
         availableLanguage: ["en"],
         areaServed: "IN",
       },
-      sameAs: Object.values(siteConfig.social).filter(Boolean),
+      // Emitted only when a profile actually exists: `sameAs: []` tells Google
+      // nothing and clutters the entity.
+      ...(Object.values(siteConfig.social).filter(Boolean).length
+        ? { sameAs: Object.values(siteConfig.social).filter(Boolean) }
+        : {}),
       address: {
         "@type": "PostalAddress",
         addressCountry: "IN",

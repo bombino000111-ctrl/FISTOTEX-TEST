@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import { ShieldCheck, Eye, Database, Lock, Mail, Truck, Globe, UserCheck, Calendar } from "lucide-react";
+import { ShieldCheck, Eye, Database, Lock, Mail, Truck, Globe, UserCheck, Calendar, Megaphone } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
@@ -53,8 +53,10 @@ const sections = [
       <ul>
         <li><strong>Essential cookies:</strong> Required for the Site to function properly</li>
         <li><strong>Analytics cookies:</strong> GA4 cookies (_ga, _ga_*) to understand how visitors interact with the Site</li>
+        <li><strong>Advertising cookies:</strong> Set by Google and its partners to serve and measure ads. See section 5 for full detail and how to opt out.</li>
       </ul>
       <p>You can control cookies through your browser settings. Disabling essential cookies may break Site functionality.</p>
+      <p>We operate Google Consent Mode: advertising and analytics storage are switched off by default for visitors in the European Economic Area, the United Kingdom and Switzerland until consent is given through the consent banner.</p>
     `,
   },
   {
@@ -81,7 +83,7 @@ const sections = [
     content: `
       <p>We may share your information in the following circumstances:</p>
       <ul>
-        <li><strong>Service Providers:</strong> We use Vercel (hosting), Google Analytics (Google LLC) for anonymous website analytics, and Resend to deliver contact-form messages to our inbox. Each provider's privacy policy governs its data handling.</li>
+        <li><strong>Service Providers:</strong> We use Vercel (hosting), Google Analytics (Google LLC) for anonymous website analytics, Google AdSense (Google LLC) to display advertising, and Resend to deliver contact-form messages to our inbox. Each provider's privacy policy governs its data handling.</li>
         <li><strong>Legal Requirements:</strong> If required by law, court order, or government request.</li>
         <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred.</li>
         <li><strong>With Your Consent:</strong> When you explicitly agree to share information.</li>
@@ -90,8 +92,42 @@ const sections = [
     `,
   },
   {
+    id: "advertising",
+    title: "5. Advertising and Google AdSense",
+    icon: Megaphone,
+    content: `
+      <p>This Site is supported by advertising. We use <strong>Google AdSense</strong>, an advertising service operated by Google LLC, to display ads on some pages.</p>
+
+      <h3>5.1 How Google uses cookies for advertising</h3>
+      <ul>
+        <li>Google, as a third-party vendor, uses cookies to serve ads on this Site.</li>
+        <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this Site and/or other sites on the Internet.</li>
+        <li>Third-party vendors and ad networks may also serve ads on this Site and may use cookies, web beacons or similar technologies to measure ad performance.</li>
+        <li>We do not control these cookies, and we do not have access to the information they collect.</li>
+      </ul>
+
+      <h3>5.2 Personalised advertising and how to opt out</h3>
+      <ul>
+        <li>You may opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+        <li>You can opt out of a third-party vendor's use of cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info/choices</a> or <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer">optout.networkadvertising.org</a>.</li>
+        <li>More detail is in <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google's advertising and privacy policy</a> and in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses information from sites that use its services</a>.</li>
+        <li>Opting out stops ads being <em>personalised</em>. You will still see ads, and they will be less relevant to you.</li>
+      </ul>
+
+      <h3>5.3 Consent in the EEA, UK and Switzerland</h3>
+      <p>Visitors from the European Economic Area, the United Kingdom and Switzerland are shown a consent message before any advertising or analytics cookie is set. Advertising and analytics storage remain disabled until consent is given, and consent can be changed or withdrawn at any time through that message.</p>
+
+      <h3>5.4 What advertising does not touch</h3>
+      <ul>
+        <li>We do not share your name, email address or contact-form messages with advertisers.</li>
+        <li><strong>Calculator inputs are never shared with advertisers.</strong> Calculations run entirely in your browser and the figures you enter are never transmitted anywhere, including to Google.</li>
+        <li>We do not place ads on pages aggregating third-party news content.</li>
+      </ul>
+    `,
+  },
+  {
     id: "data-security",
-    title: "5. Data Security",
+    title: "6. Data Security",
     icon: Lock,
     content: `
       <p>We implement reasonable technical and organizational measures to protect your information:</p>
@@ -106,7 +142,7 @@ const sections = [
   },
   {
     id: "your-rights",
-    title: "6. Your Rights",
+    title: "7. Your Rights",
     icon: UserCheck,
     content: `
       <p>Depending on your location, you may have the following rights:</p>
@@ -119,12 +155,12 @@ const sections = [
         <li><strong>Objection:</strong> Object to processing for direct marketing or legitimate interests</li>
         <li><strong>Withdraw Consent:</strong> Where processing is based on consent</li>
       </ul>
-      <p>To exercise these rights, contact us at <a href="mailto:${siteConfig.contactEmail}" className="underline">${siteConfig.contactEmail}</a>.</p>
+      <p>To exercise these rights, contact us at <a href="mailto:${siteConfig.contactEmail}" class="underline">${siteConfig.contactEmail}</a>.</p>
     `,
   },
   {
     id: "third-party-links",
-    title: "7. Third-Party Links",
+    title: "8. Third-Party Links",
     icon: Globe,
     content: `
       <p>The Site contains links to third-party websites (news sources, financial institutions, etc.). We are not responsible for the privacy practices or content of these external sites. This Privacy Policy applies only to the Site.</p>
@@ -133,7 +169,7 @@ const sections = [
   },
   {
     id: "children",
-    title: "8. Children's Privacy",
+    title: "9. Children's Privacy",
     icon: Calendar,
     content: `
       <p>The Site is not directed to children under 13 (or 16 in some jurisdictions). We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.</p>
@@ -141,7 +177,7 @@ const sections = [
   },
   {
     id: "international-transfers",
-    title: "9. International Data Transfers",
+    title: "10. International Data Transfers",
     icon: Globe,
     content: `
       <p>Our Site is hosted in India/US via Vercel. Google Analytics processes data in the US. By using the Site, you consent to the transfer of your information to these jurisdictions, which may have different data protection laws than your country.</p>
@@ -149,7 +185,7 @@ const sections = [
   },
   {
     id: "changes",
-    title: "10. Changes to This Policy",
+    title: "11. Changes to This Policy",
     icon: Calendar,
     content: `
       <p>We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page with an updated "Last Updated" date.</p>
@@ -158,13 +194,13 @@ const sections = [
   },
   {
     id: "contact",
-    title: "11. Contact Us",
+    title: "12. Contact Us",
     icon: Mail,
     content: `
       <p>If you have questions about this Privacy Policy or our data practices, contact us:</p>
       <ul>
-        <li>Email: <a href="mailto:${siteConfig.contactEmail}" className="underline">${siteConfig.contactEmail}</a></li>
-        <li>Website: <a href="${siteConfig.url}/contact" className="underline">${siteConfig.url}/contact</a></li>
+        <li>Email: <a href="mailto:${siteConfig.contactEmail}" class="underline">${siteConfig.contactEmail}</a></li>
+        <li>Website: <a href="${siteConfig.url}/contact" class="underline">${siteConfig.url}/contact</a></li>
       </ul>
     `,
   },
@@ -214,6 +250,7 @@ export default function PrivacyPolicyPage() {
                 <li className="flex gap-2"><span className="text-accent">✓</span> Only contact form data and anonymous analytics collected</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> No selling of personal information</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> Google Analytics 4 for anonymous usage stats</li>
+                <li className="flex gap-2"><span className="text-accent">✓</span> Google AdSense ads on some pages — never on aggregated news, and never using your calculator inputs</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> You can request data deletion anytime</li>
               </ul>
             </div>

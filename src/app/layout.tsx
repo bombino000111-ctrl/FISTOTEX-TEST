@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { GA4, GA4PageView } from "@/components/analytics/GA4";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { themeInitScript } from "@/components/layout/theme-toggle";
+import { consentInitScript } from "@/components/ads/consent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -89,6 +90,12 @@ export const metadata: Metadata = {
   // No site-wide canonical: each page sets its own via pageMetadata(), so
   // pages can never inherit the homepage URL by accident.
   formatDetection: { telephone: false, email: false, address: false },
+  // AdSense verifies site ownership from this tag as well as from the loader
+  // script and ads.txt. Having all three means verification cannot stall on a
+  // single missing signal.
+  ...(siteConfig.adsense.clientId
+    ? { other: { "google-adsense-account": siteConfig.adsense.clientId } }
+    : {}),
 };
 
 export const viewport: Viewport = {
@@ -113,12 +120,38 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/*
+          Consent Mode v2 defaults. Must be the first script on the page: both
+          gtag.js and the AdSense loader read this state as they initialise, so
+          anything set after them is set too late.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: consentInitScript }} />
+
         {/* Apply the saved/system theme before first paint (no flash) */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+
         {siteConfig.gaId && (
           <>
             <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
             <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+          </>
+        )}
+
+        {/*
+          AdSense loader. Deliberately a plain async <script> in <head> rather
+          than next/script: AdSense verifies the site by fetching the raw HTML,
+          and next/script's strategies inject after hydration, where the
+          reviewer's fetch would not see it. `async` keeps it off the critical
+          path so it costs nothing in Core Web Vitals.
+        */}
+        {siteConfig.adsense.enabled && siteConfig.adsense.clientId && (
+          <>
+            <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsense.clientId}`}
+              crossOrigin="anonymous"
+            />
           </>
         )}
       </head>

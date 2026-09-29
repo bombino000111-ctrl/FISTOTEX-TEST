@@ -11,19 +11,51 @@ import { cn } from "@/lib/utils";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = pageMetadata({
-  title: "Latest Stock Market & Financial News India",
-  description:
-    "Today's Indian stock market and financial news from Mint, Economic Times, Moneycontrol and Business Standard: Sensex, Nifty, IPOs, mutual funds and the economy.",
-  path: "/news",
-});
-
 type SearchParams = Promise<{
   q?: string;
   category?: string;
   source?: string;
   page?: string;
 }>;
+
+const newsMetadata = pageMetadata({
+  title: "Latest Stock Market & Financial News India",
+  description:
+    "Today's Indian stock market and financial news from Mint, Economic Times, Moneycontrol and Business Standard: Sensex, Nifty, IPOs, mutual funds and the economy.",
+  path: "/news",
+});
+
+/**
+ * The category and source chips are real links, so every combination of
+ * ?category, ?source, ?q and ?page is a crawlable URL — 12 categories x 4
+ * sources x several pages is hundreds of near-identical pages competing with
+ * /news itself and burning crawl budget.
+ *
+ * So only the clean /news URL is indexable. Filtered and paginated views are
+ * noindex,follow: Google still walks them to reach the outbound stories, but
+ * keeps just one version of this page in the index. The canonical stays on
+ * /news throughout (set by pageMetadata above).
+ */
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const isFiltered = Boolean(
+    sp.q?.trim() ||
+      (sp.category && sp.category !== "all") ||
+      (sp.source && sp.source !== "all") ||
+      (sp.page && sp.page !== "1")
+  );
+
+  if (!isFiltered) return newsMetadata;
+
+  return {
+    ...newsMetadata,
+    robots: { index: false, follow: true },
+  };
+}
 
 /** Build a /news URL preserving the other active filters. */
 function buildHref(

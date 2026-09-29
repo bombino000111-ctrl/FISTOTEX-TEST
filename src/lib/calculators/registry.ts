@@ -32,9 +32,9 @@ import {
 /* ────────────────────────────────────────────────────────────────
    Single source of truth for every calculator.
 
-   Adding one here gives you: the toolkit listing, the finance-calculator
-   index, a statically generated page at /toolkit/finance-calculator/<id>,
-   and an entry in the sitemap. No per-page wiring.
+   Adding one here gives you: the /calculators hub, its category page, a
+   statically generated page at /calculators/<id>, and an entry in the
+   sitemap. No per-page wiring.
    ──────────────────────────────────────────────────────────────── */
 
 export type CategoryId =
@@ -923,4 +923,29 @@ export function calculatorsByCategory(category: CategoryId): CalculatorDef[] {
 
 export function iconFor(icon: LucideIcon) {
   return icon;
+}
+
+/* ── paths ───────────────────────────────────────────────────────
+   Every calculator URL is built here. Sprinkling the literal across pages,
+   cards, the sitemap and llms.txt is what made the last restructure a
+   30-file change; a future one is a two-line edit in this block.
+
+   Categories live under /category/ because `retirement` is BOTH a calculator
+   id and a category id — a single flat namespace would collide.
+   ──────────────────────────────────────────────────────────────── */
+
+/** The calculator hub. */
+export const calculatorsPath = "/calculators";
+
+/** A single calculator, e.g. /calculators/sip */
+export const calculatorPath = (id: string) => `${calculatorsPath}/${id}`;
+
+/** A category listing, e.g. /calculators/category/investment */
+export const categoryPath = (id: CategoryId | string) =>
+  `${calculatorsPath}/category/${id}`;
+
+export const categoryIds = categories.map((c) => c.id);
+
+export function getCategory(id: string): Category | undefined {
+  return categories.find((c) => c.id === id);
 }

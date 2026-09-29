@@ -1,7 +1,14 @@
 import { siteConfig } from "@/config/site";
 import { baseUrl } from "@/lib/seo";
-import { calculators } from "@/lib/calculators/registry";
-import { calculatorSeo } from "@/lib/calculators/seo-content";
+import {
+  calculators,
+  categories,
+  calculatorsByCategory,
+  calculatorPath,
+  categoryPath,
+  calculatorsPath,
+} from "@/lib/calculators/registry";
+import { calculatorSeo, categorySeo } from "@/lib/calculators/seo-content";
 
 export const dynamic = "force-static";
 
@@ -14,7 +21,18 @@ export function GET() {
   const calcLines = calculators
     .map((c) => {
       const seo = calculatorSeo[c.id];
-      return `- [${c.name}](${baseUrl}/toolkit/finance-calculator/${c.id}): ${seo?.description ?? c.tagline} Formula: ${c.formula.expression}`;
+      return `- [${c.name}](${baseUrl}${calculatorPath(c.id)}): ${seo?.description ?? c.tagline} Formula: ${c.formula.expression}`;
+    })
+    .join("\n");
+
+  const categoryLines = categories
+    .filter((cat) => calculatorsByCategory(cat.id).length > 0)
+    .map((cat) => {
+      const seo = categorySeo[cat.id];
+      const names = calculatorsByCategory(cat.id)
+        .map((c) => c.name)
+        .join(", ");
+      return `- [${cat.name} calculators](${baseUrl}${categoryPath(cat.id)}): ${seo?.description ?? cat.blurb} Includes: ${names}.`;
     })
     .join("\n");
 
@@ -28,9 +46,13 @@ ${siteConfig.name} is an Indian personal-finance website. Every calculator is fr
 
 ${calcLines}
 
+## Calculator categories
+
+${categoryLines}
+
 ## Other pages
 
-- [All finance calculators](${baseUrl}/toolkit/finance-calculator): Index of every calculator grouped by goal.
+- [All finance calculators](${baseUrl}${calculatorsPath}): Index of every calculator grouped by goal.
 - [Latest financial news](${baseUrl}/news): Live Indian market and personal-finance headlines with source attribution.
 - [About](${baseUrl}/about): Who runs ${siteConfig.name} and how the calculators are checked.
 - [Disclaimer](${baseUrl}/disclaimer): Limits of the estimates and the educational nature of the site.

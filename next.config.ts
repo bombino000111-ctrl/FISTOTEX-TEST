@@ -49,17 +49,40 @@ const nextConfig: NextConfig = {
   },
 
   async redirects() {
+    /*
+      Every rule below lands on its FINAL destination in one hop. Chaining
+      (/calculator -> /toolkit/finance-calculator -> /calculators) would leak
+      link equity at each step and slow every crawl, so the two pre-existing
+      legacy prefixes were retargeted straight at /calculators rather than left
+      pointing at the retired /toolkit path.
+
+      Specific /:id rules come BEFORE the bare-path rules, or a bare rule would
+      swallow them.
+    */
     return [
+      // 2026-09 restructure: the calculators moved up from /toolkit/finance-calculator.
       {
-        source: "/finance-calculator/:path*",
-        destination: "/toolkit/finance-calculator/:path*",
+        source: "/toolkit/finance-calculator/:id",
+        destination: "/calculators/:id",
         permanent: true,
       },
+      { source: "/toolkit/finance-calculator", destination: "/calculators", permanent: true },
+      // /toolkit only duplicated the calculator index, so it folds into the hub.
+      { source: "/toolkit", destination: "/calculators", permanent: true },
+
+      // Legacy prefixes that predate the restructure.
       {
-        source: "/calculator/:path*",
-        destination: "/toolkit/finance-calculator/:path*",
+        source: "/finance-calculator/:id",
+        destination: "/calculators/:id",
         permanent: true,
       },
+      { source: "/finance-calculator", destination: "/calculators", permanent: true },
+      {
+        source: "/calculator/:id",
+        destination: "/calculators/:id",
+        permanent: true,
+      },
+      { source: "/calculator", destination: "/calculators", permanent: true },
     ];
   },
 };

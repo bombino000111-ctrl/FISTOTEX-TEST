@@ -23,7 +23,7 @@ export default function NotFound() {
             Go home
           </Link>
           <Link
-            href="/toolkit/finance-calculator"
+            href="/calculators"
             className="btn-ghost h-11 px-6 text-sm"
           >
             <Calculator className="h-4 w-4" />
@@ -39,9 +39,9 @@ export default function NotFound() {
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
             {[
               { href: "/news", label: "Latest News" },
-              { href: "/toolkit", label: "Toolkit" },
-              { href: "/toolkit/finance-calculator/sip", label: "SIP Calculator" },
-              { href: "/toolkit/finance-calculator/emi", label: "EMI Calculator" },
+              { href: "/calculators", label: "All calculators" },
+              { href: "/calculators/sip", label: "SIP Calculator" },
+              { href: "/calculators/emi", label: "EMI Calculator" },
               { href: "/about", label: "About" },
               { href: "/contact", label: "Contact" },
             ].map((l) => (

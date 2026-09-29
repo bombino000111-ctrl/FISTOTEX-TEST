@@ -124,7 +124,7 @@ export function HeroCalculator() {
         </div>
 
         <Link
-          href={`/toolkit/finance-calculator/sip?monthlyInvestment=${monthly}&years=${years}`}
+          href={`/calculators/sip?monthlyInvestment=${monthly}&years=${years}`}
           className="btn-ghost mt-6 w-full py-3 text-sm"
         >
           Open full SIP calculator

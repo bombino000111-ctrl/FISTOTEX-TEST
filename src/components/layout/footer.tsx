@@ -9,17 +9,16 @@ const columns = [
     links: [
       { href: "/", label: "Home" },
       { href: "/news", label: "Latest news" },
-      { href: "/toolkit", label: "Toolkit" },
-      { href: "/toolkit/finance-calculator", label: "All calculators" },
+      { href: "/calculators", label: "All calculators" },
     ],
   },
   {
     title: "Popular tools",
     links: [
-      { href: "/toolkit/finance-calculator/sip", label: "SIP calculator" },
-      { href: "/toolkit/finance-calculator/emi", label: "EMI calculator" },
-      { href: "/toolkit/finance-calculator/fd", label: "FD calculator" },
-      { href: "/toolkit/finance-calculator/retirement", label: "Retirement planner" },
+      { href: "/calculators/sip", label: "SIP calculator" },
+      { href: "/calculators/emi", label: "EMI calculator" },
+      { href: "/calculators/fd", label: "FD calculator" },
+      { href: "/calculators/retirement", label: "Retirement planner" },
     ],
   },
   {
@@ -50,7 +49,7 @@ export function Footer() {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link href="/toolkit/finance-calculator" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-panel transition-colors hover:bg-white/90">
+              <Link href="/calculators" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-panel transition-colors hover:bg-white/90">
                 Explore calculators
                 <ArrowRight className="h-4 w-4" />
               </Link>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CalculatorPage } from "@/components/calculators/calculator-page";
-import { calculatorIds, getCalculator } from "@/lib/calculators/registry";
+import { calculatorIds, getCalculator, calculatorPath } from "@/lib/calculators/registry";
 import { calculatorSeo } from "@/lib/calculators/seo-content";
 import { pageMetadata } from "@/lib/seo";
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
     description:
       seo?.description ??
       `${def.tagline} Free ${def.name} for Indian investors with the formula and assumptions shown.`,
-    path: `/toolkit/finance-calculator/${def.id}`,
+    path: calculatorPath(def.id),
   });
 }
 

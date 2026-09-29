@@ -34,7 +34,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Financial Calculators",
         short_name: "Calculators",
         description: "Free SIP, EMI, FD, PPF and retirement calculators",
-        url: "/toolkit/finance-calculator",
+        url: "/calculators",
         icons: [{ src: "/favicon.svg", sizes: "96x96" }],
       },
       {

@@ -280,7 +280,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                   </Link>
                 )}
                 <Link
-                  href="/toolkit/finance-calculator"
+                  href="/calculators"
                   className="btn-ghost h-10 px-5 text-sm"
                 >
                   Browse calculators

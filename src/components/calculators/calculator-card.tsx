@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { categories, type CalculatorDef } from "@/lib/calculators/registry";
+import { categories, calculatorPath, type CalculatorDef } from "@/lib/calculators/registry";
 
 export function CalculatorCard({ calc }: { calc: CalculatorDef }) {
   const Icon = calc.icon;
@@ -10,7 +10,7 @@ export function CalculatorCard({ calc }: { calc: CalculatorDef }) {
 
   return (
     <Link
-      href={`/toolkit/finance-calculator/${calc.id}`}
+      href={calculatorPath(calc.id)}
       className="surface surface-link group relative flex flex-col overflow-hidden p-6"
       style={{ "--tint": tint } as CSSProperties}
     >

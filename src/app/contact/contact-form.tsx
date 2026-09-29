@@ -201,7 +201,7 @@ export default function ContactForm() {
                 <h2 className="font-bold text-foreground">Quick links</h2>
                 <div className="mt-3 space-y-1">
                   {[
-                    { href: "/toolkit/finance-calculator", label: "Explore calculators" },
+                    { href: "/calculators", label: "Explore calculators" },
                     { href: "/news", label: "Read the latest news" },
                     { href: "/about", label: "About Fistotex" },
                     { href: "/disclaimer", label: "Disclaimer" },

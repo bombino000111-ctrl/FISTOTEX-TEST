@@ -20,7 +20,7 @@ import { HeroCalculator } from "@/components/home/hero-calculator";
 import { HeadlineTicker } from "@/components/home/headline-ticker";
 import { getNews } from "@/lib/news/rss";
 import type { NewsArticle } from "@/types/news";
-import { calculators, calculatorsByCategory, categories } from "@/lib/calculators/registry";
+import { calculators, calculatorsByCategory, categories, categoryPath } from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 import { pageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -134,7 +134,7 @@ export default async function Home() {
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Link href="/toolkit/finance-calculator" className="btn-brand h-13 px-7 text-base">
+                <Link href="/calculators" className="btn-brand h-13 px-7 text-base">
                   Explore calculators
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -173,7 +173,7 @@ export default async function Home() {
         }
         description="Start with the tools people reach for most. Each one is free and shows its working."
         action={
-          <Link href="/toolkit/finance-calculator" className="btn-ghost h-11 px-5 text-sm">
+          <Link href="/calculators" className="btn-ghost h-11 px-5 text-sm">
             All {calculators.length} calculators
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -235,7 +235,7 @@ export default async function Home() {
             return (
               <Link
                 key={cat.id}
-                href={`/toolkit/finance-calculator#${cat.id}`}
+                href={categoryPath(cat.id)}
                 className="surface surface-link group relative overflow-hidden p-6"
                 style={{ "--tint": cat.tint } as CSSProperties}
               >

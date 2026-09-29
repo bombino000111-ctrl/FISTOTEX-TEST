@@ -110,7 +110,7 @@ export default function AboutPage() {
         crumbs={[{ name: "About" }]}
       >
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/toolkit/finance-calculator" className="btn-brand h-12 px-6 text-sm">
+          <Link href="/calculators" className="btn-brand h-12 px-6 text-sm">
             Explore calculators
             <ArrowRight className="h-4 w-4" />
           </Link>

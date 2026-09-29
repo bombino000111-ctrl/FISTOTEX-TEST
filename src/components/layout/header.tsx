@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
-  { href: "/toolkit/finance-calculator", label: "Calculators", match: (p: string) => p.startsWith("/toolkit") },
+  { href: "/calculators", label: "Calculators", match: (p: string) => p.startsWith("/calculators") },
   { href: "/news", label: "News", match: (p: string) => p.startsWith("/news") },
   { href: "/about", label: "About", match: (p: string) => p.startsWith("/about") },
   { href: "/contact", label: "Contact", match: (p: string) => p.startsWith("/contact") },
@@ -87,7 +87,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
-              href="/toolkit/finance-calculator/sip"
+              href="/calculators/sip"
               className="btn-brand hidden h-10 px-4 text-sm lg:inline-flex"
             >
               Start calculating
@@ -136,7 +136,7 @@ export function Header() {
             );
           })}
           <Link
-            href="/toolkit/finance-calculator/sip"
+            href="/calculators/sip"
             onClick={() => setOpen(false)}
             className="btn-brand mt-4 h-12 text-base"
           >

@@ -199,3 +199,102 @@ export const calculatorSeo: Record<string, CalculatorSeo> = {
     ],
   },
 };
+
+/* ────────────────────────────────────────────────────────────────
+   Search copy for the six category pages (/calculators/category/<id>).
+
+   These pages target the mid-funnel plural queries — "investment
+   calculators", "loan calculators" — that no single calculator page can rank
+   for. Each one carries real explanatory copy rather than a bare grid of
+   cards, because a category page with nothing but links is exactly the thin
+   content Google and AdSense discount.
+   ──────────────────────────────────────────────────────────────── */
+
+export interface CategorySeo {
+  title: string;
+  /**
+   * The adjectival form used in headings and prose. Separate from the category
+   * `name`, which is the plural noun used for nav labels ("Investments"):
+   * "Investments calculators" is wrong, "Investment calculators" is not.
+   */
+  heading: string;
+  description: string;
+  intro: string[];
+  /** Which calculator to reach for first, and why. */
+  guidance: string;
+}
+
+export const categorySeo: Record<string, CategorySeo> = {
+  investment: {
+    heading: "Investment",
+    title: "Investment Calculators: SIP, Lumpsum, CAGR & XIRR",
+    description:
+      "Free investment calculators for India. Project SIP and lumpsum growth, compare mutual fund approaches, and measure returns with CAGR and XIRR.",
+    intro: [
+      "Investment calculators answer two different questions, and it helps to know which one you are asking. Forward-looking tools — SIP, lumpsum and mutual fund — project what an assumed rate of return could turn your money into. Backward-looking tools — CAGR and XIRR — measure the return you have already earned.",
+      "Every projection here is an assumption, not a forecast. A 12% figure is a common planning convention for Indian equity, not a promise, so test a lower rate as well and see how much of your goal survives it.",
+    ],
+    guidance:
+      "Investing a fixed amount every month? Start with the SIP calculator. Investing a bonus or maturity amount in one go? Use lumpsum. Checking how an existing portfolio has actually performed? XIRR, because it accounts for when each instalment went in.",
+  },
+  loans: {
+    heading: "Loan",
+    title: "Loan Calculators: Home, Car & Personal Loan EMI",
+    description:
+      "Free loan calculators for India. Work out EMI, total interest and the full repayment cost for home, car, personal and education loans.",
+    intro: [
+      "A loan calculator turns the three numbers a lender quotes you — amount, rate and tenure — into the two that actually matter: what you pay each month, and what the loan costs you in total.",
+      "The second number is the one borrowers underestimate. On a long home loan, total interest can approach or exceed the principal, and the tenure moves it far more than a small difference in rate does.",
+    ],
+    guidance:
+      "Before you sign anything, run the same loan at two or three tenures. A shorter tenure raises the EMI but can cut total interest substantially — that comparison is the single most useful thing these calculators do.",
+  },
+  savings: {
+    heading: "Savings",
+    title: "Savings Calculators: FD, RD and PPF Returns",
+    description:
+      "Free FD, RD and PPF calculators for India. See maturity value, total interest and how compounding frequency changes what you actually receive.",
+    intro: [
+      "Savings calculators cover the instruments where the rate is fixed and known in advance: fixed deposits, recurring deposits and the Public Provident Fund. There is no market assumption to make, so these results are far more certain than any investment projection.",
+      "What varies is compounding. Two deposits at the same advertised rate can mature at different amounts depending on whether interest compounds quarterly, half-yearly or annually, which is why each calculator states its assumption.",
+    ],
+    guidance:
+      "Use FD for a single deposit, RD when you are setting aside a fixed amount monthly, and PPF when the 15-year lock-in and its tax treatment suit the goal. Note that FD and RD interest is taxable as income; PPF is not.",
+  },
+  retirement: {
+    heading: "Retirement",
+    title: "Retirement Calculators: Corpus and NPS Planning",
+    description:
+      "Free retirement calculators for India. Work out the corpus you need, what monthly saving gets you there, and how NPS annuity rules affect your payout.",
+    intro: [
+      "Retirement planning runs backwards from the rest of finance: you start with the income you want in retirement, adjust it for the decades of inflation between now and then, and only then work out what you need to set aside.",
+      "Inflation is what makes this counterintuitive. An expense of ₹50,000 a month today is a much larger number thirty years out, so a corpus that looks generous in today's rupees often is not.",
+    ],
+    guidance:
+      "Start with the retirement calculator to size the corpus, then use NPS if that is part of your plan — its rules require a portion of the maturity amount to buy an annuity, which changes how much is actually available as a lump sum.",
+  },
+  "fixed-income": {
+    heading: "Fixed income",
+    title: "Fixed Income Calculators: Bond Price and Yield",
+    description:
+      "Free bond calculator for India. Work out a bond's price, yield and interest income, and see how changing rates move its value.",
+    intro: [
+      "Fixed-income calculators deal with instruments that pay a set coupon on a set schedule. The coupon is fixed; the price is not, and that is the part most people find surprising.",
+      "Bond prices move inversely to interest rates. When prevailing rates rise, an existing bond paying a lower coupon becomes less attractive and its market price falls — which matters if you may sell before maturity rather than hold to the end.",
+    ],
+    guidance:
+      "Holding to maturity? The coupon and face value are what you receive, and price movement in between is noise. Might sell early? Then yield and price sensitivity are the numbers to watch.",
+  },
+  planning: {
+    heading: "Financial planning",
+    title: "Financial Planning Calculators: Inflation & Purchasing Power",
+    description:
+      "Free planning calculators for India. See what inflation does to the value of money over time and what a future cost means in today's rupees.",
+    intro: [
+      "Planning calculators handle the arithmetic that sits underneath every other financial decision: what a sum of money will actually be worth by the time you need it.",
+      "This is the correction most plans are missing. A goal priced at today's cost — a car, a wedding, a year of college — will cost materially more by the time you reach it, and planning against the current figure quietly underfunds the goal.",
+    ],
+    guidance:
+      "Run any goal more than a few years away through the inflation calculator first, then take that adjusted figure into the SIP or lumpsum calculator. Planning against today's price is the most common way a savings target ends up short.",
+  },
+};

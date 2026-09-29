@@ -7,7 +7,14 @@ import { CalculatorRunner } from "@/components/calculators/calculator-runner";
 import { CalculatorCard } from "@/components/calculators/calculator-card";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { AdUnit } from "@/components/ads/ad-unit";
-import { getCalculator, calculators, categories } from "@/lib/calculators/registry";
+import {
+  getCalculator,
+  calculators,
+  categories,
+  calculatorPath,
+  categoryPath,
+  calculatorsPath,
+} from "@/lib/calculators/registry";
 import { siteConfig } from "@/config/site";
 import { calculatorSeo } from "@/lib/calculators/seo-content";
 import { formatInput, formatOutput } from "@/lib/calculators/format";
@@ -26,7 +33,7 @@ export function CalculatorPage({ id }: { id: string }) {
   // search engines and AI answers can quote.
   const exampleOutputs = def.compute(def.defaults);
   const base = siteConfig.url.replace(/\/$/, "");
-  const pageUrl = `${base}/toolkit/finance-calculator/${def.id}`;
+  const pageUrl = `${base}${calculatorPath(def.id)}`;
 
   const related = calculators
     .filter((c) => c.id !== def.id && c.category === def.category)
@@ -36,10 +43,15 @@ export function CalculatorPage({ id }: { id: string }) {
     (c, i, arr) => arr.findIndex((x) => x.id === c.id) === i
   );
 
+  // The trail runs through the calculator's category even though the URL is
+  // flat (/calculators/sip). That is deliberate: it gives every category page
+  // an inbound link from all of its calculators, which is what makes those
+  // pages worth having. Google reads breadcrumbs as position in the site, not
+  // as a literal echo of the path.
   const crumbs = [
-    { name: "Toolkit", url: "/toolkit" },
-    { name: "Finance Calculator", url: "/toolkit/finance-calculator" },
-    { name: def.name, url: `/toolkit/finance-calculator/${def.id}` },
+    { name: "Calculators", url: calculatorsPath },
+    ...(category ? [{ name: category.name, url: categoryPath(category.id) }] : []),
+    { name: def.name, url: calculatorPath(def.id) },
   ];
 
   return (
@@ -79,8 +91,8 @@ export function CalculatorPage({ id }: { id: string }) {
           </>
         }
         crumbs={[
-          { name: "Toolkit", href: "/toolkit" },
-          { name: "Finance Calculator", href: "/toolkit/finance-calculator" },
+          { name: "Calculators", href: calculatorsPath },
+          ...(category ? [{ name: category.name, href: categoryPath(category.id) }] : []),
           { name: def.name },
         ]}
       >
@@ -227,7 +239,7 @@ export function CalculatorPage({ id }: { id: string }) {
           title="Related calculators"
           action={
             <Link
-              href="/toolkit/finance-calculator"
+              href="/calculators"
               className="btn-ghost h-11 px-5 text-sm"
             >
               All calculators

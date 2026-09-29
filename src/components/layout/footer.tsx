@@ -1,96 +1,79 @@
 import Link from "next/link";
-import { Mail, ArrowRight, ShieldCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/layout/logo";
 
 const columns = [
   {
-    title: "Explore",
-    links: [
-      { href: "/", label: "Home" },
-      { href: "/news", label: "Latest news" },
-      { href: "/calculators", label: "All calculators" },
-    ],
-  },
-  {
-    title: "Popular tools",
+    title: "Investing tools",
     links: [
       { href: "/calculators/sip", label: "SIP calculator" },
-      { href: "/calculators/emi", label: "EMI calculator" },
-      { href: "/calculators/fd", label: "FD calculator" },
-      { href: "/calculators/retirement", label: "Retirement planner" },
+      { href: "/calculators/lumpsum", label: "Lumpsum compound" },
+      { href: "/calculators/mutual-fund", label: "Mutual fund returns" },
+      { href: "/calculators/cagr", label: "CAGR calculator" },
+      { href: "/calculators/xirr", label: "XIRR calculator" },
     ],
   },
   {
-    title: "Company",
+    title: "Loans & sovereign",
     links: [
-      { href: "/about", label: "About us" },
-      { href: "/contact", label: "Contact" },
-      { href: "/privacy-policy", label: "Privacy policy" },
-      { href: "/disclaimer", label: "Disclaimer" },
-      { href: "/terms-and-conditions", label: "Terms & conditions" },
+      { href: "/calculators/emi", label: "EMI calculator" },
+      { href: "/calculators/loan", label: "Loan eligibility" },
+      { href: "/calculators/ppf", label: "PPF (Public Provident)" },
+      { href: "/calculators/fd", label: "Fixed deposit (FD)" },
+      { href: "/calculators/nps", label: "NPS pension scheme" },
+    ],
+  },
+  {
+    title: "Methodology",
+    links: [
+      { href: "/about", label: "Formulas & method" },
+      { href: "/news", label: "Syndicated wire" },
+      { href: "/privacy-policy", label: "Privacy by design" },
+      { href: "/disclaimer", label: "Statutory disclaimers" },
+      { href: "/terms-and-conditions", label: "Terms of reference" },
     ],
   },
 ];
 
 export function Footer() {
   return (
-    <footer className="relative mt-auto overflow-hidden border-t border-border bg-card">
-      {/* CTA band */}
-      <div className="container mx-auto px-4 pt-14">
-        <div className="rounded-lg bg-panel px-6 py-10 text-white sm:px-10 md:py-12">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div className="max-w-xl">
-              <h2 className="font-display text-2xl md:text-3xl">
-                Your money, in numbers you can trust.
-              </h2>
-              <p className="mt-2 text-white/70">
-                {siteConfig.name} is free, needs no sign-up and runs every calculation in your browser.
+    <footer className="mt-auto border-t-2 border-foreground bg-muted text-xs text-ink-2">
+      <div className="container mx-auto px-4 pb-8 pt-12">
+        <div className="grid grid-cols-1 gap-8 border-b border-border pb-10 sm:grid-cols-2 md:grid-cols-5">
+          {/* Colophon */}
+          <div className="space-y-3 sm:col-span-2">
+            <Logo compact />
+            <p className="max-w-sm text-xs leading-relaxed text-ink-2">
+              An independent, non-telemetry Indian financial reference broadsheet. Verified
+              compounding mathematics and syndicated business news for disciplined household
+              investors.
+            </p>
+            <div className="space-y-1 pt-2 font-mono text-[11px] text-foreground">
+              {siteConfig.businessAddress && <p>Editorial office: {siteConfig.businessAddress}</p>}
+              <p>
+                Inquiries:{" "}
+                <a
+                  href={`mailto:${siteConfig.contactEmail}`}
+                  className="text-accent hover:underline"
+                >
+                  {siteConfig.contactEmail}
+                </a>
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Link href="/calculators" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-panel transition-colors hover:bg-white/90">
-                Explore calculators
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/news"
-                className="inline-flex h-12 items-center justify-center rounded-lg border border-white/25 px-6 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-              >
-                Read the news
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-14">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
-          <div className="col-span-2">
-            <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Clear financial news and transparent calculators built for Indian investors.
-            </p>
-            <a
-              href={`mailto:${siteConfig.contactEmail}`}
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
-            >
-              <Mail className="h-4 w-4" />
-              {siteConfig.contactEmail}
-            </a>
           </div>
 
           {columns.map((col) => (
             <div key={col.title}>
-              <h2 className="mb-4 text-xs font-bold uppercase tracking-wider text-foreground">
+              <h2 className="mb-3 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground">
                 {col.title}
               </h2>
-              <ul className="space-y-3">
+              <ul className="space-y-2 font-medium">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-accent"
+                      className="text-ink-2 transition-colors hover:text-accent"
                     >
                       {link.label}
                     </Link>
@@ -101,13 +84,19 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+        {/* Footnote */}
+        <div className="flex flex-col items-center justify-between gap-3 pt-6 text-center font-mono text-[11px] text-muted-foreground sm:flex-row sm:text-left">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            © {new Date().getFullYear()} {siteConfig.name}. All computations executed locally on
+            your own hardware.
           </p>
-          <p className="inline-flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-accent" />
-            For education only — not investment advice.
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <span className="inline-flex items-center gap-1 font-semibold text-accent">
+              <BadgeCheck className="h-3.5 w-3.5" />
+              Zero telemetry
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>For education only — not investment advice</span>
           </p>
         </div>
       </div>

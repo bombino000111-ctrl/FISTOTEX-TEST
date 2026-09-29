@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
+import { Plus_Jakarta_Sans, Newsreader, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+import { Dateline } from "@/components/layout/dateline";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { GA4, GA4PageView } from "@/components/analytics/GA4";
@@ -9,23 +10,28 @@ import { StructuredData } from "@/components/seo/StructuredData";
 import { themeInitScript } from "@/components/layout/theme-toggle";
 import { consentInitScript } from "@/components/ads/consent";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Body and UI. Variable font — no weight list needed.
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Editorial serif for headlines
-const sourceSerif = Source_Serif_4({
-  variable: "--font-serif",
+// Editorial serif for the masthead, headlines and money figures.
+// Italic is loaded because the lead headline sets a clause in it.
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Datelines, slugs and statutory stamps are set in monospace, the way a
+// wire service prints them.
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-mono-editorial",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -100,8 +106,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-    { media: "(prefers-color-scheme: dark)", color: "#181B1E" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#12151A" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -116,7 +122,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
+      className={`${jakarta.variable} ${newsreader.variable} ${plexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -165,6 +171,7 @@ export default function RootLayout({
 
         <GA4 />
         <GA4PageView />
+        <Dateline />
         <Header />
 
         <main id="main" className="flex-1">

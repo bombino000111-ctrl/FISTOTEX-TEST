@@ -5,75 +5,111 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─────────────────────────────────────────────────────────────
-   Fistotex design tokens
-   Emerald brand with an indigo/violet counterpoint. Light + dark.
+   Fistotex design tokens — "The Indian Investor's Gazette"
+   An authentic broadsheet: warm paper, black ink, forest-emerald
+   rules and a saffron editorial accent. Light + dark.
    ───────────────────────────────────────────────────────────── */
 :root {
-  --background: #F7F5F0;
-  --foreground: #16181B;
-  --card: #FFFFFF;
-  --card-foreground: #16181B;
+  /* Paper */
+  --background: #FAF7F2;   /* paper canvas */
+  --muted: #F4F0E6;        /* paper surface (tinted bands, column heads) */
+  --card: #FFFFFF;         /* printed card */
   --popover: #FFFFFF;
-  --popover-foreground: #16181B;
-  --primary: #16181B;
-  --primary-foreground: #FFFFFF;
-  --secondary: #34507F;
-  --secondary-foreground: #FFFFFF;
-  --muted: #EFECE5;
-  --muted-foreground: #5C6066;
-  --accent: #0B6E4F;
+
+  /* Ink */
+  --foreground: #1A1D20;   /* ink primary */
+  --ink-2: #3B424A;        /* ink secondary — body copy */
+  --muted-foreground: #6E7781; /* ink muted — captions, datelines */
+  --card-foreground: #1A1D20;
+  --popover-foreground: #1A1D20;
+  --primary: #1A1D20;
+  --primary-foreground: #FAF7F2;
+
+  /* Rules — the hairlines that make a broadsheet read as one */
+  --border: #E5DFD5;
+  --rule: #D8D0C5;         /* heavier rule, column dividers, double rules */
+  --input: #D8D0C5;
+
+  /* Editorial accents */
+  --accent: #0A5C36;       /* forest emerald — the house colour */
   --accent-foreground: #FFFFFF;
-  --brand: #0B6E4F;
-  --brand-2: #C46A12;
-  --brand-3: #34507F;
-  --panel: #0F2E24;
-  --success: #0B6E4F;
+  --accent-soft: #E9F5EF;  /* emerald wash behind small labels */
+  --brand: #0A5C36;
+  --brand-2: #C26100;      /* broadsheet saffron — section eyebrows */
+  --brand-2-soft: #FCF3E6;
+  --brand-3: #1B365D;      /* navy — the borrowing desk */
+  --amber-warm: #D97706;   /* principal bars, step-up markers */
+  --secondary: #1B365D;
+  --secondary-foreground: #FFFFFF;
+
+  /* The ledger slate — dark panels that read as a banker's blotter */
+  --panel: #14211D;
+  --panel-rule: #223B33;
+  --panel-accent: #7BD8B1;
+
+  --success: #0A5C36;
   --success-foreground: #FFFFFF;
-  --destructive: #B42318;
+  --destructive: #9B2226;
   --destructive-foreground: #FFFFFF;
-  --border: #E2DDD3;
-  --input: #D6D0C4;
-  --ring: #0B6E4F;
-  --radius: 0.625rem;
+  --ring: #0A5C36;
+
+  /* Broadsheets print square. Radii stay small everywhere. */
+  --radius: 0.25rem;
   color-scheme: light;
 }
 
 /* Readable ink for per-category tints (see .tint-text) */
 * { --tint-ink: var(--tint, var(--accent)); }
-[data-theme="dark"] * { --tint-ink: color-mix(in srgb, var(--tint, var(--accent)) 45%, #fff); }
+[data-theme="dark"] * { --tint-ink: color-mix(in srgb, var(--tint, var(--accent)) 52%, #fff); }
 
 [data-theme="dark"] {
-  --background: #111315;
-  --foreground: #ECEAE4;
-  --card: #181B1E;
-  --card-foreground: #ECEAE4;
-  --popover: #181B1E;
-  --popover-foreground: #ECEAE4;
-  --primary: #ECEAE4;
-  --primary-foreground: #111315;
-  --secondary: #8FA7D6;
-  --secondary-foreground: #111315;
-  --muted: #1F2326;
-  --muted-foreground: #9A9EA3;
-  --accent: #3FB68B;
-  --accent-foreground: #0B1F17;
-  --brand: #3FB68B;
-  --brand-2: #E39A4B;
+  /* Night edition: the paper darkens, the ink lifts. */
+  --background: #12151A;
+  --muted: #1A1F26;
+  --card: #171B21;
+  --popover: #171B21;
+
+  --foreground: #EDE8DF;
+  --ink-2: #C3C8CF;
+  --muted-foreground: #949BA5;
+  --card-foreground: #EDE8DF;
+  --popover-foreground: #EDE8DF;
+  --primary: #EDE8DF;
+  --primary-foreground: #12151A;
+
+  --border: #2A3038;
+  --rule: #39414B;
+  --input: #39414B;
+
+  --accent: #4FBF8B;
+  --accent-foreground: #062015;
+  --accent-soft: #10291F;
+  --brand: #4FBF8B;
+  --brand-2: #E2963F;
+  --brand-2-soft: #2A1F12;
   --brand-3: #8FA7D6;
-  --panel: #0F2E24;
-  --success: #3FB68B;
-  --success-foreground: #0B1F17;
+  --amber-warm: #E2963F;
+  --secondary: #8FA7D6;
+  --secondary-foreground: #12151A;
+
+  /* At night the slate reads as a panel only if it sits above the page, not
+     below it — so it lifts and greens rather than going blacker. */
+  --panel: #14261F;
+  --panel-rule: #2B463B;
+  --panel-accent: #7BD8B1;
+
+  --success: #4FBF8B;
+  --success-foreground: #062015;
   --destructive: #F0746B;
   --destructive-foreground: #2A0606;
-  --border: #2A2F33;
-  --input: #353B40;
-  --ring: #3FB68B;
+  --ring: #4FBF8B;
   color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-ink-2: var(--ink-2);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -86,23 +122,29 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
+  --color-brand-2-soft: var(--brand-2-soft);
   --color-brand-3: var(--brand-3);
+  --color-amber-warm: var(--amber-warm);
   --color-panel: var(--panel);
+  --color-panel-rule: var(--panel-rule);
+  --color-panel-accent: var(--panel-accent);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-rule: var(--rule);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 0.25rem);
-  --radius-2xl: calc(var(--radius) + 0.625rem);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --radius-xl: calc(var(--radius) + 0.125rem);
+  --radius-2xl: calc(var(--radius) + 0.25rem);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono-editorial), ui-monospace, SFMono-Regular, monospace;
 
   --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -121,7 +163,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 6.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -137,20 +179,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "cv11", "ss01";
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 25%, transparent);
-  color: var(--foreground);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 
 /* Numeric alignment for money figures */
@@ -159,10 +201,38 @@ body {
 /* Component classes live in the components layer so Tailwind utilities
    (hidden, sticky, absolute…) can still override them. */
 @layer components {
-  /* ── Brand pieces ──────────────────────────────────────────── */
+  /* ── Editorial type ────────────────────────────────────────── */
 
-  /* Headline font */
-  .font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; }
+  /* Headline serif */
+  .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.015em; }
+
+  /* Masthead / lead headline — lighter weight, larger optical size */
+  .font-masthead {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+  }
+
+  /* Small caps monospace used for datelines, slugs and section kickers */
+  .slug {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Rules ─────────────────────────────────────────────────── */
+
+  /* Classical double rule — closes a masthead or opens a section */
+  .rule-double-b { border-bottom: 3px double var(--rule); }
+  .rule-double-t { border-top: 3px double var(--rule); }
+
+  /* Heavy black rule under a section header, as a broadsheet prints it */
+  .rule-heavy-b { border-bottom: 2px solid var(--foreground); }
+
+  /* ── Brand pieces ──────────────────────────────────────────── */
 
   /* Primary call-to-action */
   .btn-brand {
@@ -170,60 +240,77 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     font-weight: 600;
     color: var(--accent-foreground);
     background: var(--accent);
     transition: background-color 150ms ease;
   }
-  .btn-brand:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+  .btn-brand:hover { background: color-mix(in srgb, var(--accent) 84%, #000); }
 
-  /* Secondary button */
+  /* Secondary button — a printed box rule */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     font-weight: 600;
     color: var(--foreground);
-    border: 1px solid var(--input);
+    border: 1px solid var(--rule);
     background: var(--card);
     transition: border-color 150ms ease, background-color 150ms ease;
   }
-  .btn-ghost:hover { border-color: var(--foreground); }
+  .btn-ghost:hover { border-color: var(--foreground); background: var(--muted); }
 
   /* Uppercase section label */
   .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     font-size: 0.6875rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--brand-2);
   }
   .eyebrow::before {
     content: "";
     width: 1.25rem;
     height: 2px;
-    background: var(--accent);
+    background: var(--brand-2);
   }
   .eyebrow.eyebrow-plain::before { display: none; }
 
-  /* Pill badge */
+  /* Registry badge — the little boxed tag on a card */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border-radius: 999px;
+    border-radius: 0.25rem;
     border: 1px solid var(--border);
     background: var(--card);
-    padding: 0.375rem 0.875rem;
+    padding: 0.3125rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--foreground);
+  }
+
+  /* Monospace stamp — "[01]", "CAGR COMPOUND", "SECTION 80C (EEE)" */
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 0.1875rem;
+    padding: 0.125rem 0.375rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tint-ink);
+    background: color-mix(in srgb, var(--tint, var(--accent)) 12%, var(--card));
   }
 
   /* Card surface */
@@ -234,15 +321,21 @@ body {
     border-radius: var(--radius);
   }
 
+  /* Heavier-ruled surface for lead items */
+  .surface-lead {
+    position: relative;
+    border: 2px solid var(--rule);
+    background: var(--card);
+    border-radius: var(--radius);
+  }
+
   .surface-link { transition: border-color 150ms ease, box-shadow 150ms ease; }
   .surface-link:hover {
     border-color: var(--foreground);
     box-shadow: 0 2px 0 0 var(--foreground);
   }
 
-  /* Per-category colour: set --tint on the element (or an ancestor).
-     Tints are deep, AA-contrast tones on light surfaces; dark mode lifts them
-     toward white so small labels stay readable. */
+  /* Per-category colour: set --tint on the element (or an ancestor). */
   .tint-text { color: var(--tint-ink); }
 
   /* Icon tile with per-category colour */
@@ -250,9 +343,47 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--tint, var(--accent)) 28%, transparent);
     color: var(--tint-ink);
     background: color-mix(in srgb, var(--tint, var(--accent)) 10%, var(--card));
+  }
+
+  /* ── Gazette index ─────────────────────────────────────────── */
+
+  /* One desk column in the calculator directory */
+  .gazette-col { display: flex; flex-direction: column; }
+
+  .gazette-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.25rem;
+    min-height: 6rem;
+    padding: 1rem 1.25rem;
+    background: var(--muted);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* A filed entry inside a desk column. Entries keep their natural height —
+     desks hold different numbers of calculators, and a broadsheet column
+     simply ends where its copy ends rather than stretching to match its
+     neighbour. */
+  .gazette-entry {
+    display: block;
+    padding: 1rem;
+    transition: background-color 150ms ease;
+  }
+  .gazette-entry:hover {
+    background: color-mix(in srgb, var(--tint, var(--accent)) 7%, var(--card));
+  }
+
+  /* ── Ledger slate (dark blotter panels) ───────────────────── */
+  .ledger {
+    background: var(--panel);
+    border: 1px solid var(--panel-rule);
+    border-radius: var(--radius);
+    color: #F4F1EA;
   }
 
   /* ── Range slider ─────────────────────────────────────────── */
@@ -263,7 +394,7 @@ body {
     width: 100%;
     height: 6px;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--accent) var(--pct), var(--muted) var(--pct));
+    background: linear-gradient(90deg, var(--accent) var(--pct), var(--rule) var(--pct));
     cursor: pointer;
     outline: none;
   }
@@ -273,33 +404,37 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 999px;
-    background: #fff;
-    border: 3px solid var(--accent);
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
-    transition: transform 120ms ease;
+    background: var(--background);
+    border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+    transition: transform 150ms ease, background-color 150ms ease;
   }
-  .range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: var(--accent);
+  }
   .range::-moz-range-thumb {
     width: 16px;
     height: 16px;
     border-radius: 999px;
-    background: #fff;
-    border: 3px solid var(--accent);
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+    background: var(--background);
+    border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
   }
   .range:focus-visible::-webkit-slider-thumb { outline: 3px solid color-mix(in srgb, var(--ring) 45%, transparent); }
 
   /* ── Long-form legal / editorial text ─────────────────────── */
   .legal-copy h2 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--foreground);
     margin-top: 2rem;
     margin-bottom: 0.5rem;
   }
   .legal-copy p,
   .legal-copy li {
-    color: var(--muted-foreground);
+    color: var(--ink-2);
     line-height: 1.7;
     margin-bottom: 0.75rem;
   }

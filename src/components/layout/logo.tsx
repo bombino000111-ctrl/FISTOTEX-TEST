@@ -2,18 +2,35 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-/** Brand mark: solid green tile with a rising trend line. Matches /icon.svg. */
+/**
+ * Masthead mark: a solid ink tile struck with a rupee, the way a gazette
+ * prints its colophon. Square, not rounded — this is letterpress, not an app.
+ */
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" className={cn("h-9 w-9", className)}>
-      <rect width="64" height="64" rx="12" fill="#0B6E4F" />
-      <path d="M16 44 L27 32 L35 38 L48 22" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M40 22 H48 V30" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <span
+      aria-hidden="true"
+      className={cn(
+        "flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-foreground bg-foreground text-xl font-bold leading-none text-background",
+        "font-display",
+        className
+      )}
+    >
+      ₹
+    </span>
   );
 }
 
-export function Logo({ className, onClick }: { className?: string; onClick?: () => void }) {
+export function Logo({
+  className,
+  onClick,
+  /** Hides the "The Indian Investor's Gazette" strapline (tight spaces, footer). */
+  compact = false,
+}: {
+  className?: string;
+  onClick?: () => void;
+  compact?: boolean;
+}) {
   return (
     <Link
       href="/"
@@ -21,9 +38,21 @@ export function Logo({ className, onClick }: { className?: string; onClick?: () 
       className={cn("group flex shrink-0 items-center gap-2.5", className)}
       aria-label={`${siteConfig.name} home`}
     >
-      <LogoMark />
-      <span className="text-xl font-bold tracking-tight text-foreground">
-        Fisto<span className="text-accent">tex</span>
+      <LogoMark className={compact ? "h-6 w-6 text-sm" : undefined} />
+      <span className="block">
+        <span
+          className={cn(
+            "font-display block font-extrabold leading-none tracking-tight text-foreground",
+            compact ? "text-xl" : "text-2xl sm:text-3xl"
+          )}
+        >
+          {siteConfig.name}
+        </span>
+        {!compact && (
+          <span className="mt-0.5 block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-brand-2">
+            The Indian Investor&apos;s Gazette
+          </span>
+        )}
       </span>
     </Link>
   );

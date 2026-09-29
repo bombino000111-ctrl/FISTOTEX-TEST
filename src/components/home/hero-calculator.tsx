@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Calculator } from "lucide-react";
+import { ArrowUpRight, Wallet } from "lucide-react";
 import { calculateSIP } from "@/lib/calculators";
 import { formatCurrency, formatCompactCurrency } from "@/lib/utils";
 
@@ -32,103 +32,155 @@ function useTweened(target: number, ms = 450) {
   return value;
 }
 
+/**
+ * The blotter: a working SIP ledger that sits in the masthead spine.
+ * Deliberately physical — ruled box, slated dark readout, a split bar that
+ * shows capital against compounded growth rather than an abstract curve.
+ */
 export function HeroCalculator() {
   const [monthly, setMonthly] = React.useState(10000);
   const [years, setYears] = React.useState(15);
 
   const result = calculateSIP({ monthlyInvestment: monthly, annualReturn: RETURN_RATE, years });
   const shown = useTweened(result.futureValue);
-  const gainShare = result.futureValue > 0 ? result.estimatedReturns / result.futureValue : 0;
 
-  // Mini bar series: value at each tenth of the horizon
-  const bars = Array.from({ length: 10 }, (_, i) => {
-    const y = ((i + 1) / 10) * years;
-    return calculateSIP({ monthlyInvestment: monthly, annualReturn: RETURN_RATE, years: y }).futureValue;
-  });
-  const peak = Math.max(...bars, 1);
+  const gainPct =
+    result.futureValue > 0 ? Math.round((result.estimatedReturns / result.futureValue) * 100) : 0;
+  const principalPct = 100 - gainPct;
 
-  const pctMonthly = ((monthly - 500) / (100000 - 500)) * 100;
-  const pctYears = ((years - 1) / (40 - 1)) * 100;
+  const pctMonthly = ((monthly - 1000) / (100000 - 1000)) * 100;
+  const pctYears = ((years - 1) / (30 - 1)) * 100;
 
   return (
-    <div className="relative">
-      <div className="surface p-6 shadow-[0_12px_32px_-18px_rgb(0_0_0/0.3)] md:p-7">
-        <div className="flex items-center justify-between">
-          <p className="inline-flex items-center gap-2 text-sm font-bold text-foreground">
-            <Calculator className="h-4 w-4 text-accent" />
-            Quick SIP estimate
-          </p>
-          <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-muted-foreground">
-            @ {RETURN_RATE}% p.a.
-          </span>
-        </div>
+    <div className="surface-lead p-6 shadow-[0_4px_20px_-4px_rgb(0_0_0/0.06)] sm:p-7">
+      {/* Blotter header */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-4">
+        <span className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-foreground">
+          <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+          Physical SIP Blotter
+        </span>
+        <span className="rounded-sm border border-accent/20 bg-accent-soft px-2 py-0.5 font-mono text-[11px] font-bold text-accent">
+          {RETURN_RATE.toFixed(1)}% P.A. COMPOUND
+        </span>
+      </div>
 
-        <div className="mt-5 rounded-lg bg-panel p-5 text-white">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#7FD6B2]">
-            Estimated value in {years} years
-          </p>
-          <p className="tnum mt-1 text-4xl font-bold tracking-tight" aria-live="polite">
-            {formatCurrency(shown)}
-          </p>
-          <p className="mt-1 text-sm text-white/60">
-            You invest {formatCompactCurrency(result.totalInvested)} · gains{" "}
-            <span className="font-semibold text-[#7FD6B2]">{Math.round(gainShare * 100)}%</span> of the total
-          </p>
-
-          <div className="mt-5 flex h-20 items-end gap-1.5" aria-hidden="true">
-            {bars.map((b, i) => (
-              <div
-                key={i}
-                className="flex-1 rounded-t-sm bg-[#3FB68B] transition-[height] duration-500"
-                style={{ height: `${Math.max(6, (b / peak) * 100)}%` }}
-              />
-            ))}
+      {/* Slated readout */}
+      <div className="ledger my-5 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-panel-accent">
+              Projected maturity corpus ({years} {years === 1 ? "yr" : "yrs"})
+            </p>
+            <p
+              className="font-display tnum mt-1 text-3xl font-bold tracking-tight text-white sm:text-4xl"
+              aria-live="polite"
+            >
+              {formatCurrency(shown)}
+            </p>
           </div>
+          <Wallet aria-hidden="true" className="h-6 w-6 shrink-0 text-panel-accent/60" />
         </div>
 
-        <div className="mt-6 space-y-5">
-          <div>
-            <div className="mb-2 flex items-center justify-between text-sm">
-              <label htmlFor="hero-monthly" className="font-semibold text-foreground">Monthly SIP</label>
-              <span className="tnum font-bold text-foreground">{formatCurrency(monthly)}</span>
-            </div>
-            <input
-              id="hero-monthly"
-              type="range"
-              min={500}
-              max={100000}
-              step={500}
-              value={monthly}
-              onChange={(e) => setMonthly(Number(e.target.value))}
-              className="range"
-              style={{ "--pct": `${pctMonthly}%` } as React.CSSProperties}
+        {/* Compounding ladder */}
+        <div className="mt-4 border-t border-panel-rule pt-3">
+          <div className="mb-1.5 flex flex-wrap justify-between gap-x-3 gap-y-1 font-mono text-[11px] text-white/70">
+            <span>
+              Capital:{" "}
+              <strong className="tnum font-semibold text-white">
+                {formatCompactCurrency(result.totalInvested)}
+              </strong>
+            </span>
+            <span className="tnum font-bold text-panel-accent">
+              Gains: {gainPct}% ({formatCompactCurrency(result.estimatedReturns)})
+            </span>
+          </div>
+
+          <div
+            className="flex h-3 w-full overflow-hidden rounded-sm bg-white/10"
+            role="img"
+            aria-label={`${principalPct}% principal invested, ${gainPct}% compounded growth`}
+          >
+            <div
+              className="h-full bg-amber-warm transition-[width] duration-500"
+              style={{ width: `${principalPct}%` }}
+            />
+            <div
+              className="h-full bg-accent transition-[width] duration-500"
+              style={{ width: `${gainPct}%` }}
             />
           </div>
-          <div>
-            <div className="mb-2 flex items-center justify-between text-sm">
-              <label htmlFor="hero-years" className="font-semibold text-foreground">Duration</label>
-              <span className="tnum font-bold text-foreground">{years} years</span>
-            </div>
-            <input
-              id="hero-years"
-              type="range"
-              min={1}
-              max={40}
-              step={1}
-              value={years}
-              onChange={(e) => setYears(Number(e.target.value))}
-              className="range"
-              style={{ "--pct": `${pctYears}%` } as React.CSSProperties}
-            />
+
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-white/55">
+            <span className="inline-flex items-center gap-1">
+              <span aria-hidden="true" className="inline-block h-2 w-2 bg-amber-warm" />
+              Principal invested
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span aria-hidden="true" className="inline-block h-2 w-2 bg-accent" />
+              Compounded growth
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tactile controls */}
+      <div className="space-y-4 pt-1">
+        <div>
+          <div className="mb-1 flex items-center justify-between font-mono text-xs font-medium text-foreground">
+            <label htmlFor="hero-monthly">MONTHLY COMMITMENT</label>
+            <span className="tnum text-sm font-bold text-accent">{formatCurrency(monthly)} / mo</span>
+          </div>
+          <input
+            id="hero-monthly"
+            type="range"
+            min={1000}
+            max={100000}
+            step={1000}
+            value={monthly}
+            onChange={(e) => setMonthly(Number(e.target.value))}
+            className="range"
+            style={{ "--pct": `${pctMonthly}%` } as React.CSSProperties}
+          />
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-muted-foreground">
+            <span>₹1,000</span>
+            <span>₹50,000</span>
+            <span>₹1,00,000</span>
           </div>
         </div>
 
+        <div>
+          <div className="mb-1 flex items-center justify-between font-mono text-xs font-medium text-foreground">
+            <label htmlFor="hero-years">INVESTMENT HORIZON</label>
+            <span className="tnum text-sm font-bold text-accent">
+              {years} {years === 1 ? "Year" : "Years"}
+            </span>
+          </div>
+          <input
+            id="hero-years"
+            type="range"
+            min={1}
+            max={30}
+            step={1}
+            value={years}
+            onChange={(e) => setYears(Number(e.target.value))}
+            className="range"
+            style={{ "--pct": `${pctYears}%` } as React.CSSProperties}
+          />
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-muted-foreground">
+            <span>1 Year</span>
+            <span>15 Years</span>
+            <span>30 Years</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 border-t border-border pt-4">
         <Link
           href={`/calculators/sip?monthlyInvestment=${monthly}&years=${years}`}
-          className="btn-ghost mt-6 w-full py-3 text-sm"
+          className="btn-ghost w-full bg-muted px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wide"
         >
-          Open full SIP calculator
-          <ArrowRight className="h-4 w-4" />
+          Open full mathematical breakdown
+          <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
     </div>

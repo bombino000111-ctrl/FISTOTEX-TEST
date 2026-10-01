@@ -100,10 +100,10 @@ export function CalculatorPage({ id }: { id: string }) {
           <span className="inline-flex items-center gap-1.5">
             <BadgeCheck className="h-4 w-4 text-accent" />
             Formula checked by{" "}
-            <Link href="/about#founder" className="font-medium text-foreground underline-offset-4 hover:underline">
-              {siteConfig.founder.name}
+            <Link href="/about#partner" className="font-medium text-foreground underline-offset-4 hover:underline">
+              {siteConfig.partner.name}
             </Link>
-            , {siteConfig.name} founder
+            , {siteConfig.name} {siteConfig.partner.role.toLowerCase()}
           </span>
           <span>
             Last updated <time dateTime={siteConfig.contentReviewed}>{reviewedLabel}</time>

@@ -69,6 +69,13 @@ export function StructuredData({ type, data = {} }: StructuredDataProps) {
         jobTitle: siteConfig.founder.role,
         url: `${base}/about#founder`,
       },
+      member: {
+        "@type": "Person",
+        "@id": `${base}/about#partner`,
+        name: siteConfig.partner.name,
+        jobTitle: siteConfig.partner.role,
+        url: `${base}/about#partner`,
+      },
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",

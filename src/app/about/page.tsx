@@ -157,41 +157,61 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* Founder */}
-      <Section id="founder" tone="muted" eyebrow="Who we are" title="The person behind Fistotex">
-        <div className="surface grid gap-8 p-7 md:grid-cols-[auto_1fr] md:p-9">
-          <span
-            aria-hidden="true"
-            className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
-          >
-            {siteConfig.founder.name.charAt(0)}
-          </span>
-          <div>
-            <h3 className="text-2xl font-bold text-foreground">{siteConfig.founder.name}</h3>
-            <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
-              {siteConfig.founder.role}, {siteConfig.name}
-            </p>
-            <div className="mt-5 space-y-4 text-base leading-relaxed text-muted-foreground">
-              <p>
-                {siteConfig.founder.name} started {siteConfig.name} to make everyday money maths simple and
-                transparent for Indian savers and investors, building and maintaining the calculators,
-                checking every formula against standard financial methods and curating the news sources.
+      {/* Founder & partner */}
+      <Section id="founder" tone="muted" eyebrow="Who we are" title="The people behind Fistotex">
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="surface flex flex-col gap-6 p-7 md:p-9">
+            <span
+              aria-hidden="true"
+              className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
+            >
+              {siteConfig.founder.name.charAt(0)}
+            </span>
+            <div>
+              <h3 className="text-2xl font-bold text-foreground">{siteConfig.founder.name}</h3>
+              <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
+                {siteConfig.founder.role}, {siteConfig.name}
               </p>
-              <p className="rounded-lg border border-border bg-muted px-4 py-3 text-sm">
-                <strong className="text-foreground">Please note:</strong> {siteConfig.founder.name} is not a
-                SEBI-registered investment adviser or research analyst. Nothing on {siteConfig.name} is a
-                recommendation to buy or sell any security or financial product. For personal advice, consult a
-                SEBI-registered adviser.
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                {siteConfig.founder.name} founded {siteConfig.name} and leads it as CEO. The thinking behind the
+                site is his: that everyday money maths in India should be simple, transparent and free to check,
+                with every formula shown rather than buried in a black box. He is currently studying for an MSc
+                in Finance in Paris.
               </p>
             </div>
-            <a
-              href={`mailto:${siteConfig.contactEmail}`}
-              className="btn-ghost mt-6 h-11 px-5 text-sm"
+          </div>
+
+          <div id="partner" className="surface flex flex-col gap-6 p-7 md:p-9">
+            <span
+              aria-hidden="true"
+              className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
             >
-              Contact {siteConfig.founder.name}
-            </a>
+              {siteConfig.partner.name.charAt(0)}
+            </span>
+            <div>
+              <h3 className="text-2xl font-bold text-foreground">{siteConfig.partner.name}</h3>
+              <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
+                {siteConfig.partner.role}, {siteConfig.name}
+              </p>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                {siteConfig.partner.name} is {siteConfig.founder.name}&apos;s partner in {siteConfig.name}. He
+                builds and maintains the calculators, checks every formula against standard financial methods
+                and curates the news sources.
+              </p>
+            </div>
           </div>
         </div>
+
+        <p className="surface mt-5 px-5 py-4 text-sm leading-relaxed text-muted-foreground">
+          <strong className="text-foreground">Please note:</strong> neither {siteConfig.founder.name} nor{" "}
+          {siteConfig.partner.name} is a SEBI-registered investment adviser or research analyst. Nothing on{" "}
+          {siteConfig.name} is a recommendation to buy or sell any security or financial product. For personal
+          advice, consult a SEBI-registered adviser.
+        </p>
+
+        <a href={`mailto:${siteConfig.contactEmail}`} className="btn-ghost mt-6 h-11 px-5 text-sm">
+          Contact the {siteConfig.name} team
+        </a>
       </Section>
 
       {/* Features */}

@@ -11,7 +11,8 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   contactEmail: process.env.CONTACT_EMAIL || "contact@fistotex.com",
   ownerName: process.env.SITE_OWNER_NAME || "Fistotex",
-  founder: { name: "Naman", role: "Founder" },
+  founder: { name: "Ishan Gupta", role: "Founder & CEO" },
+  partner: { name: "Naman", role: "Partner" },
   businessAddress: process.env.BUSINESS_ADDRESS || "",
 
   // Date the calculator formulas and guide copy were last checked (YYYY-MM-DD)

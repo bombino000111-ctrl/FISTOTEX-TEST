@@ -9,11 +9,27 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Gazette Front", match: (p: string) => p === "/" },
-  { href: "/calculators", label: "Calculators", match: (p: string) => p.startsWith("/calculators") },
-  { href: "/news", label: "Market Wire", live: true, match: (p: string) => p.startsWith("/news") },
-  { href: "/about", label: "Methodology", match: (p: string) => p.startsWith("/about") },
-  { href: "/contact", label: "Contact", match: (p: string) => p.startsWith("/contact") },
+  { href: "/", label: "Gazette Front", title: "Home", match: (p: string) => p === "/" },
+  {
+    href: "/calculators",
+    label: "Calculators",
+    title: "All calculators",
+    match: (p: string) => p.startsWith("/calculators"),
+  },
+  {
+    href: "/news",
+    label: "Market Wire",
+    title: "Financial news",
+    live: true,
+    match: (p: string) => p.startsWith("/news"),
+  },
+  {
+    href: "/about",
+    label: "How It Works",
+    title: "About & methodology",
+    match: (p: string) => p.startsWith("/about"),
+  },
+  { href: "/contact", label: "Contact", title: "Contact us", match: (p: string) => p.startsWith("/contact") },
 ];
 
 export function Header() {
@@ -67,6 +83,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  title={item.title}
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-semibold transition-colors",

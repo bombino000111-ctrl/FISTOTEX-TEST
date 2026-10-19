@@ -280,30 +280,23 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2 lg:grid-cols-1">
-              {pillars.map((pillar, i) => {
+            <div className="space-y-3 pt-2">
+              {pillars.map((pillar) => {
                 const Icon = pillar.icon;
-                /* First pillar reads as the lead module — a touch more room
-                   and a larger icon — while the other two stay compact. A
-                   small bento-style size contrast within a short list of
-                   three, without needing a multi-row grid. */
-                const isLead = i === 0;
                 return (
                   <div
                     key={pillar.no}
-                    className={`surface flex items-start gap-3 ${isLead ? "sm:col-span-2 p-5" : "p-4"}`}
+                    className="surface flex items-start gap-3 p-4"
                     style={{ "--tint": pillar.tint } as CSSProperties}
                   >
-                    <span className={`icon-tile shrink-0 ${isLead ? "h-10 w-10" : "h-8 w-8"}`}>
-                      <Icon className={isLead ? "h-5 w-5" : "h-[18px] w-[18px]"} />
+                    <span className="icon-tile h-8 w-8 shrink-0">
+                      <Icon className="h-[18px] w-[18px]" />
                     </span>
                     <div>
                       <p className="tint-text font-mono text-[10px] font-bold uppercase tracking-wider">
                         {pillar.no}. {pillar.kicker}
                       </p>
-                      <h3
-                        className={`font-display font-bold text-foreground ${isLead ? "text-lg" : "text-base"}`}
-                      >
+                      <h3 className="font-display text-base font-bold text-foreground">
                         {pillar.title}
                       </h3>
                       <p className="mt-1 text-xs leading-relaxed text-ink-2">{pillar.body}</p>

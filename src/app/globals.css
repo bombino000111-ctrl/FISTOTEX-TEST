@@ -378,43 +378,6 @@ body {
     background: color-mix(in srgb, var(--tint, var(--accent)) 7%, var(--card));
   }
 
-  /* ── Bento directory grid ──────────────────────────────────── */
-
-  /* Varied-size module grid for the calculator directory. Mobile stacks to
-     one column; tablet relaxes to two; the full bento rhythm (featured 2x2
-     blocks, tall 1x2 accents, compact 1x1 cells) only appears at desktop
-     width, where there's room for the size contrast to read as intentional
-     rather than cramped. */
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  @media (min-width: 640px) {
-    .bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (min-width: 1024px) {
-    .bento-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-flow: dense;
-      grid-auto-rows: 9.5rem;
-      gap: 1.25rem;
-    }
-  }
-
-  /* The four most-reached-for calculators — a featured 2x2 module. */
-  .bento-featured { grid-column: span 1; }
-  @media (min-width: 640px) { .bento-featured { grid-column: span 2; } }
-  @media (min-width: 1024px) { .bento-featured { grid-row: span 2; } }
-
-  /* A couple of calculators with enough to say that they earn a taller
-     1x2 module for rhythm, without competing with the featured blocks. */
-  .bento-tall { grid-column: span 1; }
-  @media (min-width: 1024px) { .bento-tall { grid-row: span 2; } }
-
-  /* Everything else: a self-contained 1x1 module. */
-  .bento-compact { grid-column: span 1; }
-
   /* ── Ledger slate (dark blotter panels) ───────────────────── */
   .ledger {
     background: var(--panel);

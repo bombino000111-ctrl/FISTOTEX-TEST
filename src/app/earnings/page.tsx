@@ -51,7 +51,7 @@ export default function EarningsPage() {
         <div className="container mx-auto px-4">
           <p className="mb-6 inline-flex items-center gap-2 rounded-sm border border-border bg-muted px-3 py-1.5 text-xs text-ink-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-            As of {EARNINGS_AS_OF}. Figures from company filings, releases and financial news reports — each linked to its source.
+            As of {EARNINGS_AS_OF}. Figures from official company filings and results releases — each linked to its primary source.
           </p>
 
           <EarningsList companies={companyResults} today={today} />

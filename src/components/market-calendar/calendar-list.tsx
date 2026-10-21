@@ -3,10 +3,10 @@
 import * as React from "react";
 import type { MarketEvent, MarketSentiment } from "@/types/market-calendar";
 import { EventRow } from "@/components/market-calendar/event-row";
-import { sentimentMeta } from "@/components/market-calendar/sentiment-badge";
+import { sentimentMeta, type TaggedSentiment } from "@/components/market-calendar/sentiment-badge";
 import { cn } from "@/lib/utils";
 
-const sentiments: MarketSentiment[] = ["positive", "negative", "pending"];
+const sentiments: TaggedSentiment[] = ["positive", "negative"];
 
 /**
  * `today` (IST, YYYY-MM-DD) comes from the server so the countdown in the

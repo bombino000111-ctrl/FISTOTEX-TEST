@@ -1,9 +1,12 @@
-import { TrendingUp, TrendingDown, Shuffle } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import type { MarketSentiment } from "@/types/market-calendar";
 import { cn } from "@/lib/utils";
 
+type TaggedSentiment = Exclude<MarketSentiment, "pending">;
+
+// "pending" events (outcome decides direction) get no tag at all
 const sentimentMeta: Record<
-  MarketSentiment,
+  TaggedSentiment,
   { label: string; icon: typeof TrendingUp; className: string }
 > = {
   positive: {
@@ -16,14 +19,10 @@ const sentimentMeta: Record<
     icon: TrendingDown,
     className: "border-destructive/30 bg-destructive/10 text-destructive",
   },
-  pending: {
-    label: "Bidirectional",
-    icon: Shuffle,
-    className: "border-amber-warm/30 bg-amber-warm/10 text-amber-warm",
-  },
 };
 
 export function SentimentBadge({ sentiment, className }: { sentiment: MarketSentiment; className?: string }) {
+  if (sentiment === "pending") return null;
   const meta = sentimentMeta[sentiment];
   const Icon = meta.icon;
   return (
@@ -41,3 +40,4 @@ export function SentimentBadge({ sentiment, className }: { sentiment: MarketSent
 }
 
 export { sentimentMeta };
+export type { TaggedSentiment };

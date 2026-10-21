@@ -29,6 +29,7 @@ const columns = [
     links: [
       { href: "/about", label: "Formulas & method" },
       { href: "/news", label: "Syndicated wire" },
+      { href: "/market-calendar", label: "Market calendar" },
       { href: "/privacy-policy", label: "Privacy by design" },
       { href: "/disclaimer", label: "Statutory disclaimers" },
       { href: "/terms-and-conditions", label: "Terms of reference" },

@@ -30,6 +30,12 @@ const navItems = [
     match: (p: string) => p.startsWith("/market-calendar"),
   },
   {
+    href: "/earnings",
+    label: "Earnings",
+    title: "Quarterly results of Indian and US companies",
+    match: (p: string) => p.startsWith("/earnings"),
+  },
+  {
     href: "/about",
     label: "How It Works",
     title: "About & methodology",
@@ -82,7 +88,7 @@ export function Header() {
           <Logo />
 
           {/* Masthead nav */}
-          <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
             {navItems.map((item) => {
               const active = item.match(pathname);
               return (
@@ -92,7 +98,7 @@ export function Header() {
                   title={item.title}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-semibold transition-colors",
+                    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-2.5 py-1.5 text-sm font-semibold transition-colors",
                     active
                       ? "border-b-2 border-accent font-bold text-accent"
                       : "text-ink-2 hover:bg-muted hover:text-foreground"
@@ -113,7 +119,7 @@ export function Header() {
             <ThemeToggle />
             <Link
               href="/calculators"
-              className="btn-brand hidden h-10 px-4 font-mono text-xs font-bold uppercase tracking-wide xl:inline-flex"
+              className="btn-brand hidden h-10 px-4 font-mono text-xs whitespace-nowrap font-bold uppercase tracking-wide 2xl:inline-flex"
             >
               Open Ledger
               <Calculator className="h-4 w-4" />
@@ -122,7 +128,7 @@ export function Header() {
             {/* Mobile toggle */}
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-foreground lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-foreground xl:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
@@ -138,7 +144,7 @@ export function Header() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-border bg-background lg:hidden"
+        className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-border bg-background xl:hidden"
       >
         <nav aria-label="Mobile" className="container mx-auto flex flex-col gap-1 px-4 py-6">
           {navItems.map((item, i) => {

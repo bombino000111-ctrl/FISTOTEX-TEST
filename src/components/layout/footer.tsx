@@ -30,6 +30,7 @@ const columns = [
       { href: "/about", label: "Formulas & method" },
       { href: "/news", label: "Syndicated wire" },
       { href: "/market-calendar", label: "Market calendar" },
+      { href: "/earnings", label: "Earnings results" },
       { href: "/privacy-policy", label: "Privacy by design" },
       { href: "/disclaimer", label: "Statutory disclaimers" },
       { href: "/terms-and-conditions", label: "Terms of reference" },

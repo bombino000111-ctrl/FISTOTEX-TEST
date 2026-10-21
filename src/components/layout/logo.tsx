@@ -48,10 +48,9 @@ export function Logo({
         >
           {siteConfig.name}
         </span>
-        {/* Strapline drops where the masthead is tight: phones, and the lg band
-            where the full desktop nav first appears */}
+        {/* Strapline drops on phones, where the masthead is tight */}
         {!compact && (
-          <span className="mt-0.5 hidden font-mono sm:block lg:hidden xl:block text-[10px] font-bold uppercase tracking-[0.14em] text-brand-2">
+          <span className="mt-0.5 hidden font-mono sm:block text-[10px] font-bold uppercase tracking-[0.14em] text-brand-2">
             The Indian Investor&apos;s Gazette
           </span>
         )}

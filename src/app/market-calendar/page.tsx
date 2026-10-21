@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const metadata = pageMetadata({
   title: "Market Calendar — Upcoming Events That Move Indian Markets",
   description:
-    "Dates for RBI MPC decisions, the US Fed FOMC, India GDP, CPI and IIP releases, the Union Budget and earnings season — each flagged bidirectional where the outcome decides market direction, with sources.",
+    "Dates for RBI MPC decisions, the US Fed FOMC, India GDP, CPI and IIP releases, the Union Budget and earnings season — each with its official source.",
   path: "/market-calendar",
 });
 
@@ -46,7 +46,7 @@ export default function MarketCalendarPage() {
             Events that move <span className="text-accent">Indian markets</span>
           </>
         }
-        description="The next occurrence of every scheduled catalyst — rate decisions, data releases, the Budget and earnings season — each with its source. Most are flagged bidirectional: the outcome, not the date, decides market direction."
+        description="The next occurrence of every scheduled catalyst — rate decisions, data releases, the Budget and earnings season — each with its source. The outcome, not the date, decides market direction."
         crumbs={[{ name: "Market Calendar" }]}
       />
 
@@ -57,9 +57,8 @@ export default function MarketCalendarPage() {
           <p className="mt-10 max-w-3xl text-xs leading-relaxed text-muted-foreground">
             Dates are sourced from each issuing authority and can shift as official calendars are
             confirmed; those marked &ldquo;Estimated date&rdquo; are not yet official. Countdowns use
-            Indian Standard Time. Sentiment tags reflect the typical market reaction to this event, not a
-            prediction of the outcome — &ldquo;Bidirectional&rdquo; means the result can move the
-            market either way.
+            Indian Standard Time. Each listed event can move the market either way, depending on the
+            outcome.
           </p>
         </div>
       </section>

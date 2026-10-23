@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight, Calculator } from "lucide-react";
+import { Menu, X, ArrowRight, Calculator, ChevronDown, Newspaper, CalendarDays, TrendingUp } from "lucide-react";
 import { Logo } from "@/components/layout/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -16,8 +16,40 @@ const navItems = [
   { href: "/contact", label: "Contact", match: (p: string) => p.startsWith("/contact") },
 ];
 
+const toolkitItems = [
+  {
+    href: "/news",
+    label: "News",
+    desc: "Live market wires from Mint, ET, Moneycontrol & Business Standard",
+    icon: Newspaper,
+    match: (p: string) => p.startsWith("/news"),
+  },
+  {
+    href: "/calculators",
+    label: "Calculators",
+    desc: "All 14 RBI-grade financial calculators",
+    icon: Calculator,
+    match: (p: string) => p.startsWith("/calculators"),
+  },
+  {
+    href: "/toolkit/market-calendar",
+    label: "Market Calendar",
+    desc: "RBI policy, F&O expiry, Budget & volatile days",
+    icon: CalendarDays,
+    match: (p: string) => p.startsWith("/toolkit/market-calendar"),
+  },
+  {
+    href: "/toolkit/results",
+    label: "Results",
+    desc: "Nifty 50 quarterly results, QoQ & YoY",
+    icon: TrendingUp,
+    match: (p: string) => p.startsWith("/toolkit/results"),
+  },
+];
+
 export function Header() {
   const [open, setOpen] = React.useState(false);
+  const [toolkitOpen, setToolkitOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const pathname = usePathname();
 
@@ -61,7 +93,26 @@ export function Header() {
 
           {/* Masthead nav */}
           <nav aria-label="Primary" className="hidden items-center gap-0.5 md:flex lg:gap-1">
-            {navItems.map((item) => {
+            {navItems.slice(0, 1).map((item) => {
+              const active = item.match(pathname);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-semibold transition-colors",
+                    active
+                      ? "border-b-2 border-accent font-bold text-accent"
+                      : "text-ink-2 hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <ToolkitMenu pathname={pathname} open={toolkitOpen} setOpen={setToolkitOpen} />
+            {navItems.slice(1).map((item) => {
               const active = item.match(pathname);
               return (
                 <Link
@@ -137,6 +188,26 @@ export function Header() {
               </Link>
             );
           })}
+          <p className="eyebrow mt-6 px-4">Toolkit</p>
+          {toolkitItems.map((item) => {
+            const active = item.match(pathname);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex items-center gap-3 rounded-sm px-4 py-3 text-base font-semibold transition-colors",
+                  active ? "bg-muted text-accent" : "text-ink-2 hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+                <ArrowRight className="ml-auto h-4 w-4 opacity-50" />
+              </Link>
+            );
+          })}
           <Link
             href="/calculators"
             onClick={() => setOpen(false)}
@@ -148,5 +219,60 @@ export function Header() {
         </nav>
       </div>
     </header>
+  );
+}
+
+/** Desktop Toolkit dropdown - opens on hover and click, closes on Escape / mouse leave. */
+function ToolkitMenu({
+  pathname,
+  open,
+  setOpen,
+}: {
+  pathname: string;
+  open: boolean;
+  setOpen: (v: boolean) => void;
+}) {
+  const active = toolkitItems.some((i) => i.match(pathname));
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen(!open)}
+        onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-semibold transition-colors",
+          active
+            ? "border-b-2 border-accent font-bold text-accent"
+            : "text-ink-2 hover:bg-muted hover:text-foreground"
+        )}
+      >
+        Toolkit
+        <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")} />
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full z-50 w-72 rounded-sm border border-rule bg-card p-1.5 shadow-lg">
+          {toolkitItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="flex items-start gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-muted"
+            >
+              <item.icon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+              <span>
+                <span className="block text-sm font-semibold text-foreground">{item.label}</span>
+                <span className="block text-xs text-muted-foreground">{item.desc}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

@@ -21,6 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, lastModified: reviewed, changeFrequency: "daily", priority: 1.0 },
     { url: `${baseUrl}${calculatorsPath}`, lastModified: reviewed, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/news`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.8 },
+    { url: `${baseUrl}/toolkit/market-calendar`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/toolkit/results`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/about`, lastModified: reviewed, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/contact`, lastModified: reviewed, changeFrequency: "yearly", priority: 0.5 },
     { url: `${baseUrl}/privacy-policy`, lastModified: legalUpdated, changeFrequency: "yearly", priority: 0.3 },

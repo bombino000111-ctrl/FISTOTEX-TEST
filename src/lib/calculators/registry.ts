@@ -141,6 +141,8 @@ export interface CalculatorDef {
   validate?: (v: Record<string, number | string>) => string | null;
   chart?: (v: Record<string, number | string>) => ChartPoint[];
   chartSeriesLabels?: { invested: string; value: string };
+  /** Heading above the chart; defaults to "Growth over time" in the runner */
+  chartTitle?: string;
   formula: { expression: string; note: string };
   steps: string[];
   faqs: Array<{ q: string; a: string }>;
@@ -468,6 +470,7 @@ const emi: CalculatorDef = {
     return out;
   },
   chartSeriesLabels: { invested: "Principal repaid", value: "Total paid (principal + interest)" },
+  chartTitle: "Repayment over time",
   formula: {
     expression: "EMI = P × r × (1 + r)ⁿ ÷ ((1 + r)ⁿ − 1)",
     note: "P = principal, r = annual rate ÷ 12 ÷ 100, n = tenure in months.",

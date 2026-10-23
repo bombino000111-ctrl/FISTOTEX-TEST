@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { Dateline } from "@/components/layout/dateline";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { GA4, GA4PageView } from "@/components/analytics/GA4";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { themeInitScript } from "@/components/layout/theme-toggle";
@@ -179,6 +180,7 @@ export default function RootLayout({
         </main>
 
         <Footer />
+        <FeedbackWidget />
 
         {/* Site-wide structured data, emitted once */}
         <StructuredData type="WebSite" />

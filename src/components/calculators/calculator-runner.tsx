@@ -235,7 +235,7 @@ export function CalculatorRunner({ id }: { id: string }) {
 
         {chartData && (
           <div className="surface p-6 md:p-8">
-            <h2 className="mb-5 text-lg font-bold text-foreground">Growth over time</h2>
+            <h2 className="mb-5 text-lg font-bold text-foreground">{def.chartTitle ?? "Growth over time"}</h2>
             <GrowthChart
               data={chartData}
               labels={def.chartSeriesLabels ?? { invested: "Invested", value: "Value" }}

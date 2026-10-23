@@ -9,10 +9,10 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Gazette Front", match: (p: string) => p === "/" },
+  { href: "/", label: "Home", match: (p: string) => p === "/" },
   { href: "/calculators", label: "Calculators", match: (p: string) => p.startsWith("/calculators") },
-  { href: "/news", label: "Market Wire", live: true, match: (p: string) => p.startsWith("/news") },
-  { href: "/about", label: "Methodology", match: (p: string) => p.startsWith("/about") },
+  { href: "/news", label: "News", live: true, match: (p: string) => p.startsWith("/news") },
+  { href: "/about", label: "About", match: (p: string) => p.startsWith("/about") },
   { href: "/contact", label: "Contact", match: (p: string) => p.startsWith("/contact") },
 ];
 
@@ -92,7 +92,7 @@ export function Header() {
               href="/calculators"
               className="btn-brand hidden h-10 px-4 font-mono text-xs font-bold uppercase tracking-wide lg:inline-flex"
             >
-              Open Ledger
+              All Calculators
               <Calculator className="h-4 w-4" />
             </Link>
 
@@ -142,7 +142,7 @@ export function Header() {
             onClick={() => setOpen(false)}
             className="btn-brand mt-4 h-12 font-mono text-sm font-bold uppercase tracking-wide"
           >
-            Open Ledger
+            All Calculators
             <Calculator className="h-4 w-4" />
           </Link>
         </nav>

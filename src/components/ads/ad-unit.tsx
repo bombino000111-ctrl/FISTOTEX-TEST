@@ -81,7 +81,7 @@ export function AdUnit({
       className={className}
       style={{ minHeight }}
     >
-      <p className="mb-2 text-center text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+      <p className="mb-2 text-center text-xs text-muted-foreground">
         Advertisement
       </p>
       <ins

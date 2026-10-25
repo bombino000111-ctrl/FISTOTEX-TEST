@@ -51,17 +51,17 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t-2 border-foreground bg-muted text-xs text-ink-2">
+    <footer className="mt-auto border-t border-border bg-muted text-sm text-ink-2">
       <div className="container mx-auto px-4 pb-8 pt-12">
         <div className="grid grid-cols-1 gap-8 border-b border-border pb-10 sm:grid-cols-2 lg:grid-cols-6">
           {/* Colophon */}
           <div className="space-y-3 sm:col-span-2">
             <Logo compact />
-            <p className="max-w-sm text-xs leading-relaxed text-ink-2">
+            <p className="max-w-sm leading-relaxed text-ink-2">
               Free, independent calculators for Indian households, with every formula shown —
               plus the day&apos;s market news from India&apos;s leading publishers.
             </p>
-            <div className="space-y-1 pt-2 font-mono text-[11px] text-foreground">
+            <div className="space-y-1 pt-2 text-sm text-ink-2">
               {siteConfig.businessAddress && <p>Editorial office: {siteConfig.businessAddress}</p>}
               <p>
                 Inquiries:{" "}
@@ -77,7 +77,7 @@ export function Footer() {
 
           {columns.map((col) => (
             <div key={col.title}>
-              <h2 className="mb-3 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground">
+              <h2 className="mb-3 text-sm font-semibold text-foreground">
                 {col.title}
               </h2>
               <ul className="space-y-1 font-medium">
@@ -97,7 +97,7 @@ export function Footer() {
         </div>
 
         {/* Footnote */}
-        <div className="flex flex-col items-center justify-between gap-3 pt-6 text-center font-mono text-[11px] text-muted-foreground sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-3 pt-6 text-center text-sm text-muted-foreground sm:flex-row sm:text-left">
           <p>© {new Date().getFullYear()} {siteConfig.name}. For education only — not investment advice.</p>
           <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <span className="inline-flex items-center gap-1 font-semibold text-accent">

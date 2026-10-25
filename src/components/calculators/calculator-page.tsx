@@ -87,11 +87,10 @@ export function CalculatorPage({ id }: { id: string }) {
       )}
 
       <PageHeader
-        eyebrow={category?.name ?? "Finance calculator"}
         title={def.name}
         description={
           <>
-            {def.tagline} Move the sliders or type exact numbers — results update instantly.
+            {def.tagline} Move the sliders or type exact numbers; the result updates as you go.
           </>
         }
         crumbs={[
@@ -112,7 +111,7 @@ export function CalculatorPage({ id }: { id: string }) {
           <span>
             Last updated <time dateTime={siteConfig.contentReviewed}>{reviewedLabel}</time>
           </span>
-          <span>Free · No sign-up · Runs in your browser</span>
+          <span>Your numbers stay in your browser</span>
         </p>
       </PageHeader>
 
@@ -125,7 +124,6 @@ export function CalculatorPage({ id }: { id: string }) {
       {seo && (
         <Section
           tone="muted"
-          eyebrow="Guide"
           title={`${def.name}: what it does and when to use it`}
         >
           <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
@@ -143,7 +141,7 @@ export function CalculatorPage({ id }: { id: string }) {
             </div>
 
             <figure className="surface p-6 md:p-7">
-              <figcaption className="text-sm font-bold uppercase tracking-wider text-foreground">
+              <figcaption className="font-display text-xl text-foreground">
                 Worked example
               </figcaption>
               <dl className="mt-4 divide-y divide-border text-sm">
@@ -171,17 +169,16 @@ export function CalculatorPage({ id }: { id: string }) {
 
       {/* How it works */}
       <Section
-        eyebrow="Method"
         title="How this calculation works"
         description="The exact formula and assumptions behind the numbers above."
       >
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="surface p-6 md:p-8">
-            <p className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+            <p className="font-display mb-4 flex items-center gap-2 text-2xl text-foreground">
               <span className="icon-tile h-9 w-9"><Sigma className="h-4 w-4" /></span>
               Formula
             </p>
-            <p className="tnum overflow-x-auto whitespace-pre-wrap rounded-lg border border-border bg-muted px-4 py-4 font-mono text-sm text-foreground">
+            <p className="tnum overflow-x-auto whitespace-pre-wrap rounded-lg border border-border bg-muted px-4 py-4 font-code text-sm text-foreground">
               {def.formula.expression}
             </p>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -190,7 +187,7 @@ export function CalculatorPage({ id }: { id: string }) {
           </div>
 
           <div className="surface p-6 md:p-8" style={{ "--tint": "#34507F" } as React.CSSProperties}>
-            <p className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+            <p className="font-display mb-4 flex items-center gap-2 text-2xl text-foreground">
               <span className="icon-tile h-9 w-9"><ListChecks className="h-4 w-4" /></span>
               Assumptions
             </p>
@@ -209,7 +206,6 @@ export function CalculatorPage({ id }: { id: string }) {
       {/* Related */}
       {suggestions.length > 0 && (
         <Section
-          eyebrow="Keep going"
           title="Related calculators"
           action={
             <Link
@@ -237,7 +233,7 @@ export function CalculatorPage({ id }: { id: string }) {
 
       {/* FAQ */}
       {faqs.length > 0 && (
-        <Section tone="muted" eyebrow="Questions" title="Frequently asked questions">
+        <Section tone="muted" title="Frequently asked questions">
           <div className="max-w-3xl space-y-3">
             {faqs.map((faq) => (
               <details key={faq.q} className="surface group px-5 py-4 open:border-brand/40">

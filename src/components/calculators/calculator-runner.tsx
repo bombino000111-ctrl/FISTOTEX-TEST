@@ -4,6 +4,7 @@ import * as React from "react";
 import { RotateCcw, Link2, Check, AlertTriangle, Bookmark, BookmarkCheck } from "lucide-react";
 import { getCalculator, type CalcField } from "@/lib/calculators/registry";
 import { GrowthChart } from "@/components/calculators/growth-chart";
+import { Rosette } from "@/components/calculators/rosette";
 import { formatCompactCurrency, cn } from "@/lib/utils";
 import { formatOutput } from "@/lib/calculators/format";
 import { trackEvent } from "@/lib/analytics";
@@ -154,6 +155,7 @@ export function CalculatorRunner({ id }: { id: string }) {
   // The last emphasised output is the headline figure
   const headline = [...outputs].reverse().find((o) => o.emphasis) ?? outputs[outputs.length - 1];
   const rest = outputs.filter((o) => o !== headline);
+  const chartLabels = def.chartSeriesLabels ?? { invested: "Invested", value: "Value" };
   const headlineNumber = typeof headline?.value === "number" ? headline.value : 0;
   const steps = validation || !headline ? [] : nextStepsFor(def.id, values, headlineNumber);
 
@@ -180,7 +182,7 @@ export function CalculatorRunner({ id }: { id: string }) {
       {/* ── Inputs ── */}
       <div className="surface p-6 md:p-8">
         <div className="mb-8 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-bold text-foreground">Your inputs</h2>
+          <h2 className="font-display text-2xl text-foreground">Your inputs</h2>
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -230,8 +232,8 @@ export function CalculatorRunner({ id }: { id: string }) {
       {/* ── Results ── */}
       <div className="space-y-6">
         {validation ? (
-          <div role="status" className="surface flex items-start gap-3 border-amber-500/40 bg-amber-500/10 p-6">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+          <div role="status" className="surface flex items-start gap-3 border-growth/50 bg-growth/10 p-6">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-growth-ink" />
             <div>
               <p className="font-semibold text-foreground">Check your inputs</p>
               <p className="mt-1 text-sm text-muted-foreground">{validation}</p>
@@ -243,7 +245,7 @@ export function CalculatorRunner({ id }: { id: string }) {
               <div className="bg-panel px-6 py-7 text-white md:px-8">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                   <div aria-live="polite" aria-atomic="true">
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#7FD6B2]">
+                    <p className="text-sm font-medium text-panel-accent">
                       {headline.label}
                     </p>
                     <p className="font-display tnum mt-2 break-words text-4xl tracking-tight md:text-5xl">
@@ -257,7 +259,13 @@ export function CalculatorRunner({ id }: { id: string }) {
                         </p>
                       )}
                   </div>
-                  {showDonut && (
+                  {chartData && def.category !== "loans" ? (
+                    <Rosette
+                      series={chartData}
+                      label={`Rosette with one ring per year: inner rings mostly ${chartLabels.invested.toLowerCase()}, outer rings mostly growth.`}
+                      className="h-28 w-28 shrink-0 self-center sm:h-32 sm:w-32 [--foreground:var(--card)]"
+                    />
+                  ) : showDonut && (
                     <Donut base={base.value as number} gain={gain.value as number} baseLabel={base.label} gainLabel={gain.label} />
                   )}
                 </div>
@@ -272,7 +280,7 @@ export function CalculatorRunner({ id }: { id: string }) {
                       <span
                         className={cn(
                           "h-2.5 w-2.5 rounded-full",
-                          out.split === "base" ? "bg-[#8FA7D6]" : "bg-[#3FB68B]"
+                          out.split === "base" ? "bg-principal" : "bg-growth"
                         )}
                       />
                     )}
@@ -285,7 +293,7 @@ export function CalculatorRunner({ id }: { id: string }) {
                       out.tone === "positive"
                         ? typeof out.value === "number" && out.value < 0
                           ? "text-destructive"
-                          : "text-success"
+                          : "text-growth-ink"
                         : "text-foreground"
                     )}
                   >
@@ -304,11 +312,8 @@ export function CalculatorRunner({ id }: { id: string }) {
 
         {chartData && (
           <div className="surface p-6 md:p-8">
-            <h2 className="mb-5 text-lg font-bold text-foreground">Growth over time</h2>
-            <GrowthChart
-              data={chartData}
-              labels={def.chartSeriesLabels ?? { invested: "Invested", value: "Value" }}
-            />
+            <h2 className="font-display mb-5 text-2xl text-foreground">Growth over time</h2>
+            <GrowthChart data={chartData} labels={chartLabels} />
           </div>
         )}
 
@@ -345,13 +350,13 @@ function Donut({
   return (
     <div className="flex items-center gap-4">
       <svg viewBox="0 0 100 100" className="h-24 w-24 -rotate-90" role="img" aria-label={`${gainLabel} is ${Math.round(gainShare * 100)}% of the total`}>
-        <circle cx="50" cy="50" r={r} fill="none" stroke="#8FA7D6" strokeWidth="14" />
+        <circle cx="50" cy="50" r={r} fill="none" stroke="var(--principal)" strokeWidth="14" />
         <circle
           cx="50"
           cy="50"
           r={r}
           fill="none"
-          stroke="#3FB68B"
+          stroke="var(--growth)"
           strokeWidth="14"
           strokeDasharray={`${gainShare * c} ${c}`}
           className="transition-[stroke-dasharray] duration-500"
@@ -359,12 +364,12 @@ function Donut({
       </svg>
       <div className="space-y-2 text-xs">
         <p className="flex items-center gap-2 text-white/80">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#8FA7D6]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-principal" />
           {baseLabel}
           <span className="tnum font-semibold text-white">{Math.round((1 - gainShare) * 100)}%</span>
         </p>
         <p className="flex items-center gap-2 text-white/80">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#3FB68B]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-growth" />
           {gainLabel}
           <span className="tnum font-semibold text-white">{Math.round(gainShare * 100)}%</span>
         </p>
@@ -527,7 +532,7 @@ function FieldControl({
       )}
 
       <div className="mt-2 flex items-start justify-between gap-3">
-        <p id={helpId} className={cn("text-xs leading-relaxed", hint ? "font-medium text-amber-700 dark:text-amber-400" : "text-muted-foreground")}>
+        <p id={helpId} className={cn("text-xs leading-relaxed", hint ? "font-medium text-growth-ink" : "text-muted-foreground")}>
           {hint ?? field.help}
         </p>
         {hasRange && (

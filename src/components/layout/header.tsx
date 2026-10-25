@@ -18,7 +18,6 @@ const navItems = [
   {
     href: "/news",
     label: "Market News",
-    live: true,
     match: (p: string) => p.startsWith("/news"),
   },
   {
@@ -122,18 +121,13 @@ export function Header() {
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-2.5 py-1.5 text-sm font-semibold transition-colors",
+                    "inline-flex min-h-10 items-center whitespace-nowrap rounded-full px-3.5 text-sm font-medium transition-colors",
                     active
-                      ? "border-b-2 border-accent font-bold text-accent"
+                      ? "bg-card font-semibold text-foreground"
                       : "text-ink-2 hover:bg-muted hover:text-foreground"
                   )}
                 >
                   {item.label}
-                  {item.live && (
-                    <span className="rounded-sm bg-accent-soft px-1.5 py-px font-mono text-[10px] font-bold text-accent">
-                      LIVE
-                    </span>
-                  )}
                 </Link>
               );
             })}
@@ -153,7 +147,7 @@ export function Header() {
             <button
               type="button"
               ref={toggleRef}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-sm border border-rule text-foreground lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-rule text-foreground lg:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
@@ -173,7 +167,7 @@ export function Header() {
         className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-border bg-background lg:hidden"
       >
         <nav aria-label="Mobile" className="container mx-auto flex flex-col gap-1 px-4 py-6">
-          {navItems.map((item, i) => {
+          {navItems.map((item) => {
             const active = item.match(pathname);
             return (
               <Link
@@ -181,9 +175,8 @@ export function Header() {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 aria-current={active ? "page" : undefined}
-                style={{ animationDelay: `${i * 40}ms` }}
                 className={cn(
-                  "animate-fade-up font-display flex items-center justify-between rounded-sm border-b border-border px-4 py-3.5 text-lg font-bold transition-colors",
+                  "font-display flex min-h-14 items-center justify-between border-b border-border px-2 text-2xl transition-colors",
                   active ? "bg-muted text-accent" : "text-ink-2 hover:bg-muted hover:text-foreground"
                 )}
               >

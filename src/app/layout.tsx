@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Newsreader, IBM_Plex_Mono } from "next/font/google";
+import { Hanken_Grotesk, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
-import { Dateline } from "@/components/layout/dateline";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { GA4, GA4PageView } from "@/components/analytics/GA4";
@@ -11,28 +10,19 @@ import { themeInitScript } from "@/components/layout/theme-toggle";
 import { consentInitScript } from "@/components/ads/consent";
 import { ConsentBanner } from "@/components/ads/consent-banner";
 
-// Body and UI. Variable font — no weight list needed.
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+// Body, UI and small labels. Variable; tabular figures for money.
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Editorial serif for the masthead, headlines and money figures.
-// Italic is loaded because the lead headline sets a clause in it.
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+// Headlines and result figures: a high-contrast Didone with optical sizes,
+// the engraved lettering of a banknote. Variable, so one file serves 10–96px.
+const bodoni = Bodoni_Moda({
+  variable: "--font-bodoni",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-// Datelines, slugs and statutory stamps are set in monospace, the way a
-// wire service prints them.
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-mono-editorial",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -107,8 +97,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
-    { media: "(prefers-color-scheme: dark)", color: "#12151A" },
+    { media: "(prefers-color-scheme: light)", color: "#E8EAE6" },
+    { media: "(prefers-color-scheme: dark)", color: "#161927" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -123,7 +113,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${jakarta.variable} ${newsreader.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${hanken.variable} ${bodoni.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -172,7 +162,6 @@ export default function RootLayout({
 
         <GA4 />
         <GA4PageView />
-        <Dateline />
         <Header />
 
         <main id="main" className="flex-1">

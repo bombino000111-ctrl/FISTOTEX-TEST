@@ -2,193 +2,141 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Wallet } from "lucide-react";
-import { calculateSIP } from "@/lib/calculators";
+import { Rosette, type RosettePoint } from "@/components/calculators/rosette";
 import { formatCurrency, formatCompactCurrency } from "@/lib/utils";
 
 const RETURN_RATE = 12;
+const MONTHLY = { min: 1000, max: 100000, step: 500 };
+const YEARS = { min: 1, max: 40, step: 1 };
 
-/** Smoothly tween a number towards its target for a lively readout. */
-function useTweened(target: number, ms = 450) {
-  const [value, setValue] = React.useState(target);
-  const from = React.useRef(target);
-
-  React.useEffect(() => {
-    const start = performance.now();
-    const initial = from.current;
-    // Respect reduced motion: jump straight to the new figure
-    const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
-    let raf = 0;
-    const tick = (now: number) => {
-      const t = duration === 0 ? 1 : Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const v = initial + (target - initial) * eased;
-      from.current = v;
-      setValue(v);
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, ms]);
-
-  return value;
+/** SIP balance at the end of each year (payments at the start of each month). */
+function sipSeries(monthly: number, years: number): RosettePoint[] {
+  const i = RETURN_RATE / 12 / 100;
+  const out: RosettePoint[] = [];
+  for (let y = 0; y <= years; y++) {
+    const n = y * 12;
+    out.push({
+      invested: monthly * n,
+      value: n === 0 ? 0 : monthly * ((Math.pow(1 + i, n) - 1) / i) * (1 + i),
+    });
+  }
+  return out;
 }
 
+const lakh = (v: number) => formatCompactCurrency(Math.round(v)).replace(" Lakh", " lakh").replace(" Crore", " crore");
+
 /**
- * The blotter: a working SIP ledger that sits in the masthead spine.
- * Deliberately physical — ruled box, slated dark readout, a split bar that
- * shows capital against compounded growth rather than an abstract curve.
+ * The homepage hero: a working SIP whose result is engraved as a rosette.
+ * `children` is the headline block, rendered on the server and placed beside
+ * the controls.
  */
-export function HeroCalculator() {
+export function HeroCalculator({ children }: { children: React.ReactNode }) {
   const [monthly, setMonthly] = React.useState(10000);
   const [years, setYears] = React.useState(15);
 
-  const result = calculateSIP({ monthlyInvestment: monthly, annualReturn: RETURN_RATE, years });
-  const shown = useTweened(result.futureValue);
+  const series = React.useMemo(() => sipSeries(monthly, years), [monthly, years]);
+  const final = series[series.length - 1];
+  const growth = final.value - final.invested;
 
-  const gainPct =
-    result.futureValue > 0 ? Math.round((result.estimatedReturns / result.futureValue) * 100) : 0;
-  const principalPct = 100 - gainPct;
-
-  const pctMonthly = ((monthly - 1000) / (100000 - 1000)) * 100;
-  const pctYears = ((years - 1) / (30 - 1)) * 100;
+  const pct = (v: number, r: { min: number; max: number }) => ((v - r.min) / (r.max - r.min)) * 100;
 
   return (
-    <div className="surface-lead p-6 shadow-[0_4px_20px_-4px_rgb(0_0_0/0.06)] sm:p-7">
-      {/* Blotter header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-4">
-        <span className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-foreground">
-          <span className="h-2.5 w-2.5 rounded-full bg-accent" />
-          Physical SIP Blotter
-        </span>
-        <span className="rounded-sm border border-accent/20 bg-accent-soft px-2 py-0.5 font-mono text-[11px] font-bold text-accent">
-          {RETURN_RATE.toFixed(1)}% P.A. COMPOUND
-        </span>
-      </div>
+    <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:gap-16">
+      <div className="max-w-xl">
+        {children}
 
-      {/* Slated readout */}
-      <div className="ledger my-5 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-panel-accent">
-              Projected maturity corpus ({years} {years === 1 ? "yr" : "yrs"})
-            </p>
-            <p
-              className="font-display tnum mt-1 text-3xl font-bold tracking-tight text-white sm:text-4xl"
-              aria-hidden="true"
-            >
-              {formatCurrency(shown)}
-            </p>
-            {/* Screen readers get the settled figure once, not every animation frame */}
-            <p className="sr-only" aria-live="polite">
-              {formatCurrency(result.futureValue)}
-            </p>
+        <div className="mt-10 space-y-7">
+          <div>
+            <div className="flex items-baseline justify-between gap-4">
+              <label htmlFor="hero-monthly" className="text-sm font-medium text-ink-2">
+                Each month
+              </label>
+              <output htmlFor="hero-monthly" className="tnum font-display text-2xl text-foreground">
+                {formatCurrency(monthly)}
+              </output>
+            </div>
+            <input
+              id="hero-monthly"
+              type="range"
+              min={MONTHLY.min}
+              max={MONTHLY.max}
+              step={MONTHLY.step}
+              value={monthly}
+              aria-valuetext={formatCurrency(monthly)}
+              onChange={(e) => setMonthly(Number(e.target.value))}
+              className="range mt-2"
+              style={{ "--pct": `${pct(monthly, MONTHLY)}%` } as React.CSSProperties}
+            />
           </div>
-          <Wallet aria-hidden="true" className="h-6 w-6 shrink-0 text-panel-accent/60" />
+
+          <div>
+            <div className="flex items-baseline justify-between gap-4">
+              <label htmlFor="hero-years" className="text-sm font-medium text-ink-2">
+                For
+              </label>
+              <output htmlFor="hero-years" className="tnum font-display text-2xl text-foreground">
+                {years} {years === 1 ? "year" : "years"}
+              </output>
+            </div>
+            <input
+              id="hero-years"
+              type="range"
+              min={YEARS.min}
+              max={YEARS.max}
+              step={YEARS.step}
+              value={years}
+              aria-valuetext={`${years} years`}
+              onChange={(e) => setYears(Number(e.target.value))}
+              className="range mt-2"
+              style={{ "--pct": `${pct(years, YEARS)}%` } as React.CSSProperties}
+            />
+          </div>
         </div>
 
-        {/* Compounding ladder */}
-        <div className="mt-4 border-t border-panel-rule pt-3">
-          <div className="mb-1.5 flex flex-wrap justify-between gap-x-3 gap-y-1 font-mono text-[11px] text-white/70">
-            <span>
-              Capital:{" "}
-              <strong className="tnum font-semibold text-white">
-                {formatCompactCurrency(result.totalInvested)}
-              </strong>
-            </span>
-            <span className="tnum font-bold text-panel-accent">
-              Gains: {gainPct}% ({formatCompactCurrency(result.estimatedReturns)})
-            </span>
-          </div>
-
-          <div
-            className="flex h-3 w-full overflow-hidden rounded-sm bg-white/10"
-            role="img"
-            aria-label={`${principalPct}% principal invested, ${gainPct}% compounded growth`}
+        <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <Link
+            href={`/calculators/sip#monthlyInvestment=${monthly}&years=${years}`}
+            className="btn-brand min-h-12 px-6 text-base"
           >
-            <div
-              className="h-full bg-amber-warm transition-[width] duration-500"
-              style={{ width: `${principalPct}%` }}
-            />
-            <div
-              className="h-full bg-accent transition-[width] duration-500"
-              style={{ width: `${gainPct}%` }}
-            />
-          </div>
-
-          <div className="mt-1 flex justify-between font-mono text-[11px] text-white/55">
-            <span className="inline-flex items-center gap-1">
-              <span aria-hidden="true" className="inline-block h-2 w-2 bg-amber-warm" />
-              Principal invested
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <span aria-hidden="true" className="inline-block h-2 w-2 bg-accent" />
-              Compounded growth
-            </span>
-          </div>
+            Open the full SIP calculator
+          </Link>
+          <p className="text-sm text-muted-foreground">
+            Assumes {RETURN_RATE}% a year. You can change it there.
+          </p>
         </div>
       </div>
 
-      {/* Tactile controls */}
-      <div className="space-y-4 pt-1">
-        <div>
-          <div className="mb-1 flex items-center justify-between font-mono text-xs font-medium text-foreground">
-            <label htmlFor="hero-monthly">MONTHLY COMMITMENT</label>
-            <span className="tnum text-sm font-bold text-accent">{formatCurrency(monthly)} / mo</span>
-          </div>
-          <input
-            id="hero-monthly"
-            type="range"
-            min={1000}
-            max={100000}
-            step={1000}
-            value={monthly}
-            onChange={(e) => setMonthly(Number(e.target.value))}
-            className="range"
-            style={{ "--pct": `${pctMonthly}%` } as React.CSSProperties}
-          />
-          <div className="mt-1 flex justify-between font-mono text-[11px] text-muted-foreground">
-            <span>₹1,000</span>
-            <span>₹50,000</span>
-            <span>₹1,00,000</span>
-          </div>
-        </div>
-
-        <div>
-          <div className="mb-1 flex items-center justify-between font-mono text-xs font-medium text-foreground">
-            <label htmlFor="hero-years">INVESTMENT HORIZON</label>
-            <span className="tnum text-sm font-bold text-accent">
-              {years} {years === 1 ? "Year" : "Years"}
+      {/* The engraving */}
+      <figure className="mx-auto w-full max-w-[30rem]">
+        <Rosette
+          series={series}
+          engrave
+          label={`Rosette with ${years} rings, one per year. Inner rings are mostly money put in; outer rings are mostly growth.`}
+          className="aspect-square w-full"
+        />
+        <figcaption className="mt-6 text-center">
+          <span className="block text-sm text-muted-foreground">
+            After {years} {years === 1 ? "year" : "years"}
+          </span>
+          <span className="tnum font-display mt-1 block text-5xl text-foreground sm:text-6xl" aria-hidden="true">
+            {formatCurrency(final.value)}
+          </span>
+          {/* Announced once per change, not on every frame of a drag */}
+          <span className="sr-only" aria-live="polite">
+            After {years} years: {formatCurrency(final.value)}
+          </span>
+          <span className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-ink-2">
+            <span className="inline-flex items-center gap-2">
+              <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-principal" />
+              {lakh(final.invested)} you put in
             </span>
-          </div>
-          <input
-            id="hero-years"
-            type="range"
-            min={1}
-            max={30}
-            step={1}
-            value={years}
-            onChange={(e) => setYears(Number(e.target.value))}
-            className="range"
-            style={{ "--pct": `${pctYears}%` } as React.CSSProperties}
-          />
-          <div className="mt-1 flex justify-between font-mono text-[11px] text-muted-foreground">
-            <span>1 Year</span>
-            <span>15 Years</span>
-            <span>30 Years</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-6 border-t border-border pt-4">
-        <Link
-          href={`/calculators/sip#monthlyInvestment=${monthly}&years=${years}`}
-          className="btn-ghost w-full bg-muted px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wide"
-        >
-          Open full mathematical breakdown
-          <ArrowUpRight className="h-4 w-4" />
-        </Link>
-      </div>
+            <span className="inline-flex items-center gap-2">
+              <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-growth" />
+              <span className="font-semibold text-growth-ink">{lakh(growth)}</span> of growth
+            </span>
+          </span>
+        </figcaption>
+      </figure>
     </div>
   );
 }

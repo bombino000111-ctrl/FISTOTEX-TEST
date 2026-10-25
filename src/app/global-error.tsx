@@ -14,8 +14,8 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#FAF7F2",
-          color: "#1A1D20",
+          background: "#E8EAE6",
+          color: "#262A4F",
           fontFamily: "Georgia, serif",
           padding: 24,
           textAlign: "center",
@@ -23,7 +23,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
       >
         <div style={{ maxWidth: 480 }}>
           <h1 style={{ fontSize: 36, margin: 0 }}>Something went wrong</h1>
-          <p style={{ fontSize: 18, color: "#5F6770", lineHeight: 1.5 }}>
+          <p style={{ fontSize: 18, color: "#585D7A", lineHeight: 1.5 }}>
             Fistotex couldn&apos;t load. Please try again in a moment.
           </p>
           <button
@@ -32,7 +32,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
             style={{
               marginTop: 16,
               padding: "12px 24px",
-              background: "#0A5C36",
+              background: "#34419A",
               color: "#fff",
               border: 0,
               borderRadius: 4,

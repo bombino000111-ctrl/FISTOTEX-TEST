@@ -5,56 +5,64 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─────────────────────────────────────────────────────────────
-   Fistotex design tokens — "The Indian Investor's Gazette"
-   An authentic broadsheet: warm paper, black ink, forest-emerald
-   rules and a saffron editorial accent. Light + dark.
+   Fistotex design tokens — "Security print"
+   Borrowed from the object every Indian already trusts with money:
+   the rupee note. Cool note paper, intaglio-indigo ink, and two
+   denomination tints that carry meaning everywhere on the site —
+   lavender for money you put in, turmeric for what it grows into.
    ───────────────────────────────────────────────────────────── */
 :root {
   /* Paper */
-  --background: #FAF7F2;   /* paper canvas */
-  --muted: #F4F0E6;        /* paper surface (tinted bands, column heads) */
-  --card: #FFFFFF;         /* printed card */
-  --popover: #FFFFFF;
+  --background: #E8EAE6;   /* note paper — cool stone, not cream */
+  --muted: #DEE1DC;        /* recessed bands */
+  --card: #F6F7F4;         /* raised surfaces */
+  --popover: #F6F7F4;
 
   /* Ink */
-  --foreground: #1A1D20;   /* ink primary */
-  --ink-2: #3B424A;        /* ink secondary — body copy */
-  --muted-foreground: #5F6770; /* ink muted — captions, datelines (≥4.6:1 on every light band) */
-  --card-foreground: #1A1D20;
-  --popover-foreground: #1A1D20;
-  --primary: #1A1D20;
-  --primary-foreground: #FAF7F2;
+  --foreground: #262A4F;   /* intaglio indigo, used in place of black */
+  --ink-2: #3E4366;        /* body copy */
+  --muted-foreground: #585D7A; /* captions (>=5:1 on every light band) */
+  --card-foreground: #262A4F;
+  --popover-foreground: #262A4F;
+  --primary: #262A4F;
+  --primary-foreground: #F6F7F4;
 
-  /* Rules — the hairlines that make a broadsheet read as one */
-  --border: #E5DFD5;
-  --rule: #D8D0C5;         /* heavier rule, column dividers, double rules */
-  --input: #D8D0C5;
+  /* Lines */
+  --border: #CDD1CB;
+  --rule: #B6BBB5;
+  --input: #B6BBB5;
 
-  /* Editorial accents */
-  --accent: #0A5C36;       /* forest emerald — the house colour */
-  --accent-foreground: #FFFFFF;
-  --accent-soft: #E9F5EF;  /* emerald wash behind small labels */
-  --brand: #0A5C36;
-  --brand-2: #A65300;      /* broadsheet saffron — section eyebrows (≥4.5:1 at 11px) */
-  --brand-2-soft: #FCF3E6;
-  --brand-3: #1B365D;      /* navy — the borrowing desk */
-  --amber-warm: #D97706;   /* principal bars, step-up markers */
-  --secondary: #1B365D;
-  --secondary-foreground: #FFFFFF;
+  /* Action + links: a brighter intaglio blue, so interactive ink reads apart from text ink */
+  --accent: #34419A;
+  --accent-foreground: #F6F7F4;
+  --accent-soft: #DCDFF0;
+  --brand: #34419A;
+  --brand-2: #5E5596;      /* lavender ink — small headings */
+  --brand-2-soft: #E4E1F0;
+  --brand-3: #262A4F;
+  --secondary: #262A4F;
+  --secondary-foreground: #F6F7F4;
 
-  /* The ledger slate — dark panels that read as a banker's blotter */
-  --panel: #14211D;
-  --panel-rule: #223B33;
-  --panel-accent: #7BD8B1;
+  /* Meaning colours */
+  --principal: #8B83B6;    /* Rs 100-note lavender: money put in */
+  --growth: #C9962B;       /* turmeric: what it grows into (fills) */
+  --growth-ink: #805A0E;   /* turmeric legible as text (>=4.8:1 on card) */
+  --amber-warm: #C9962B;
 
-  --success: #0A5C36;
-  --success-foreground: #FFFFFF;
-  --destructive: #9B2226;
+  /* The result panel: a slab of ink */
+  --panel: #262A4F;
+  --panel-rule: #3A3F6B;
+  --panel-accent: #E8C277;
+
+  --success: #805A0E;
+  --success-foreground: #F6F7F4;
+  --destructive: #A23B3B;
   --destructive-foreground: #FFFFFF;
-  --ring: #0A5C36;
+  --ring: #34419A;
 
-  /* Broadsheets print square. Radii stay small everywhere. */
-  --radius: 0.25rem;
+  /* Radii follow hierarchy: controls are pills, surfaces soft, tags tight */
+  --radius: 0.75rem;
+  --radius-tag: 0.375rem;
   color-scheme: light;
 }
 
@@ -63,46 +71,49 @@
 [data-theme="dark"] * { --tint-ink: color-mix(in srgb, var(--tint, var(--accent)) 52%, #fff); }
 
 [data-theme="dark"] {
-  /* Night edition: the paper darkens, the ink lifts. */
-  --background: #12151A;
-  --muted: #1A1F26;
-  --card: #171B21;
-  --popover: #171B21;
+  /* Night vault: deep blue-black paper, the ink lifts to moonlight */
+  --background: #161927;
+  --muted: #1C2032;
+  --card: #1F2336;
+  --popover: #1F2336;
 
-  --foreground: #EDE8DF;
-  --ink-2: #C3C8CF;
-  --muted-foreground: #949BA5;
-  --card-foreground: #EDE8DF;
-  --popover-foreground: #EDE8DF;
-  --primary: #EDE8DF;
-  --primary-foreground: #12151A;
+  --foreground: #E6E7EF;
+  --ink-2: #C4C6D8;
+  --muted-foreground: #9A9DB8;
+  --card-foreground: #E6E7EF;
+  --popover-foreground: #E6E7EF;
+  --primary: #E6E7EF;
+  --primary-foreground: #161927;
 
-  --border: #2A3038;
-  --rule: #39414B;
-  --input: #39414B;
+  --border: #2C3148;
+  --rule: #3B4162;
+  --input: #3B4162;
 
-  --accent: #4FBF8B;
-  --accent-foreground: #062015;
-  --accent-soft: #10291F;
-  --brand: #4FBF8B;
-  --brand-2: #E2963F;
-  --brand-2-soft: #2A1F12;
-  --brand-3: #8FA7D6;
-  --amber-warm: #E2963F;
-  --secondary: #8FA7D6;
-  --secondary-foreground: #12151A;
+  --accent: #A3ADF2;
+  --accent-foreground: #161927;
+  --accent-soft: #262B4D;
+  --brand: #A3ADF2;
+  --brand-2: #B8B0E6;
+  --brand-2-soft: #27243F;
+  --brand-3: #C4C6D8;
+  --secondary: #A3ADF2;
+  --secondary-foreground: #161927;
 
-  /* At night the slate reads as a panel only if it sits above the page, not
-     below it — so it lifts and greens rather than going blacker. */
-  --panel: #14261F;
-  --panel-rule: #2B463B;
-  --panel-accent: #7BD8B1;
+  --principal: #9F98CF;
+  --growth: #E2B353;
+  --growth-ink: #E8C277;
+  --amber-warm: #E2B353;
 
-  --success: #4FBF8B;
-  --success-foreground: #062015;
-  --destructive: #F0746B;
+  /* The panel lifts above the page rather than sinking below it */
+  --panel: #2A2F55;
+  --panel-rule: #3E4472;
+  --panel-accent: #E8C277;
+
+  --success: #E8C277;
+  --success-foreground: #161927;
+  --destructive: #F08C84;
   --destructive-foreground: #2A0606;
-  --ring: #4FBF8B;
+  --ring: #A3ADF2;
   color-scheme: dark;
 }
 
@@ -128,6 +139,9 @@
   --color-brand-2-soft: var(--brand-2-soft);
   --color-brand-3: var(--brand-3);
   --color-amber-warm: var(--amber-warm);
+  --color-principal: var(--principal);
+  --color-growth: var(--growth);
+  --color-growth-ink: var(--growth-ink);
   --color-panel: var(--panel);
   --color-panel-rule: var(--panel-rule);
   --color-panel-accent: var(--panel-accent);
@@ -142,9 +156,13 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.125rem);
   --radius-2xl: calc(var(--radius) + 0.25rem);
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-mono-editorial), ui-monospace, SFMono-Regular, monospace;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-bodoni), "Didot", "Bodoni 72", Georgia, serif;
+  /* Small labels are set in the text face; there is no monospace chrome.
+     `font-mono` stays as an alias so older markup inherits the new voice. */
+  --font-mono: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  /* Formulas only */
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -179,7 +197,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -204,24 +222,33 @@ body {
   /* ── Editorial type ────────────────────────────────────────── */
 
   /* Headline serif */
-  .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.015em; }
+  /* Bodoni Moda with optical sizing: hairlines sharpen as the size grows,
+     the way an engraved note's lettering does. */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
 
-  /* Masthead / lead headline — lighter weight, larger optical size */
+  /* Lead headline — lighter weight at large sizes */
   .font-masthead {
     font-family: var(--font-display);
     font-weight: 400;
-    letter-spacing: -0.025em;
-    line-height: 1.08;
+    font-optical-sizing: auto;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
   }
 
-  /* Small caps monospace used for datelines, slugs and section kickers */
+  /* Small kicker text — sentence case, never shouted */
   .slug {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 600;
   }
+
+  .font-code { font-family: var(--font-code); }
 
   /* ── Rules ─────────────────────────────────────────────────── */
 
@@ -240,7 +267,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 999px;
     font-weight: 600;
     color: var(--accent-foreground);
     background: var(--accent);
@@ -254,7 +281,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 999px;
     font-weight: 600;
     color: var(--foreground);
     border: 1px solid var(--rule);
@@ -263,32 +290,22 @@ body {
   }
   .btn-ghost:hover { border-color: var(--foreground); background: var(--muted); }
 
-  /* Uppercase section label */
+  /* Section kicker — a quiet lavender line of sentence-case text */
   .eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.6875rem;
-    font-weight: 700;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
     color: var(--brand-2);
   }
-  .eyebrow::before {
-    content: "";
-    width: 1.25rem;
-    height: 2px;
-    background: var(--brand-2);
-  }
-  .eyebrow.eyebrow-plain::before { display: none; }
 
   /* Registry badge — the little boxed tag on a card */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: var(--radius-tag);
     border: 1px solid var(--border);
     background: var(--card);
     padding: 0.3125rem 0.75rem;
@@ -302,13 +319,11 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    border-radius: 0.1875rem;
-    padding: 0.125rem 0.375rem;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    border-radius: var(--radius-tag);
+    padding: 0.125rem 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
     color: var(--tint-ink);
     background: color-mix(in srgb, var(--tint, var(--accent)) 12%, var(--card));
   }
@@ -324,16 +339,13 @@ body {
   /* Heavier-ruled surface for lead items */
   .surface-lead {
     position: relative;
-    border: 2px solid var(--rule);
+    border: 1px solid var(--rule);
     background: var(--card);
     border-radius: var(--radius);
   }
 
   .surface-link { transition: border-color 150ms ease, box-shadow 150ms ease; }
-  .surface-link:hover {
-    border-color: var(--foreground);
-    box-shadow: 0 2px 0 0 var(--foreground);
-  }
+  .surface-link:hover { border-color: var(--accent); }
 
   /* Per-category colour: set --tint on the element (or an ancestor). */
   .tint-text { color: var(--tint-ink); }
@@ -343,39 +355,10 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.25rem;
+    border-radius: var(--radius-tag);
     border: 1px solid color-mix(in srgb, var(--tint, var(--accent)) 28%, transparent);
     color: var(--tint-ink);
     background: color-mix(in srgb, var(--tint, var(--accent)) 10%, var(--card));
-  }
-
-  /* ── Gazette index ─────────────────────────────────────────── */
-
-  /* One desk column in the calculator directory */
-  .gazette-col { display: flex; flex-direction: column; }
-
-  .gazette-head {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 0.25rem;
-    min-height: 6rem;
-    padding: 1rem 1.25rem;
-    background: var(--muted);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  /* A filed entry inside a desk column. Entries keep their natural height —
-     desks hold different numbers of calculators, and a broadsheet column
-     simply ends where its copy ends rather than stretching to match its
-     neighbour. */
-  .gazette-entry {
-    display: block;
-    padding: 1rem;
-    transition: background-color 150ms ease;
-  }
-  .gazette-entry:hover {
-    background: color-mix(in srgb, var(--tint, var(--accent)) 7%, var(--card));
   }
 
   /* ── Ledger slate (dark blotter panels) ───────────────────── */
@@ -383,7 +366,7 @@ body {
     background: var(--panel);
     border: 1px solid var(--panel-rule);
     border-radius: var(--radius);
-    color: #F4F1EA;
+    color: var(--card);
   }
 
   /* ── Range slider ─────────────────────────────────────────── */
@@ -474,3 +457,15 @@ body {
 
 /* FAQ disclosure */
 details > summary::-webkit-details-marker { display: none; }
+
+/* Rosette engraving: each ring draws in once on load, inner to outer.
+   Reduced motion skips straight to the finished rosette (see the base reset). */
+@keyframes engrave { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.rosette-engrave path[pathLength] {
+  stroke-dasharray: 1;
+  animation: engrave 1.4s cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--ring, 0) * 28ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rosette-engrave path[pathLength] { animation: none; stroke-dasharray: none; }
+}

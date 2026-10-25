@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { CompanyResult, NextResults } from "@/types/earnings";
 import { Growth } from "@/components/earnings/growth";
 import { daysBetween } from "@/lib/market-calendar/dates";
+import { quarterMonths } from "@/lib/earnings/period";
 
 // Values arrive as ₹ crore (India) or US$ billion (US)
 function money(value: number, market: CompanyResult["market"]) {
@@ -62,16 +63,37 @@ function Metric({
   );
 }
 
-export function CompanyCard({ company, today }: { company: CompanyResult; today: string }) {
+export function CompanyCard({
+  company,
+  today,
+  checkedOn,
+}: {
+  company: CompanyResult;
+  today: string;
+  checkedOn: string;
+}) {
   const next = nextLabel(company.next, today);
   const nextDate = company.next.kind === "date" ? company.next.date : undefined;
 
   return (
     <article className="surface flex flex-col p-6 sm:p-7">
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h3 className="font-display text-2xl text-foreground">{company.name}</h3>
-        <span className="shrink-0 text-sm text-muted-foreground">{company.quarter}</span>
+        <span className="shrink-0 text-sm text-muted-foreground">
+          {quarterMonths(company.periodEnd)}
+          {company.quarter && ` (${company.quarter})`}
+        </span>
       </div>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {company.live ? (
+          <span className="inline-flex items-center gap-1.5 font-medium text-growth-ink">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-growth" />
+            Updated automatically from SEC filings
+          </span>
+        ) : (
+          <>Checked by hand on {checkedOn}</>
+        )}
+      </p>
 
       <dl className="mt-6 grid flex-1 content-start grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3">
         <Metric
@@ -87,7 +109,7 @@ export function CompanyCard({ company, today }: { company: CompanyResult; today:
           qoq={company.profitQoQ}
           flag={!!company.profitNote}
         />
-        <Metric label="EPS" value={perShare(company.eps, company.market)} />
+        <Metric label="Earnings per share" value={perShare(company.eps, company.market)} />
       </dl>
 
       {company.profitNote && (

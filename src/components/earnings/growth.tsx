@@ -1,18 +1,17 @@
 import { ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** "YoY ▲ 11.2%" — green when up, red when down. `flag` adds a footnote marker. */
+/** "+11.2% vs last year" — turmeric when up, red when down, always with a sign and an arrow so colour is never the only cue. `flag` adds a footnote marker. */
 export function Growth({ label, value, flag }: { label: "YoY" | "QoQ"; value: number; flag?: boolean }) {
   const Icon = value > 0 ? ArrowUpRight : value < 0 ? ArrowDownRight : Minus;
   const sign = value > 0 ? "+" : value < 0 ? "−" : "";
   const word = value > 0 ? "up" : value < 0 ? "down" : "flat";
 
   return (
-    <span className="flex items-center gap-1.5 text-xs">
-      <span className="w-7 font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</span>
+    <span className="flex items-center gap-1.5 text-sm">
       <span
         className={cn(
-          "inline-flex items-center gap-0.5 font-mono font-semibold tabular-nums",
+          "inline-flex items-center gap-0.5 font-semibold tabular-nums",
           value > 0 ? "text-success" : value < 0 ? "text-destructive" : "text-muted-foreground"
         )}
       >
@@ -26,6 +25,7 @@ export function Growth({ label, value, flag }: { label: "YoY" | "QoQ"; value: nu
           </sup>
         )}
       </span>
+      <span className="text-muted-foreground">{label === "YoY" ? "vs last year" : "vs last quarter"}</span>
     </span>
   );
 }

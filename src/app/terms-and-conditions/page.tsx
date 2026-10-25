@@ -4,6 +4,7 @@ import { ShieldCheck, FileText, Gavel, Globe, Calendar, UserCheck, AlertTriangle
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
+import { LegalDocument } from "@/components/layout/legal-document";
 
 export const metadata: Metadata = pageMetadata({
   title: "Terms and Conditions",
@@ -233,53 +234,24 @@ export default function TermsPage() {
       <StructuredData type="WebPage" data={{ title: "Terms and Conditions", url: "/terms-and-conditions", description: "Fistotex Terms and Conditions - Legal terms governing the use of our financial calculators, news platform, and website." }} />
 
       <PageHeader
-        eyebrow="Legal"
         title="Terms and Conditions"
-        description={
-          <>
-            <span className="block">Last updated: {lastUpdated}</span>
-          </>
-        }
+        description={<>Last updated {lastUpdated}.</>}
         crumbs={[{ name: "Terms & Conditions" }]}
       />
 
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="legal-copy surface p-6 md:p-10">
-              {sections.map((section) => (
-                <section key={section.id} id={section.id} className="mb-10 border-b border-border pb-8 last:mb-0 last:border-0 last:pb-0">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-tile h-10 w-10">
-                      <section.icon className="h-5 w-5" />
-                    </div>
-                    <h2 className="!m-0 text-xl font-bold text-foreground md:text-2xl">{section.title}</h2>
-                  </div>
-                  <div className="space-y-4 md:ml-[52px] text-muted-foreground leading-relaxed">
-                    {section.content.split('\n\n').map((paragraph, i) => (
-                      <div key={i} dangerouslySetInnerHTML={{ __html: paragraph.trim() }} />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-
-            {/* Summary Box */}
-            <div className="mt-12 surface p-6 border-brand/30 bg-brand/5">
-              <h3 className="font-semibold text-foreground mb-4">Quick Summary</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex gap-2"><span className="text-accent">✓</span> Free to use for personal, non-commercial purposes</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Calculators are educational tools - not financial advice</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> News content belongs to respective publishers</li>
-                <li>✗ No scraping, bots, or automated access without permission</li>
-                <li>✗ No commercial use of calculator outputs as advisory service</li>
-                <li>✗ We&apos;re not liable for your financial decisions</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Governed by Indian law</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      <LegalDocument
+        sections={sections}
+        summary={{
+          title: "In short",
+          items: [
+            "Fistotex is free for personal, non-commercial use.",
+            "The calculators are for education. They are not financial advice.",
+            "News headlines belong to their publishers.",
+            "Please don\u2019t scrape the site or resell its results as an advisory service.",
+            "Decisions you make with these tools are your own; Indian law governs these terms.",
+          ],
+        }}
+      />
     </div>
   );
 }

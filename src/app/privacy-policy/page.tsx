@@ -4,6 +4,7 @@ import { ShieldCheck, Eye, Database, Lock, Mail, Truck, Globe, UserCheck, Calend
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
+import { LegalDocument } from "@/components/layout/legal-document";
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
@@ -212,51 +213,24 @@ export default function PrivacyPolicyPage() {
       <StructuredData type="WebPage" data={{ title: "Privacy Policy", url: "/privacy-policy", description: "Fistotex Privacy Policy - How we collect, use, and protect your personal information." }} />
 
       <PageHeader
-        eyebrow="Legal"
         title="Privacy Policy"
-        description={
-          <>
-            <span className="block">Last updated: {lastUpdated}</span>
-          </>
-        }
+        description={<>Last updated {lastUpdated}.</>}
         crumbs={[{ name: "Privacy Policy" }]}
       />
 
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="legal-copy surface p-6 md:p-10">
-              {sections.map((section) => (
-                <section key={section.id} id={section.id} className="mb-10 border-b border-border pb-8 last:mb-0 last:border-0 last:pb-0">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-tile h-10 w-10">
-                      <section.icon className="h-5 w-5" />
-                    </div>
-                    <h2 className="!m-0 text-xl font-bold text-foreground md:text-2xl">{section.title}</h2>
-                  </div>
-                  <div className="space-y-4 md:ml-[52px] text-muted-foreground leading-relaxed">
-                    {section.content.split('\n\n').map((paragraph, i) => (
-                      <div key={i} dangerouslySetInnerHTML={{ __html: paragraph.trim() }} />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-
-            <div className="mt-12 surface p-6 border-brand/30 bg-brand/5">
-              <h3 className="font-semibold text-foreground mb-3">Summary</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex gap-2"><span className="text-accent">✓</span> Calculator data never leaves your browser (your light/dark theme choice is saved in your browser only)</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Only contact form data, plus analytics if you allow it</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> No selling of personal information</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Google Analytics 4 and personalised ads only with your consent</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Google AdSense ads on some pages — never on aggregated news, and never using your calculator inputs</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> You can request data deletion anytime</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      <LegalDocument
+        sections={sections}
+        summary={{
+          title: "In short",
+          items: [
+            "What you type into a calculator stays in your browser. We never receive it.",
+            "We collect what you send through the contact form, and analytics only if you allow it.",
+            "Google Analytics and personalised ads run only after you choose \u201cAllow\u201d. Change this any time with \u201cManage cookies\u201d in the footer.",
+            "Ads appear on some pages, never on the news page, and never use your calculator inputs.",
+            "We don\u2019t sell personal information, and you can ask us to delete yours at any time.",
+          ],
+        }}
+      />
     </div>
   );
 }

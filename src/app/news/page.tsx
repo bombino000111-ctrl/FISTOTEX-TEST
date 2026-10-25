@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Search, Rss, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, AlertTriangle } from "lucide-react";
 import { PageHeader } from "@/components/layout/section";
 import { NewsCard } from "@/components/news/news-card";
 import { StructuredData } from "@/components/seo/StructuredData";
@@ -127,30 +127,18 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
       />
 
       <PageHeader
-        eyebrow="Financial news"
-        title={
-          <>
-            Market news, <span className="text-accent">without the noise</span>
-          </>
-        }
-        description="Headlines curated from India's leading financial publications. Every story links to its original source."
+        title="Market news"
+        description="Today's headlines from India's leading financial publishers. Every story opens on the publisher's own site."
         crumbs={[{ name: "News" }]}
       >
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-2">
-            <span className="relative flex h-2 w-2"><span className="relative inline-flex h-2 w-2 rounded-full bg-accent" /></span>
-            <Rss className="h-4 w-4 text-accent" />
-            {activeSources.length} source{activeSources.length === 1 ? "" : "s"} live
-          </span>
-          <span aria-hidden="true" className="text-border">·</span>
-          <span>{articles.length} stories</span>
-          <span aria-hidden="true" className="text-border">·</span>
-          <span>Updated {updatedLabel} IST</span>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          {articles.length} stories from {activeSources.length}{" "}
+          {activeSources.length === 1 ? "publisher" : "publishers"}, checked {updatedLabel} IST.
+        </p>
       </PageHeader>
 
       {/* Filters */}
-      <section className="sticky top-16 z-30 border-b border-border bg-background py-5 md:top-[72px]">
+      <section aria-label="Search and filter" className="sticky top-[68px] z-30 border-b border-border bg-background/95 py-5 backdrop-blur-md">
         <div className="container mx-auto space-y-5 px-4">
           <form action="/news" method="get" className="flex flex-col gap-3 sm:flex-row">
             {category !== "all" && <input type="hidden" name="category" value={category} />}
@@ -166,7 +154,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                 type="search"
                 defaultValue={q}
                 placeholder="Search headlines, e.g. RBI, SIP, Nifty…"
-                className="h-11 w-full rounded-lg border border-input bg-card pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25"
+                className="h-11 w-full rounded-full border border-input bg-card pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25"
               />
             </div>
             <button
@@ -190,7 +178,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
             <Link
               href={buildHref(current, { category: "all", page: 1 })}
               className={cn(
-                "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                "inline-flex min-h-9 shrink-0 items-center rounded-full border px-4 text-sm font-medium transition-colors",
                 category === "all"
                   ? "border-transparent bg-foreground text-background"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -203,7 +191,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                 key={c.id}
                 href={buildHref(current, { category: c.id, page: 1 })}
                 className={cn(
-                  "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                  "inline-flex min-h-9 shrink-0 items-center rounded-full border px-4 text-sm font-medium transition-colors",
                   category === c.id
                     ? "border-transparent bg-foreground text-background"
                     : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -217,13 +205,13 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
           {/* Source chips */}
           {activeSources.length > 1 && (
             <div className="no-scrollbar -mx-4 flex items-center gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
-              <span className="eyebrow eyebrow-plain shrink-0">Sources</span>
+              <span className="shrink-0 text-sm font-medium text-muted-foreground">Publisher</span>
               <Link
                 href={buildHref(current, { source: "all", page: 1 })}
                 className={cn(
-                  "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                  "inline-flex min-h-9 shrink-0 items-center rounded-full border px-3.5 text-sm font-medium transition-colors",
                   source === "all"
-                    ? "border-brand bg-brand/10 text-foreground"
+                    ? "border-accent bg-accent-soft text-foreground"
                     : "border-border text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -234,9 +222,9 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                   key={s.id}
                   href={buildHref(current, { source: s.id, page: 1 })}
                   className={cn(
-                    "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                    "inline-flex min-h-9 shrink-0 items-center rounded-full border px-3.5 text-sm font-medium transition-colors",
                     source === s.id
-                      ? "border-brand bg-brand/10 text-foreground"
+                      ? "border-accent bg-accent-soft text-foreground"
                       : "border-border text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -253,7 +241,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
       <section className="py-12">
         <div className="container mx-auto px-4">
           {unavailable.length > 0 && (
-            <div className="mb-8 flex items-start gap-3 rounded-lg border border-border bg-muted/50 p-4 text-sm">
+            <div className="mx-auto mb-8 flex max-w-3xl items-start gap-3 rounded-lg border border-border bg-card p-4 text-sm">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
               <p className="text-muted-foreground">
                 {unavailable.length} source{unavailable.length === 1 ? "" : "s"} couldn&apos;t be
@@ -264,11 +252,11 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
 
           {slice.length === 0 ? (
             <div className="mx-auto max-w-lg py-16 text-center">
-              <h2 className="text-xl font-semibold text-foreground">No stories to show</h2>
+              <h2 className="font-display text-3xl text-foreground">No stories to show</h2>
               <p className="mt-3 text-muted-foreground">
                 {hasFilters
                   ? "No headlines match your search or filters. Try a broader search, or clear the filters."
-                  : "We couldn't reach any news sources just now. Please try again in a few minutes."}
+                  : "None of the publishers' feeds responded just now. They're checked again on your next visit."}
               </p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                 {hasFilters && (
@@ -289,21 +277,21 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <ol className="mx-auto max-w-3xl divide-y divide-border border-b border-border">
                 {slice.map((article, i) => (
-                  <NewsCard key={article.id} article={article} featured={i === 0 && safePage === 1 && !hasFilters}
-                    className={i === 0 && safePage === 1 && !hasFilters ? "md:col-span-2 lg:col-span-3" : undefined}
-                  />
+                  <li key={article.id}>
+                    <NewsCard article={article} featured={i === 0 && safePage === 1 && !hasFilters} />
+                  </li>
                 ))}
-              </div>
+              </ol>
 
               {totalPages > 1 && (
                 <nav
                   aria-label="Pagination"
-                  className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row"
+                  className="mx-auto mt-10 flex max-w-3xl flex-col items-center justify-between gap-4 sm:flex-row"
                 >
                   <p className="text-sm text-muted-foreground">
-                    Page {safePage} of {totalPages} · {filtered.length} stories
+                    Page {safePage} of {totalPages}, {filtered.length} stories
                   </p>
                   <div className="flex items-center gap-2">
                     {safePage > 1 ? (
@@ -315,7 +303,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                         Previous
                       </Link>
                     ) : (
-                      <span className="inline-flex h-9 items-center gap-1 rounded-md border border-border px-3 text-sm text-muted-foreground opacity-50">
+                      <span className="inline-flex h-10 items-center gap-1 rounded-full border border-border px-4 text-sm text-muted-foreground opacity-50">
                         <ChevronLeft className="h-4 w-4" />
                         Previous
                       </span>
@@ -330,7 +318,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
                         <ChevronRight className="h-4 w-4" />
                       </Link>
                     ) : (
-                      <span className="inline-flex h-9 items-center gap-1 rounded-md border border-border px-3 text-sm text-muted-foreground opacity-50">
+                      <span className="inline-flex h-10 items-center gap-1 rounded-full border border-border px-4 text-sm text-muted-foreground opacity-50">
                         Next
                         <ChevronRight className="h-4 w-4" />
                       </span>
@@ -343,8 +331,8 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
 
           {/* Source attribution */}
           {activeSources.length > 0 && (
-            <div className="mt-12 border-t border-border pt-8">
-              <p className="eyebrow mb-3">Story sources</p>
+            <div className="mx-auto mt-16 max-w-3xl">
+              <h2 className="mb-3 text-sm font-semibold text-foreground">Where these stories come from</h2>
               <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
                 {activeSources.map((s) => (
                   <span key={s.id} className="text-muted-foreground">

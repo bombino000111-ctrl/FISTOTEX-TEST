@@ -29,7 +29,7 @@ function nextLabel(next: NextResults, today: string): { text: string; estimated:
     case "date": {
       const d = daysBetween(today, next.date);
       if (d === 0) return { text: "Results due today", estimated: !!next.estimated };
-      if (d < 0) return { text: `Results out ${day(next.date)} — update pending`, estimated: false };
+      if (d < 0) return { text: `Results out ${day(next.date)}, figures being updated`, estimated: false };
       return { text: `Next results: ${day(next.date)}`, estimated: !!next.estimated };
     }
   }
@@ -50,8 +50,8 @@ function Metric({
 }) {
   return (
     <div className="min-w-0">
-      <dt className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="mt-1 font-mono text-lg font-bold tabular-nums text-foreground sm:text-xl">{value}</dd>
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="font-display mt-1 text-2xl tabular-nums text-foreground">{value}</dd>
       {yoy !== undefined && qoq !== undefined && (
         <dd className="mt-1.5 flex flex-col gap-1">
           <Growth label="YoY" value={yoy} flag={flag} />
@@ -67,15 +67,13 @@ export function CompanyCard({ company, today }: { company: CompanyResult; today:
   const nextDate = company.next.kind === "date" ? company.next.date : undefined;
 
   return (
-    <article className="surface flex flex-col p-5">
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg text-foreground">{company.name}</h3>
-        <span className="shrink-0 rounded-sm border border-border bg-muted px-2 py-0.5 font-mono text-xs font-semibold text-ink-2">
-          {company.quarter}
-        </span>
+    <article className="surface flex flex-col p-6 sm:p-7">
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="font-display text-2xl text-foreground">{company.name}</h3>
+        <span className="shrink-0 text-sm text-muted-foreground">{company.quarter}</span>
       </div>
 
-      <dl className="mt-4 grid flex-1 content-start grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3">
+      <dl className="mt-6 grid flex-1 content-start grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3">
         <Metric
           label={company.revenueLabel}
           value={money(company.revenue, company.market)}
@@ -98,8 +96,8 @@ export function CompanyCard({ company, today }: { company: CompanyResult; today:
         </p>
       )}
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-border pt-3 text-xs text-muted-foreground">
-        <span className="font-mono font-semibold text-foreground">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
+        <span className="font-medium text-foreground">
           {nextDate ? <time dateTime={nextDate}>{next.text}</time> : next.text}
         </span>
         {next.estimated && (
@@ -110,15 +108,14 @@ export function CompanyCard({ company, today }: { company: CompanyResult; today:
             Estimated
           </span>
         )}
-        <span aria-hidden="true" className="text-border">·</span>
         <a
           href={company.sourceUrl}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
+          className="ml-auto inline-flex items-center gap-1 font-semibold text-accent underline-offset-4 hover:underline"
         >
-          {company.source}
-          <ArrowUpRight className="h-3 w-3" />
+          Source: {company.source}
+          <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
         </a>
       </div>
     </article>

@@ -1,23 +1,9 @@
-import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
-import {
-  ArrowRight,
-  ShieldCheck,
-  Target,
-  Users,
-  Lightbulb,
-  BookOpen,
-  Calculator,
-  Newspaper,
-  IndianRupee,
-  Sigma,
-  CheckCircle2,
-} from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
-import { PageHeader, Section } from "@/components/layout/section";
+import { PageHeader } from "@/components/layout/section";
 import { calculators } from "@/lib/calculators/registry";
 
 export const metadata: Metadata = pageMetadata({
@@ -27,63 +13,27 @@ export const metadata: Metadata = pageMetadata({
   path: "/about",
 });
 
-const values = [
+/** How the site works, set as plain statements rather than icon cards. */
+const practices = [
   {
-    icon: Target,
-    tint: "#0B6E4F",
-    title: "Accuracy first",
-    description: "Calculators use standard, published formulas, and every news story links back to its original publisher.",
+    title: "Standard formulas, shown in full",
+    body: "Each calculator uses the published method for its product — reducing-balance EMIs, quarterly compounding for bank deposits, PFRDA's rules for NPS — and prints the formula and assumptions next to the result.",
   },
   {
-    icon: ShieldCheck,
-    tint: "#34507F",
-    title: "Transparency",
-    description: "Formulas and assumptions are shown on every calculator, so you can see exactly how a number was reached.",
+    title: "Made for Indian money",
+    body: "Rupees, lakhs and crores; PPF, NPS and recurring deposits; current RBI and PFRDA conventions. Rules change, and we update the calculators when they do.",
   },
   {
-    icon: Users,
-    tint: "#A2560B",
-    title: "Built for people",
-    description: "Plain language, fast pages and no sign-up walls. Tools that respect your time and your privacy.",
+    title: "Your numbers stay with you",
+    body: "Calculations run in your browser and are never sent to us. There are no accounts. We show ads to stay free, and use Google Analytics only if you allow it.",
   },
   {
-    icon: Lightbulb,
-    tint: "#7A3E6C",
-    title: "Education over advice",
-    description: "We explain the numbers; you make the decision. We never push products or give personal recommendations.",
+    title: "Education, not advice",
+    body: "We explain the numbers; you make the decision. We don't sell financial products, take commissions or recommend what to buy.",
   },
   {
-    icon: BookOpen,
-    tint: "#0F6A80",
-    title: "Always improving",
-    description: "We refine tools as rates, rules and your feedback change. Tell us what you'd like to see next.",
-  },
-];
-
-const features = [
-  {
-    icon: Calculator,
-    tint: "#0B6E4F",
-    title: `${calculators.length} financial calculators`,
-    description: "SIP, lumpsum, EMI, FD, RD, PPF, NPS, retirement, CAGR, XIRR, bonds, inflation and more.",
-  },
-  {
-    icon: Newspaper,
-    tint: "#0F6A80",
-    title: "Curated market news",
-    description: "Live headlines from Mint, Economic Times, Moneycontrol and Business Standard, always attributed.",
-  },
-  {
-    icon: IndianRupee,
-    tint: "#A2560B",
-    title: "Made for India",
-    description: "Rupee formatting, lakh/crore figures and Indian products like PPF, NPS and recurring deposits.",
-  },
-  {
-    icon: Sigma,
-    tint: "#34507F",
-    title: "Working shown",
-    description: "Every calculator explains its formula, assumptions and common questions alongside the result.",
+    title: "News, credited",
+    body: "Headlines come from Mint, The Economic Times, Moneycontrol and Business Standard, unedited, and link to the original story.",
   },
 ];
 
@@ -100,187 +50,111 @@ export default function AboutPage() {
       />
 
       <PageHeader
-        eyebrow="About us"
-        title={
-          <>
-            Financial clarity for <span className="text-accent">every Indian.</span>
-          </>
-        }
-        description="We build free, transparent tools and curate trustworthy news so you can make money decisions with confidence."
+        title="Why Fistotex exists"
+        description="Free calculators for everyday Indian money decisions, each showing its working, and the day's market news from the publishers who report it."
         crumbs={[{ name: "About" }]}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/calculators" className="btn-brand h-12 px-6 text-sm">
-            Explore calculators
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link href="/news" className="btn-ghost h-12 px-6 text-sm">
-            Read the latest news
-          </Link>
-        </div>
-      </PageHeader>
+      />
 
-      {/* Mission */}
-      <Section eyebrow="Our mission" title="Why we built Fistotex">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
-          <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
+      <article className="container mx-auto px-4 py-16 md:py-24">
+        <div className="mx-auto max-w-2xl">
+          <div className="space-y-6 text-lg leading-[1.75] text-ink-2">
             <p>
-              In a country where financial aspirations run high but reliable guidance is hard to find,{" "}
-              <strong className="text-foreground">{siteConfig.name}</strong> started from a simple belief: everyone
-              deserves access to clear financial tools and honest information.
+              Money decisions in India come with two kinds of help. One is the product page, built to sell
+              you something, with the maths in the fine print. The other is generic advice that ignores how
+              things work here: our tax rules, our savings schemes, our banks.
             </p>
             <p>
-              On one side are complex products with fine print; on the other, generic advice that ignores Indian
-              realities — our tax rules, our investment options, our economy. We sit in between, giving you the
-              numbers and the context to decide for yourself.
-            </p>
-            <p className="font-semibold text-foreground">
-              We don&apos;t give financial advice. We give you the tools to make informed decisions.
+              {siteConfig.name} sits in between. You put in your own numbers, you see the result, and you
+              see exactly how it was worked out. Then you decide.
             </p>
           </div>
-          <div className="surface p-7">
-            <p className="text-sm font-bold uppercase tracking-wider text-accent">What you get</p>
-            <ul className="mt-5 space-y-4">
-              {[
-                "Calculators built on standard formulas with assumptions spelled out",
-                "News aggregated from India's leading financial publications",
-                "Explanations of the 'why' behind every calculation",
-                "No accounts, no paywalls — inputs never leave your browser",
-              ].map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-foreground">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Section>
 
-      {/* Founder & partner */}
-      <Section id="founder" tone="muted" eyebrow="Who we are" title="The people behind Fistotex">
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="surface flex flex-col gap-6 p-7 md:p-9">
-            <span
-              aria-hidden="true"
-              className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
-            >
-              {siteConfig.founder.name.charAt(0)}
-            </span>
-            <div>
-              <h3 className="text-2xl font-bold text-foreground">{siteConfig.founder.name}</h3>
-              <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
-                {siteConfig.founder.role}, {siteConfig.name}
-              </p>
-              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                {siteConfig.founder.name} founded {siteConfig.name} and leads it as CEO. The thinking behind the
-                site is his: that everyday money maths in India should be simple, transparent and free to check,
-                with every formula shown rather than buried in a black box. He is currently studying for an MSc
-                in Finance in Paris.
-              </p>
+          <h2 className="font-display mt-20 text-4xl text-foreground">How we work</h2>
+          <dl className="mt-8 space-y-8">
+            {practices.map((p) => (
+              <div key={p.title}>
+                <dt className="font-display text-2xl text-foreground">{p.title}</dt>
+                <dd className="mt-2 leading-[1.75] text-ink-2">{p.body}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-8 text-ink-2">
+            That covers {calculators.length} calculators today.{" "}
+            <Link href="/calculators" className="font-semibold text-accent underline-offset-4 hover:underline">
+              See them all
+            </Link>
+            .
+          </p>
+
+          <h2 id="founder" className="font-display mt-20 scroll-mt-28 text-4xl text-foreground">
+            Who we are
+          </h2>
+          <div className="mt-8 space-y-12">
+            <section aria-labelledby="founder-name" className="flex gap-5">
+              <span
+                aria-hidden="true"
+                className="font-display flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-foreground text-2xl text-background"
+              >
+                {siteConfig.founder.name.charAt(0)}
+              </span>
+              <div>
+                <h3 id="founder-name" className="font-display text-2xl text-foreground">
+                  {siteConfig.founder.name}
+                </h3>
+                <p className="text-muted-foreground">
+                  {siteConfig.founder.role}, {siteConfig.name}
+                </p>
+                <p className="mt-3 leading-[1.75] text-ink-2">
+                  {siteConfig.founder.name} founded {siteConfig.name} and leads it as CEO. The thinking behind
+                  the site is his: that everyday money maths in India should be simple, transparent and free
+                  to check, with every formula shown rather than buried in a black box. He is currently
+                  studying for an MSc in Finance in Paris.
+                </p>
+              </div>
+            </section>
+
+            <section id="partner" aria-labelledby="partner-name" className="flex scroll-mt-28 gap-5">
+              <span
+                aria-hidden="true"
+                className="font-display flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-principal text-2xl text-white"
+              >
+                {siteConfig.partner.name.charAt(0)}
+              </span>
+              <div>
+                <h3 id="partner-name" className="font-display text-2xl text-foreground">
+                  {siteConfig.partner.name}
+                </h3>
+                <p className="text-muted-foreground">
+                  {siteConfig.partner.role}, {siteConfig.name}
+                </p>
+                <p className="mt-3 leading-[1.75] text-ink-2">
+                  {siteConfig.partner.name} is {siteConfig.founder.name}&apos;s partner in {siteConfig.name}.
+                  He builds and maintains the calculators, checks every formula against standard financial
+                  methods and curates the news sources.
+                </p>
+              </div>
+            </section>
+          </div>
+
+          <div className="mt-20 rounded-[var(--radius)] border border-border bg-card p-7">
+            <h2 className="font-display text-2xl text-foreground">What we are not</h2>
+            <p className="mt-3 leading-[1.75] text-ink-2">
+              Neither {siteConfig.founder.name} nor {siteConfig.partner.name} is a SEBI-registered investment
+              adviser or research analyst. Nothing on {siteConfig.name} is a recommendation to buy or sell any
+              security or financial product, and every figure is an estimate. For personal advice, consult a
+              SEBI-registered adviser.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-brand min-h-11 px-5 text-sm">
+                Write to us
+              </Link>
+              <Link href="/disclaimer" className="btn-ghost min-h-11 px-5 text-sm">
+                Read the full disclaimer
+              </Link>
             </div>
           </div>
-
-          <div id="partner" className="surface flex flex-col gap-6 p-7 md:p-9">
-            <span
-              aria-hidden="true"
-              className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-panel text-3xl text-white"
-            >
-              {siteConfig.partner.name.charAt(0)}
-            </span>
-            <div>
-              <h3 className="text-2xl font-bold text-foreground">{siteConfig.partner.name}</h3>
-              <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent">
-                {siteConfig.partner.role}, {siteConfig.name}
-              </p>
-              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                {siteConfig.partner.name} is {siteConfig.founder.name}&apos;s partner in {siteConfig.name}. He
-                builds and maintains the calculators, checks every formula against standard financial methods
-                and curates the news sources.
-              </p>
-            </div>
-          </div>
         </div>
-
-        <p className="surface mt-5 px-5 py-4 text-sm leading-relaxed text-muted-foreground">
-          <strong className="text-foreground">Please note:</strong> neither {siteConfig.founder.name} nor{" "}
-          {siteConfig.partner.name} is a SEBI-registered investment adviser or research analyst. Nothing on{" "}
-          {siteConfig.name} is a recommendation to buy or sell any security or financial product. For personal
-          advice, consult a SEBI-registered adviser.
-        </p>
-
-        <a href={`mailto:${siteConfig.contactEmail}`} className="btn-ghost mt-6 h-11 px-5 text-sm">
-          Contact the {siteConfig.name} team
-        </a>
-      </Section>
-
-      {/* Features */}
-      <Section eyebrow="What we offer" title="Everything in one place">
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => {
-            const Icon = f.icon;
-            return (
-              <div key={f.title} className="surface p-6" style={{ "--tint": f.tint } as CSSProperties}>
-                <span className="icon-tile h-12 w-12">
-                  <Icon className="h-6 w-6" />
-                </span>
-                <h3 className="mt-5 text-lg font-bold text-foreground">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
-              </div>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* Values */}
-      <Section
-        tone="muted"
-        eyebrow="Our values"
-        title="Principles we build by"
-        description="These guide every tool we ship and every decision we make."
-      >
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {values.map((v) => {
-            const Icon = v.icon;
-            return (
-              <div key={v.title} className="surface p-7" style={{ "--tint": v.tint } as CSSProperties}>
-                <span className="icon-tile h-12 w-12">
-                  <Icon className="h-6 w-6" />
-                </span>
-                <h3 className="mt-5 text-lg font-bold text-foreground">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{v.description}</p>
-              </div>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* Disclaimer */}
-      <Section className="py-14 md:py-16">
-        <div className="surface mx-auto max-w-3xl p-7 md:p-9">
-          <h2 className="text-2xl font-bold text-foreground">Important disclaimer</h2>
-          <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              <strong className="text-foreground">{siteConfig.name} is an educational and informational platform.</strong>{" "}
-              We do not provide personalised financial advice, investment recommendations or tax advice.
-            </p>
-            <p>
-              Calculators provide estimates based on standard formulas and your inputs. Actual returns, rates, taxes
-              and outcomes vary with market conditions, policy and regulatory changes, product terms, fees and your
-              individual circumstances.
-            </p>
-            <p>
-              Always consult a qualified financial adviser or tax professional before making financial decisions.
-              Past performance is not indicative of future results. Mutual fund investments are subject to market
-              risks.
-            </p>
-          </div>
-          <Link href="/disclaimer" className="btn-ghost mt-6 h-11 px-5 text-sm">
-            Read the full disclaimer
-          </Link>
-        </div>
-      </Section>
+      </article>
     </div>
   );
 }

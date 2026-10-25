@@ -304,7 +304,7 @@ const mutualFund: CalculatorDef = {
   },
   chart: (v) =>
     str(v.mode) === "lumpsum"
-      ? lumpsum.chart!(v)
+      ? lumpsum.chart!({ ...v, initialInvestment: v.amount })
       : yearlySipSeries(num(v.amount), num(v.annualReturn), num(v.years)),
   chartSeriesLabels: { invested: "Invested", value: "Estimated value" },
   formula: {
@@ -394,7 +394,7 @@ const xirr: CalculatorDef = {
       return [
         { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
         { label: "Current value", value: r.currentValue, kind: "currency" },
-        { label: "XIRR", value: r.error ? "Could not solve" : "—", kind: "number" },
+        { label: "XIRR", value: r.error ? "No steady rate fits" : "—", kind: "number" },
       ];
     }
 
@@ -700,7 +700,7 @@ const nps: CalculatorDef = {
     { key: "retirementAge", label: "Retirement age", kind: "age", min: 40, max: 75, step: 1 },
     { key: "monthlyContribution", label: "Monthly contribution", kind: "currency", min: 500, max: 200000, step: 500 },
     { key: "expectedReturn", label: "Expected return", kind: "percent", min: 1, max: 20, step: 0.5 },
-    { key: "annuityPercentage", label: "Annuity allocation", kind: "percent", min: 40, max: 100, step: 5, help: "At least 40% of the corpus must buy an annuity." },
+    { key: "annuityPercentage", label: "Annuity allocation", kind: "percent", min: 20, max: 100, step: 5, help: "Since December 2025, non-government subscribers need at least 20% in an annuity; government employees, 40%." },
     { key: "expectedAnnuityRate", label: "Annuity rate", kind: "percent", min: 1, max: 12, step: 0.5 },
   ],
   defaults: { currentAge: 30, retirementAge: 60, monthlyContribution: 10000, expectedReturn: 10, annuityPercentage: 40, expectedAnnuityRate: 6 },
@@ -736,11 +736,11 @@ const nps: CalculatorDef = {
     note: "Pension = (corpus × annuity %) × annuity rate ÷ 12.",
   },
   steps: [
-    "The lump-sum portion is tax-free; the annuity income is taxable as salary.",
+    "Up to 60% of the corpus taken as a lump sum is tax-free; the annuity income is taxable as salary.",
     "A higher annuity allocation means a safer but usually smaller income.",
   ],
   faqs: [
-    { q: "How much must go into an annuity?", a: "At least 40% of the corpus at retirement. The remaining 60% can be withdrawn as a lump sum." },
+    { q: "How much must go into an annuity?", a: "Under PFRDA's December 2025 exit rules, non-government subscribers must put at least 20% of the corpus into an annuity and can withdraw up to 80% as a lump sum. Government employees still need 40%. Small corpuses (up to ₹8 lakh) can be withdrawn in full." },
     { q: "Is NPS tax-efficient?", a: "Contributions may qualify for deduction under Section 80CCD, subject to the applicable limits for your regime." },
   ],
 };

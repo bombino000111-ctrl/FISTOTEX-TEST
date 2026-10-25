@@ -30,7 +30,7 @@ export function CalendarList({ events, today }: { events: MarketEvent[]; today: 
   return (
     <div>
       {filters.length > 1 && (
-        <div className="surface no-scrollbar sticky top-16 z-20 mb-8 flex gap-2 overflow-x-auto p-3 md:top-[72px]">
+        <div className="no-scrollbar sticky top-[68px] z-20 -mx-4 mb-10 flex gap-2 overflow-x-auto border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
           {filters.map((f) => {
             const active = filter === f.id;
             return (
@@ -60,15 +60,15 @@ export function CalendarList({ events, today }: { events: MarketEvent[]; today: 
       </p>
 
       {visible.length > 0 ? (
-        <div className="flex flex-col gap-4">
+        <ol className="max-w-4xl [&>li:last-child_article]:border-transparent">
           {visible.map((event) => (
             <EventRow key={event.id} event={event} today={today} />
           ))}
-        </div>
+        </ol>
       ) : (
         <div className="surface p-10 text-center">
-          <p className="font-semibold text-foreground">No upcoming events right now.</p>
-          <p className="mt-2 text-sm text-muted-foreground">Check back soon — the calendar is updated as dates are confirmed.</p>
+          <p className="font-display text-2xl text-foreground">No events scheduled yet</p>
+          <p className="mt-2 text-muted-foreground">New dates are added as each authority confirms them.</p>
         </div>
       )}
     </div>

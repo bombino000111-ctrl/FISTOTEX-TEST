@@ -4,13 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Mail,
-  MapPin,
   Send,
   Loader2,
   CheckCircle2,
   AlertCircle,
-  Clock,
-  ArrowRight,
   Plus,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
@@ -147,82 +144,45 @@ export default function ContactForm() {
 
   return (
     <>
-      {/* Hero */}
-      <div className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-12 text-center md:py-16">
-          <p className="eyebrow eyebrow-plain mb-4 justify-center">Contact</p>
-          <h1 className="font-display mx-auto max-w-3xl text-4xl text-foreground md:text-6xl">
-            Let&apos;s <span className="text-accent">talk</span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-            Questions, feedback, a calculator you&apos;d like to see, or a partnership idea — we read every message.
-          </p>
-        </div>
-      </div>
-
-      <section className="py-14 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {/* Contact info */}
-            <div className="space-y-5 lg:col-span-1">
-              {[
-                {
-                  icon: Mail,
-                  tint: "#0B6E4F",
-                  title: "Email",
-                  body: (
-                    <a href={`mailto:${siteConfig.contactEmail}`} className="break-all hover:text-accent">
+      <section className="container mx-auto px-4 py-14 md:py-20">
+          <div className="grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+            {/* What to expect */}
+            <div>
+              <h1 className="font-masthead text-5xl text-foreground md:text-6xl">Write to us</h1>
+              <p className="mt-5 max-w-md text-lg leading-relaxed text-ink-2">
+                A question about a formula, a rate that looks out of date, a calculator you&apos;d like us
+                to build, or anything else.
+              </p>
+              <dl className="mt-10 space-y-6">
+                <div>
+                  <dt className="text-sm text-muted-foreground">Email</dt>
+                  <dd className="mt-1">
+                    <a
+                      href={`mailto:${siteConfig.contactEmail}`}
+                      className="font-display break-all text-2xl text-foreground underline-offset-4 hover:text-accent hover:underline"
+                    >
                       {siteConfig.contactEmail}
                     </a>
-                  ),
-                },
-                { icon: Clock, tint: "#34507F", title: "Response time", body: "Within 1–2 business days" },
-                { icon: MapPin, tint: "#A2560B", title: "Based in", body: siteConfig.businessAddress || "India" },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.title}
-                    className="surface flex items-start gap-4 p-5"
-                    style={{ "--tint": item.tint } as React.CSSProperties}
-                  >
-                    <span className="icon-tile h-11 w-11 shrink-0">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <h2 className="font-bold text-foreground">{item.title}</h2>
-                      <div className="mt-0.5 text-sm text-muted-foreground">{item.body}</div>
-                    </div>
-                  </div>
-                );
-              })}
-
-              <div className="surface p-5">
-                <h2 className="font-bold text-foreground">Quick links</h2>
-                <div className="mt-3 space-y-1">
-                  {[
-                    { href: "/calculators", label: "Explore calculators" },
-                    { href: "/news", label: "Read the latest news" },
-                    { href: "/about", label: "About Fistotex" },
-                    { href: "/disclaimer", label: "Disclaimer" },
-                  ].map((l) => (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      className="group flex items-center justify-between rounded-lg px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                    >
-                      {l.label}
-                      <ArrowRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </Link>
-                  ))}
+                  </dd>
                 </div>
-              </div>
+                <div>
+                  <dt className="text-sm text-muted-foreground">When you&apos;ll hear back</dt>
+                  <dd className="mt-1 text-ink-2">Within two working days</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-muted-foreground">What we do with your message</dt>
+                  <dd className="mt-1 max-w-md text-ink-2">
+                    We read it and reply. It isn&apos;t stored on the site, and we won&apos;t add you to a
+                    mailing list.
+                  </dd>
+                </div>
+              </dl>
             </div>
 
             {/* Form */}
-            <div className="lg:col-span-2">
-              <div className="surface p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-foreground">Send us a message</h2>
+            <div>
+              <div className="surface p-6 md:p-9">
+                <h2 className="font-display text-3xl text-foreground">Send a message</h2>
                 <p className="mt-1 text-sm text-muted-foreground">All fields are required.</p>
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-6" noValidate>
@@ -325,9 +285,9 @@ export default function ContactForm() {
                   )}
 
                   {status === "fallback" && (
-                    <div role="alert" className="flex flex-col gap-3 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-foreground sm:flex-row sm:items-center sm:justify-between">
+                    <div role="alert" className="flex flex-col gap-3 rounded-lg border border-growth/50 bg-growth/10 p-4 text-sm text-foreground sm:flex-row sm:items-center sm:justify-between">
                       <p className="flex items-start gap-3">
-                        <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+                        <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-growth-ink" />
                         {submitMessage}
                       </p>
                       <a href={mailtoHref(formData)} className="btn-brand h-10 shrink-0 px-4 text-sm">
@@ -352,26 +312,21 @@ export default function ContactForm() {
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-border bg-muted/50 py-14 md:py-20">
+      <section className="border-t border-border py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
-            <h2 className="font-display mb-8 text-center text-3xl text-foreground">
-              Frequently asked questions
-            </h2>
-            <div className="space-y-3">
+            <h2 className="font-display text-4xl text-foreground">Before you write</h2>
+            <div className="mt-8 divide-y divide-border border-y border-border">
               {faqs.map((faq) => (
-                <details key={faq.q} className="surface group px-5 py-4 open:border-brand/40">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-foreground">
+                <details key={faq.q} className="group">
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-semibold text-foreground">
                     {faq.q}
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform group-open:rotate-45 group-open:bg-brand group-open:text-white">
-                      <Plus className="h-4 w-4" />
-                    </span>
+                    <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-45" />
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
+                  <p className="max-w-prose pb-6 leading-relaxed text-ink-2">{faq.a}</p>
                 </details>
               ))}
             </div>

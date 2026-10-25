@@ -59,11 +59,11 @@ export function GrowthChart({
           {hover === null ? "At the end" : `Year ${point.label.replace("Y", "")}`}
         </span>
         <span className="tnum flex items-center gap-1.5 text-muted-foreground">
-          <span className="h-2 w-2 rounded-full bg-brand" />
+          <span className="h-2 w-2 rounded-full bg-growth" />
           {labels.value}: <span className="font-semibold text-foreground">{formatCurrency(point.value)}</span>
         </span>
         <span className="tnum flex items-center gap-1.5 text-muted-foreground">
-          <span className="h-2 w-2 rounded-full bg-brand-3" />
+          <span className="h-2 w-2 rounded-full bg-principal" />
           {labels.invested}: <span className="font-semibold text-foreground">{formatCurrency(point.invested)}</span>
         </span>
       </div>
@@ -83,12 +83,12 @@ export function GrowthChart({
         >
           <defs>
             <linearGradient id="gc-value" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.14" />
-              <stop offset="100%" stopColor="var(--brand)" stopOpacity="0.14" />
+              <stop offset="0%" stopColor="var(--growth)" stopOpacity="0.14" />
+              <stop offset="100%" stopColor="var(--growth)" stopOpacity="0.14" />
             </linearGradient>
             <linearGradient id="gc-invested" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--brand-3)" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="var(--brand-3)" stopOpacity="0.1" />
+              <stop offset="0%" stopColor="var(--principal)" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="var(--principal)" stopOpacity="0.1" />
             </linearGradient>
           </defs>
 
@@ -111,8 +111,8 @@ export function GrowthChart({
 
           <path d={area(valueLine)} fill="url(#gc-value)" />
           <path d={area(investedLine)} fill="url(#gc-invested)" />
-          <path d={investedLine} fill="none" stroke="var(--brand-3)" strokeWidth="2" strokeDasharray="6 5" />
-          <path d={valueLine} fill="none" stroke="var(--brand)" strokeWidth="3" strokeLinecap="round" />
+          <path d={investedLine} fill="none" stroke="var(--principal)" strokeWidth="2" strokeDasharray="6 5" />
+          <path d={valueLine} fill="none" stroke="var(--growth)" strokeWidth="3" strokeLinecap="round" />
 
           {/* Crosshair */}
           <line
@@ -124,8 +124,8 @@ export function GrowthChart({
             strokeOpacity="0.35"
             strokeWidth="1"
           />
-          <circle cx={x(active)} cy={y(point.invested)} r="4.5" fill="var(--card)" stroke="var(--brand-3)" strokeWidth="2.5" />
-          <circle cx={x(active)} cy={y(point.value)} r="5.5" fill="var(--card)" stroke="var(--brand)" strokeWidth="3" />
+          <circle cx={x(active)} cy={y(point.invested)} r="4.5" fill="var(--card)" stroke="var(--principal)" strokeWidth="2.5" />
+          <circle cx={x(active)} cy={y(point.value)} r="5.5" fill="var(--card)" stroke="var(--growth)" strokeWidth="3" />
 
           {data.map((d, i) =>
             i % Math.ceil(data.length / 8) === 0 || i === data.length - 1 ? (
@@ -140,11 +140,11 @@ export function GrowthChart({
 
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-2">
-          <span className="h-1 w-5 rounded-full bg-brand" />
+          <span className="h-1 w-5 rounded-full bg-growth" />
           {labels.value}
         </span>
         <span className="inline-flex items-center gap-2">
-          <span className="w-5 border-t-2 border-dashed border-brand-3" />
+          <span className="w-5 border-t-2 border-dashed border-principal" />
           {labels.invested}
         </span>
       </div>

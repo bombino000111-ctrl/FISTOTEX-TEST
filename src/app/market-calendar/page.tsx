@@ -40,13 +40,8 @@ export default function MarketCalendarPage() {
       />
 
       <PageHeader
-        eyebrow="Market calendar"
-        title={
-          <>
-            Events that move <span className="text-accent">Indian markets</span>
-          </>
-        }
-        description="The next occurrence of every scheduled catalyst — rate decisions, data releases, the Budget and earnings season — each with its source. The outcome, not the date, decides market direction."
+        title="What moves the market next"
+        description="Rate decisions, data releases, the Budget and results season, in date order, each linked to the authority that sets it. The outcome decides the direction, not the date."
         crumbs={[{ name: "Market Calendar" }]}
       />
 
@@ -54,7 +49,7 @@ export default function MarketCalendarPage() {
         <div className="container mx-auto px-4">
           <CalendarList events={marketEvents} today={today} />
 
-          <p className="mt-10 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-prose text-sm leading-relaxed text-muted-foreground">
             Dates are sourced from each issuing authority and can shift as official calendars are
             confirmed; those marked &ldquo;Estimated date&rdquo; are not yet official. Countdowns use
             Indian Standard Time. Each listed event can move the market either way, depending on the

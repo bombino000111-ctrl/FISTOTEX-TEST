@@ -22,10 +22,10 @@ export function CalculatorCard({ calc }: { calc: CalculatorDef }) {
           <ArrowUpRight className="h-4 w-4" />
         </span>
       </div>
-      <p className="tint-text relative text-[11px] font-bold uppercase tracking-wider">
+      <p className="tint-text relative text-sm font-semibold">
         {category?.name}
       </p>
-      <h3 className="relative mt-1 text-lg font-bold text-foreground">{calc.name}</h3>
+      <h3 className="font-display relative mt-1 text-xl text-foreground">{calc.name}</h3>
       <p className="relative mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">{calc.tagline}</p>
     </Link>
   );

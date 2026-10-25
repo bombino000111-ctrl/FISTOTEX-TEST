@@ -4,6 +4,7 @@ import { ShieldCheck, AlertTriangle, Scale, BookOpen, Calculator, TrendingUp } f
 import { siteConfig } from "@/config/site";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { PageHeader } from "@/components/layout/section";
+import { LegalDocument } from "@/components/layout/legal-document";
 
 export const metadata: Metadata = pageMetadata({
   title: "Disclaimer",
@@ -41,7 +42,7 @@ const sections = [
         <li>These estimates should not be considered as recommendations to buy, sell, or hold any financial product.</li>
         <li>You should not make any financial decisions based solely on the information or calculations from this Site.</li>
       </ul>
-      <p className="font-semibold">Always consult with a qualified financial advisor, certified financial planner (CFP), chartered accountant (CA), or tax professional before making any investment, insurance, tax, or financial planning decisions.</p>
+      <p class="font-semibold">Always consult with a qualified financial advisor, certified financial planner (CFP), chartered accountant (CA), or tax professional before making any investment, insurance, tax, or financial planning decisions.</p>
     `,
   },
   {
@@ -99,11 +100,11 @@ const sections = [
     title: "Market Risk Warning",
     icon: TrendingUp,
     content: `
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 my-6">
-        <h3 className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5" /> <strong>Mutual Fund Investments Are Subject to Market Risks</strong>
+      <div class="my-6 rounded-lg border border-growth/50 bg-growth/10 p-6">
+        <h3 class="mb-2 font-semibold text-foreground">
+          <strong>Mutual Fund Investments Are Subject to Market Risks</strong>
         </h3>
-        <p className="text-amber-700">Read all scheme-related documents carefully before investing.</p>
+        <p class="text-ink-2">Read all scheme-related documents carefully before investing.</p>
       </div>
 
       <ul>
@@ -126,7 +127,7 @@ const sections = [
         <li>Does not consider your specific tax situation, residential status, or deductions</li>
         <li>Should not be relied upon for tax filing or planning</li>
       </ul>
-      <p className="font-semibold">Consult a qualified chartered accountant (CA) or tax advisor for personalized tax advice.</p>
+      <p class="font-semibold">Consult a qualified chartered accountant (CA) or tax advisor for personalized tax advice.</p>
     `,
   },
   {
@@ -208,8 +209,8 @@ const sections = [
     content: `
       <p>If you have questions about this Disclaimer, please contact us:</p>
       <ul>
-        <li>Email: <a href="mailto:${siteConfig.contactEmail}" className="underline">${siteConfig.contactEmail}</a></li>
-        <li>Website: <a href="${siteConfig.url}/contact" className="underline">${siteConfig.url}/contact</a></li>
+        <li>Email: <a href="mailto:${siteConfig.contactEmail}" class="underline">${siteConfig.contactEmail}</a></li>
+        <li>Website: <a href="${siteConfig.url}/contact" class="underline">${siteConfig.url}/contact</a></li>
       </ul>
     `,
   },
@@ -221,56 +222,25 @@ export default function DisclaimerPage() {
       <StructuredData type="WebPage" data={{ title: "Disclaimer", url: "/disclaimer", description: "Fistotex Disclaimer - Important legal disclaimers regarding financial calculators, news content, and educational information." }} />
 
       <PageHeader
-        eyebrow="Legal"
         title="Disclaimer"
-        description={
-          <>
-            <span className="block">Last updated: {lastUpdated}</span>
-            <span className="block"><strong>Please read this carefully before using our calculators or relying on any information from this Site.</strong></span>
-          </>
-        }
+        description={<>Last updated {lastUpdated}. Please read this before relying on any figure from the site.</>}
         crumbs={[{ name: "Disclaimer" }]}
       />
 
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="legal-copy surface p-6 md:p-10">
-              {sections.map((section) => (
-                <section key={section.id} id={section.id} className="mb-10 border-b border-border pb-8 last:mb-0 last:border-0 last:pb-0">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-tile h-10 w-10">
-                      <section.icon className="h-5 w-5" />
-                    </div>
-                    <h2 className="!m-0 text-xl font-bold text-foreground md:text-2xl">{section.title}</h2>
-                  </div>
-                  <div className="space-y-4 md:ml-[52px] text-muted-foreground leading-relaxed">
-                    {section.content.split('\n\n').map((paragraph, i) => (
-                      <div key={i} dangerouslySetInnerHTML={{ __html: paragraph.trim() }} />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-
-            {/* Key Takeaways Box */}
-            <div className="mt-12 p-6 rounded-lg bg-red-50 border border-red-200">
-              <h3 className="font-semibold text-red-800 mb-4 flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5" /> Key Takeaways
-              </h3>
-              <ul className="space-y-2 text-sm text-red-700">
-                <li>✗ This Site does <strong>not</strong> provide financial advice</li>
-                <li>✗ Calculator results are <strong>estimates only</strong> - not guaranteed</li>
-                <li>✗ News content is from <strong>third-party sources</strong> - we don&apos;t verify accuracy</li>
-                <li>✗ Mutual fund investments carry <strong>market risk</strong> - read scheme documents</li>
-                <li>✗ Tax information may be <strong>outdated</strong> - consult a CA</li>
-                <li>✗ We are <strong>not SEBI/RBI/IRDAI registered</strong></li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Use our tools for <strong>education and planning</strong> - then consult a professional</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      <LegalDocument
+        sections={sections}
+        summary={{
+          title: "In short",
+          items: [
+            "Fistotex does not give financial advice.",
+            "Calculator results are estimates, not guarantees.",
+            "News comes from third-party publishers; we don\u2019t verify every story.",
+            "Mutual fund investments carry market risk. Read the scheme documents.",
+            "Tax rules change. Check current rules with a chartered accountant.",
+            "We are not registered with SEBI, RBI, IRDAI or PFRDA. Use the tools to learn and plan, then talk to a professional.",
+          ],
+        }}
+      />
     </div>
   );
 }

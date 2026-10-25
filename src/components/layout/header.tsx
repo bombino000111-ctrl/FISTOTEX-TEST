@@ -9,39 +9,33 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Gazette Front", title: "Home", match: (p: string) => p === "/" },
+  { href: "/", label: "Home", match: (p: string) => p === "/" },
   {
     href: "/calculators",
     label: "Calculators",
-    title: "All calculators",
     match: (p: string) => p.startsWith("/calculators"),
   },
   {
     href: "/news",
-    label: "Market Wire",
-    title: "Financial news",
-    live: true,
+    label: "Market News",
     match: (p: string) => p.startsWith("/news"),
   },
   {
     href: "/market-calendar",
-    label: "Market Calendar",
-    title: "Upcoming events that move markets",
+    label: "Calendar",
     match: (p: string) => p.startsWith("/market-calendar"),
   },
   {
     href: "/earnings",
     label: "Earnings",
-    title: "Quarterly results of Indian and US companies",
     match: (p: string) => p.startsWith("/earnings"),
   },
   {
     href: "/about",
-    label: "How It Works",
-    title: "About & methodology",
+    label: "About",
     match: (p: string) => p.startsWith("/about"),
   },
-  { href: "/contact", label: "Contact", title: "Contact us", match: (p: string) => p.startsWith("/contact") },
+  { href: "/contact", label: "Contact", match: (p: string) => p.startsWith("/contact") },
 ];
 
 export function Header() {
@@ -63,12 +57,41 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll and allow Escape while the mobile menu is open
+  const toggleRef = React.useRef<HTMLButtonElement>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const headerRef = React.useRef<HTMLElement>(null);
+
+  // While the mobile menu is open: lock body scroll, fit the menu to the space
+  // actually left below the header (the dateline strip may still be showing),
+  // keep Tab inside the menu, and close on Escape with focus back on the toggle.
   React.useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const headerTop = Math.max(0, headerRef.current?.getBoundingClientRect().top ?? 0);
+    if (menuRef.current) menuRef.current.style.height = `calc(100dvh - ${headerTop + 68}px)`;
+    menuRef.current?.querySelector<HTMLElement>("a")?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !menuRef.current) return;
+      const items = [toggleRef.current, ...menuRef.current.querySelectorAll<HTMLElement>("a")].filter(
+        (el): el is HTMLElement => !!el
+      );
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
@@ -78,6 +101,7 @@ export function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         "sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md transition-shadow duration-300",
         (scrolled || open) && "shadow-[0_1px_8px_rgb(0_0_0/0.06)]"
@@ -88,28 +112,22 @@ export function Header() {
           <Logo />
 
           {/* Masthead nav */}
-          <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
+          <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex">
             {navItems.map((item) => {
               const active = item.match(pathname);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  title={item.title}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-2.5 py-1.5 text-sm font-semibold transition-colors",
+                    "inline-flex min-h-10 items-center whitespace-nowrap rounded-full px-3.5 text-sm font-medium transition-colors",
                     active
-                      ? "border-b-2 border-accent font-bold text-accent"
+                      ? "bg-card font-semibold text-foreground"
                       : "text-ink-2 hover:bg-muted hover:text-foreground"
                   )}
                 >
                   {item.label}
-                  {item.live && (
-                    <span className="rounded-sm bg-accent-soft px-1.5 py-px font-mono text-[10px] font-bold text-accent">
-                      LIVE
-                    </span>
-                  )}
                 </Link>
               );
             })}
@@ -119,16 +137,17 @@ export function Header() {
             <ThemeToggle />
             <Link
               href="/calculators"
-              className="btn-brand hidden h-10 px-4 font-mono text-xs whitespace-nowrap font-bold uppercase tracking-wide 2xl:inline-flex"
+              className="btn-brand hidden h-10 px-4 text-sm whitespace-nowrap xl:inline-flex"
             >
-              Open Ledger
+              All calculators
               <Calculator className="h-4 w-4" />
             </Link>
 
             {/* Mobile toggle */}
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-foreground xl:hidden"
+              ref={toggleRef}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-rule text-foreground lg:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
@@ -143,11 +162,12 @@ export function Header() {
       {/* Mobile nav */}
       <div
         id="mobile-nav"
+        ref={menuRef}
         hidden={!open}
-        className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-border bg-background xl:hidden"
+        className="h-[calc(100dvh-68px)] overflow-y-auto border-t border-border bg-background lg:hidden"
       >
         <nav aria-label="Mobile" className="container mx-auto flex flex-col gap-1 px-4 py-6">
-          {navItems.map((item, i) => {
+          {navItems.map((item) => {
             const active = item.match(pathname);
             return (
               <Link
@@ -155,9 +175,8 @@ export function Header() {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 aria-current={active ? "page" : undefined}
-                style={{ animationDelay: `${i * 40}ms` }}
                 className={cn(
-                  "animate-fade-up font-display flex items-center justify-between rounded-sm border-b border-border px-4 py-3.5 text-lg font-bold transition-colors",
+                  "font-display flex min-h-14 items-center justify-between border-b border-border px-2 text-2xl transition-colors",
                   active ? "bg-muted text-accent" : "text-ink-2 hover:bg-muted hover:text-foreground"
                 )}
               >
@@ -169,9 +188,9 @@ export function Header() {
           <Link
             href="/calculators"
             onClick={() => setOpen(false)}
-            className="btn-brand mt-4 h-12 font-mono text-sm font-bold uppercase tracking-wide"
+            className="btn-brand mt-4 h-12 text-base"
           >
-            Open Ledger
+            All calculators
             <Calculator className="h-4 w-4" />
           </Link>
         </nav>

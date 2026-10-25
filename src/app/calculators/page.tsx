@@ -5,6 +5,8 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHeader, Section } from "@/components/layout/section";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { CalculatorBrowser } from "@/components/calculators/calculator-browser";
+import { GoalJourneys } from "@/components/calculators/goal-journeys";
+import { RecentStrip } from "@/components/calculators/recent-strip";
 import {
   calculators,
   categories,
@@ -57,7 +59,12 @@ export default function CalculatorsPage() {
       />
 
       <Section className="pt-10 md:pt-12">
+        <RecentStrip className="mb-8" />
         <CalculatorBrowser />
+      </Section>
+
+      <Section className="pt-0 md:pt-0">
+        <GoalJourneys />
       </Section>
 
       {/* Browse by goal: one card per category, linking to its own page */}

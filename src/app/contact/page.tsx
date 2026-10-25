@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <StructuredData type="WebPage" data={{ title: "Contact Us", url: "/contact", description: "Get in touch with Fistotex for feedback, suggestions, or partnership inquiries." }} />
       <ContactForm />
     </div>

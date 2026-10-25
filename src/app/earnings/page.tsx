@@ -25,7 +25,7 @@ export const metadata = pageMetadata({
  */
 async function currentResults(today: string): Promise<CompanyResult[]> {
   const meetings = await upcomingResultsMeetings(today);
-  const nextBySymbol = new Map(meetings.map((m) => [m.symbol, m.date]));
+  const nextBySymbol = new Map(meetings.map((m): [string, string] => [m.symbol, m.date]));
 
   const out: CompanyResult[] = [];
   // One company at a time: SEC limits clients to a few requests a second

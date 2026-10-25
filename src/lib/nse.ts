@@ -53,7 +53,9 @@ async function sessionCookie(): Promise<string | null> {
     next: { revalidate: REVALIDATE },
     signal: AbortSignal.timeout(8000),
   });
-  const cookies = res.headers.getSetCookie?.() ?? [];
+  // getSetCookie returns each cookie separately; older runtimes only have the joined header
+  const headers = res.headers as Headers & { getSetCookie?: () => string[] };
+  const cookies = headers.getSetCookie?.() ?? (res.headers.get("set-cookie")?.split(/,(?=\s*[^;,=\s]+=)/) ?? []);
   if (!res.ok || cookies.length === 0) return null;
   return cookies.map((c) => c.split(";")[0]).join("; ");
 }

@@ -12,7 +12,7 @@ export function resultsEvents(meetings: ResultsMeeting[]): MarketEvent[] {
     byDate.set(m.date, [...(byDate.get(m.date) ?? []), m.company]);
   }
 
-  return [...byDate.entries()].map(([date, companies]) => ({
+  return [...byDate.entries()].map(([date, companies]): MarketEvent => ({
     id: `results-${date}`,
     event:
       companies.length <= 3

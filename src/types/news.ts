@@ -17,6 +17,8 @@ export interface NewsSource {
   url: string;
   rssUrl?: string;
   fallbackRssUrl?: string;
+  /** More feeds from the same publisher (e.g. its personal-finance section), merged in */
+  extraRssUrls?: string[];
   enabled: boolean;
 }
 
@@ -29,6 +31,10 @@ export interface NewsFilters {
   category?: string;
   source?: string;
   search?: string;
+  /** A reader-need grouping of topics, e.g. "saving" (see news/topics.ts) */
+  need?: string;
+  /** "today" = last 24 hours, "week" = last 7 days */
+  when?: string;
   page?: number;
 }
 

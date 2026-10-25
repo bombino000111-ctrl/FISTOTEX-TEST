@@ -1,5 +1,6 @@
 import type { NewsArticle, NewsFilters } from "@/types/news";
 import { siteConfig } from "@/config/site";
+import { needTopics } from "@/lib/news/topics";
 
 /* ────────────────────────────────────────────────────────────────
    A small, dependency-free RSS/Atom reader.
@@ -91,12 +92,15 @@ function extractImage(block: string, rawDescription: string): string | undefined
   return undefined;
 }
 
+// First match wins, so specific topics come before broad ones. Words are
+// matched whole ("sip" must not match "gossip", "tax" must not match "taxi").
 const CATEGORY_RULES: Array<{ id: string; words: string[] }> = [
-  { id: "ipo", words: ["ipo", "initial public offer", "listing", "grey market"] },
-  { id: "mutual-funds", words: ["mutual fund", "sip", " nav ", "amfi", "fund house"] },
-  { id: "tax", words: ["tax", "tds", "gst", "itr", "80c"] },
-  { id: "insurance", words: ["insurance", "policyholder", "premium", "lic "] },
-  { id: "banking", words: ["bank", "rbi", "repo rate", "npa", "deposit"] },
+  { id: "ipo", words: ["ipo", "ipos", "initial public offer", "listing", "grey market", "gmp"] },
+  { id: "mutual-funds", words: ["mutual fund", "mutual funds", "sip", "sips", "nav", "amfi", "fund house", "elss"] },
+  { id: "loans", words: ["loan", "loans", "emi", "emis", "home loan", "credit card", "lending rate", "mclr", "borrower", "borrowers"] },
+  { id: "tax", words: ["tax", "taxes", "tds", "gst", "itr", "80c", "income tax"] },
+  { id: "insurance", words: ["insurance", "policyholder", "policyholders", "premium", "lic"] },
+  { id: "banking", words: ["bank", "banks", "rbi", "repo rate", "npa", "deposit", "deposits", "fd", "fds"] },
   { id: "cryptocurrency", words: ["crypto", "bitcoin", "ethereum", "blockchain"] },
   { id: "global-markets", words: ["wall street", "nasdaq", "dow ", "global market", "federal reserve"] },
   { id: "economy", words: ["economy", "gdp", "inflation", "cpi", "fiscal", "rupee", "trade deficit"] },
@@ -106,10 +110,17 @@ const CATEGORY_RULES: Array<{ id: string; words: string[] }> = [
   { id: "business", words: ["company", "earnings", "quarterly", "revenue", "merger", "acquisition"] },
 ];
 
+const escapeRe = (w: string) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const CATEGORY_MATCHERS = CATEGORY_RULES.map((rule) => ({
+  id: rule.id,
+  re: new RegExp(`\\b(?:${rule.words.map((w) => escapeRe(w.trim())).join("|")})\\b`, "i"),
+}));
+
 function categorise(title: string, summary: string): string {
-  const haystack = ` ${`${title} ${summary}`.toLowerCase()} `;
-  for (const rule of CATEGORY_RULES) {
-    if (rule.words.some((w) => haystack.includes(w))) return rule.id;
+  // The headline decides first; the summary only breaks a tie
+  for (const text of [title, `${title} ${summary}`]) {
+    const hit = CATEGORY_MATCHERS.find((m) => m.re.test(text));
+    if (hit) return hit.id;
   }
   return "markets";
 }
@@ -183,11 +194,11 @@ async function fetchFeed(source: {
     // Aggregator descriptions often just repeat the headline — hide those
     if (summary.toLowerCase().startsWith(title.toLowerCase().slice(0, 40))) summary = "";
 
+    // An undated item would otherwise be stamped "now" and jump to the top
     const dateRaw = pick(block, ["pubDate", "published", "updated", "dc:date"]);
-    const parsed = dateRaw ? new Date(dateRaw) : new Date();
-    const publishedAt = Number.isNaN(parsed.getTime())
-      ? new Date().toISOString()
-      : parsed.toISOString();
+    const parsed = dateRaw ? new Date(dateRaw) : null;
+    if (!parsed || Number.isNaN(parsed.getTime())) continue;
+    const publishedAt = parsed.toISOString();
 
     const url = normaliseUrl(link);
 
@@ -217,20 +228,31 @@ async function fetchSource(source: {
   name: string;
   rssUrl?: string;
   fallbackRssUrl?: string;
+  extraRssUrls?: string[];
 }): Promise<NewsArticle[]> {
   const feedUrls = [source.rssUrl, source.fallbackRssUrl].filter(
     (url): url is string => Boolean(url)
   );
   let lastError: unknown;
+  let main: NewsArticle[] = [];
 
   for (const feedUrl of feedUrls) {
     try {
-      const articles = await fetchFeed(source, feedUrl);
-      if (articles.length > 0) return articles;
+      main = await fetchFeed(source, feedUrl);
+      if (main.length > 0) break;
     } catch (error) {
       lastError = error;
     }
   }
+
+  // Extra sections from the same publisher, fetched side by side; one
+  // failing never costs the publisher's main feed
+  const extra = (
+    await Promise.allSettled((source.extraRssUrls ?? []).map((url) => fetchFeed(source, url)))
+  ).flatMap((r) => (r.status === "fulfilled" ? r.value : []));
+
+  const all = [...main, ...extra];
+  if (all.length > 0) return all;
 
   throw lastError instanceof Error
     ? lastError
@@ -274,10 +296,15 @@ export async function getNews(): Promise<NewsResult> {
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, siteConfig.news.maxArticles);
 
+  // Count what is actually shown, after de-duplication and the cap
+  const shown = new Map<string, number>();
+  for (const a of merged) shown.set(a.sourceId, (shown.get(a.sourceId) ?? 0) + 1);
+
   return {
     articles: merged,
-    sources: sources.map((s) => ({ id: s.id, name: s.name, count: counts.get(s.id) ?? 0 })),
-    lastUpdated: new Date().toISOString(),
+    sources: sources.map((s) => ({ id: s.id, name: s.name, count: shown.get(s.id) ?? 0 })),
+    // The newest story's time. Feeds are cached, so "now" would overstate freshness.
+    lastUpdated: merged[0]?.publishedAt ?? new Date().toISOString(),
     unavailable,
   };
 }
@@ -288,6 +315,16 @@ export function filterNews(articles: NewsArticle[], filters: NewsFilters = {}): 
 
   if (filters.category && filters.category !== "all") {
     out = out.filter((a) => a.category === filters.category);
+  }
+
+  if (filters.need && filters.need !== "all") {
+    const topics = needTopics(filters.need);
+    if (topics) out = out.filter((a) => topics.includes(a.category ?? ""));
+  }
+
+  if (filters.when === "today" || filters.when === "week") {
+    const cutoff = Date.now() - (filters.when === "today" ? 1 : 7) * 24 * 60 * 60 * 1000;
+    out = out.filter((a) => new Date(a.publishedAt).getTime() >= cutoff);
   }
 
   if (filters.source && filters.source !== "all") {

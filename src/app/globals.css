@@ -5,60 +5,60 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─────────────────────────────────────────────────────────────
-   Fistotex design tokens — "Security print"
-   Borrowed from the object every Indian already trusts with money:
-   the rupee note. Cool note paper, intaglio-indigo ink, and two
-   denomination tints that carry meaning everywhere on the site —
-   lavender for money you put in, turmeric for what it grows into.
+   Fistotex design tokens — "Gilt"
+   Warm white paper, charcoal-brown ink and burnished gold, like a
+   gilt-edged passbook. Night is charcoal black with the gold lifted.
+   Two colours keep a fixed meaning across the site: warm taupe for
+   money you put in, gold for what it grows into.
    ───────────────────────────────────────────────────────────── */
 :root {
   /* Paper */
-  --background: #E8EAE6;   /* note paper — cool stone, not cream */
-  --muted: #DEE1DC;        /* recessed bands */
-  --card: #F6F7F4;         /* raised surfaces */
-  --popover: #F6F7F4;
+  --background: #FDFCFA;   /* warm white */
+  --muted: #F5F1EA;        /* recessed bands */
+  --card: #FFFFFF;         /* raised surfaces */
+  --popover: #FFFFFF;
 
   /* Ink */
-  --foreground: #262A4F;   /* intaglio indigo, used in place of black */
-  --ink-2: #3E4366;        /* body copy */
-  --muted-foreground: #585D7A; /* captions (>=5:1 on every light band) */
-  --card-foreground: #262A4F;
-  --popover-foreground: #262A4F;
-  --primary: #262A4F;
-  --primary-foreground: #F6F7F4;
+  --foreground: #2A2420;   /* charcoal brown */
+  --ink-2: #4A4038;        /* body copy */
+  --muted-foreground: #6B5F54; /* captions (>=5.5:1 on every light band) */
+  --card-foreground: #2A2420;
+  --popover-foreground: #2A2420;
+  --primary: #2A2420;
+  --primary-foreground: #FDFCFA;
 
   /* Lines */
-  --border: #CDD1CB;
-  --rule: #B6BBB5;
-  --input: #B6BBB5;
+  --border: #E8E1D6;
+  --rule: #D6CBBB;
+  --input: #D6CBBB;
 
-  /* Action + links: a brighter intaglio blue, so interactive ink reads apart from text ink */
-  --accent: #34419A;
-  --accent-foreground: #F6F7F4;
-  --accent-soft: #DCDFF0;
-  --brand: #34419A;
-  --brand-2: #5E5596;      /* lavender ink — small headings */
-  --brand-2-soft: #E4E1F0;
-  --brand-3: #262A4F;
-  --secondary: #262A4F;
-  --secondary-foreground: #F6F7F4;
+  /* Action + links: burnished gold-brown, legible as text on white */
+  --accent: #8A5A1F;
+  --accent-foreground: #FFFFFF;
+  --accent-soft: #F6ECDC;
+  --brand: #8A5A1F;
+  --brand-2: #8A5A1F;
+  --brand-2-soft: #F6ECDC;
+  --brand-3: #2A2420;
+  --secondary: #2A2420;
+  --secondary-foreground: #FDFCFA;
 
   /* Meaning colours */
-  --principal: #8B83B6;    /* Rs 100-note lavender: money put in */
-  --growth: #C9962B;       /* turmeric: what it grows into (fills) */
-  --growth-ink: #805A0E;   /* turmeric legible as text (>=4.8:1 on card) */
-  --amber-warm: #C9962B;
+  --principal: #A8927A;    /* warm taupe: money put in */
+  --growth: #C9A24A;       /* gold: what it grows into (fills) */
+  --growth-ink: #7A5714;   /* gold legible as text (>=6:1 on white) */
+  --amber-warm: #C9A24A;
 
-  /* The result panel: a slab of ink */
-  --panel: #262A4F;
-  --panel-rule: #3A3F6B;
-  --panel-accent: #E8C277;
+  /* The result panel: a slab of charcoal with gold figures */
+  --panel: #26211D;
+  --panel-rule: #3A332C;
+  --panel-accent: #E2C27A;
 
-  --success: #805A0E;
-  --success-foreground: #F6F7F4;
-  --destructive: #A23B3B;
+  --success: #7A5714;
+  --success-foreground: #FFFFFF;
+  --destructive: #A3352B;
   --destructive-foreground: #FFFFFF;
-  --ring: #34419A;
+  --ring: #8A5A1F;
 
   /* Radii follow hierarchy: controls are pills, surfaces soft, tags tight */
   --radius: 0.75rem;
@@ -71,49 +71,49 @@
 [data-theme="dark"] * { --tint-ink: color-mix(in srgb, var(--tint, var(--accent)) 52%, #fff); }
 
 [data-theme="dark"] {
-  /* Night vault: deep blue-black paper, the ink lifts to moonlight */
-  --background: #161927;
-  --muted: #1C2032;
-  --card: #1F2336;
-  --popover: #1F2336;
+  /* Charcoal black, gold lifted for contrast */
+  --background: #161514;
+  --muted: #1D1C1A;
+  --card: #222020;
+  --popover: #222020;
 
-  --foreground: #E6E7EF;
-  --ink-2: #C4C6D8;
-  --muted-foreground: #9A9DB8;
-  --card-foreground: #E6E7EF;
-  --popover-foreground: #E6E7EF;
-  --primary: #E6E7EF;
-  --primary-foreground: #161927;
+  --foreground: #EEE9E1;
+  --ink-2: #CFC7BC;
+  --muted-foreground: #A39A8E;
+  --card-foreground: #EEE9E1;
+  --popover-foreground: #EEE9E1;
+  --primary: #EEE9E1;
+  --primary-foreground: #161514;
 
-  --border: #2C3148;
-  --rule: #3B4162;
-  --input: #3B4162;
+  --border: #312E2A;
+  --rule: #403B35;
+  --input: #403B35;
 
-  --accent: #A3ADF2;
-  --accent-foreground: #161927;
-  --accent-soft: #262B4D;
-  --brand: #A3ADF2;
-  --brand-2: #B8B0E6;
-  --brand-2-soft: #27243F;
-  --brand-3: #C4C6D8;
-  --secondary: #A3ADF2;
-  --secondary-foreground: #161927;
+  --accent: #D9B46A;
+  --accent-foreground: #161514;
+  --accent-soft: #2E2718;
+  --brand: #D9B46A;
+  --brand-2: #D9B46A;
+  --brand-2-soft: #2E2718;
+  --brand-3: #CFC7BC;
+  --secondary: #D9B46A;
+  --secondary-foreground: #161514;
 
-  --principal: #9F98CF;
-  --growth: #E2B353;
-  --growth-ink: #E8C277;
-  --amber-warm: #E2B353;
+  --principal: #B8A48C;
+  --growth: #E0BC65;
+  --growth-ink: #E6C77E;
+  --amber-warm: #E0BC65;
 
   /* The panel lifts above the page rather than sinking below it */
-  --panel: #2A2F55;
-  --panel-rule: #3E4472;
-  --panel-accent: #E8C277;
+  --panel: #2A2724;
+  --panel-rule: #3B3732;
+  --panel-accent: #E6C77E;
 
-  --success: #E8C277;
-  --success-foreground: #161927;
-  --destructive: #F08C84;
+  --success: #E6C77E;
+  --success-foreground: #161514;
+  --destructive: #EE8A7E;
   --destructive-foreground: #2A0606;
-  --ring: #A3ADF2;
+  --ring: #D9B46A;
   color-scheme: dark;
 }
 
@@ -290,7 +290,7 @@ body {
   }
   .btn-ghost:hover { border-color: var(--foreground); background: var(--muted); }
 
-  /* Section kicker — a quiet lavender line of sentence-case text */
+  /* Section kicker — a quiet gold-brown line of sentence-case text */
   .eyebrow {
     display: inline-flex;
     align-items: center;

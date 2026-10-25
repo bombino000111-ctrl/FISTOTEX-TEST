@@ -7,7 +7,8 @@ import { NewsCard } from "@/components/news/news-card";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { getNews, filterNews } from "@/lib/news/rss";
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, formatRelativeTime } from "@/lib/utils";
+import { readerNeeds } from "@/lib/news/topics";
 
 export const revalidate = 300;
 
@@ -15,13 +16,15 @@ type SearchParams = Promise<{
   q?: string;
   category?: string;
   source?: string;
+  need?: string;
+  when?: string;
   page?: string;
 }>;
 
 const newsMetadata = pageMetadata({
   title: "Latest Stock Market & Financial News India",
   description:
-    "Today's Indian stock market and financial news from Mint, Economic Times, Moneycontrol and Business Standard: Sensex, Nifty, IPOs, mutual funds and the economy.",
+    "Today's Indian money news from Mint, Economic Times, BusinessLine, Moneycontrol and Business Standard: markets, mutual funds, loans, deposits, tax and the economy.",
   path: "/news",
 });
 
@@ -46,6 +49,8 @@ export async function generateMetadata({
     sp.q?.trim() ||
       (sp.category && sp.category !== "all") ||
       (sp.source && sp.source !== "all") ||
+      (sp.need && sp.need !== "all") ||
+      sp.when ||
       (sp.page && sp.page !== "1")
   );
 
@@ -58,18 +63,22 @@ export async function generateMetadata({
 }
 
 /** Build a /news URL preserving the other active filters. */
-function buildHref(
-  current: { q?: string; category?: string; source?: string },
-  overrides: { q?: string; category?: string; source?: string; page?: number }
-) {
+type Filters = { q?: string; category?: string; source?: string; need?: string; when?: string };
+
+function buildHref(current: Filters, overrides: Filters & { page?: number }) {
   const params = new URLSearchParams();
-  const q = overrides.q !== undefined ? overrides.q : current.q;
-  const category = overrides.category !== undefined ? overrides.category : current.category;
-  const source = overrides.source !== undefined ? overrides.source : current.source;
+  const pick = (k: keyof Filters) => (overrides[k] !== undefined ? overrides[k] : current[k]);
+  const q = pick("q");
+  const need = pick("need");
+  const category = pick("category");
+  const source = pick("source");
+  const when = pick("when");
 
   if (q) params.set("q", q);
+  if (need && need !== "all") params.set("need", need);
   if (category && category !== "all") params.set("category", category);
   if (source && source !== "all") params.set("source", source);
+  if (when && when !== "any") params.set("when", when);
   if (overrides.page && overrides.page > 1) params.set("page", String(overrides.page));
 
   const qs = params.toString();
@@ -81,12 +90,14 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
   const q = (sp.q || "").trim();
   const category = sp.category || "all";
   const source = sp.source || "all";
+  const need = readerNeeds.some((n) => n.id === sp.need) ? (sp.need as string) : "all";
+  const when = sp.when === "today" || sp.when === "week" ? sp.when : "any";
   const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
 
   const { articles, sources, lastUpdated, unavailable } = await getNews();
-  const filtered = filterNews(articles, { category, source, search: q });
+  const filtered = filterNews(articles, { category, source, search: q, need, when });
 
-  const hasFilters = Boolean(q) || category !== "all" || source !== "all";
+  const hasFilters = Boolean(q) || category !== "all" || source !== "all" || need !== "all" || when !== "any";
 
   // Unfiltered page 1 opens with a full-width lead story, so it carries one
   // extra article to keep the grid rows even.
@@ -98,13 +109,10 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
   const slice = filtered.slice(start, safePage === 1 ? firstPage : start + perPage);
 
   const activeSources = sources.filter((s) => s.count > 0);
-  const current = { q, category: sp.category || "", source: sp.source || "" };
+  const current: Filters = { q, category: sp.category || "", source: sp.source || "", need, when };
+  const activeNeed = readerNeeds.find((n) => n.id === need);
 
-  const updatedLabel = new Date(lastUpdated).toLocaleString("en-IN", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Kolkata",
-  });
+  const newestLabel = formatRelativeTime(lastUpdated);
 
   return (
     <div className="flex flex-col">
@@ -133,7 +141,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
       >
         <p className="text-sm text-muted-foreground">
           {articles.length} stories from {activeSources.length}{" "}
-          {activeSources.length === 1 ? "publisher" : "publishers"}, checked {updatedLabel} IST.
+          {activeSources.length === 1 ? "publisher" : "publishers"}. Newest story {newestLabel}.
         </p>
       </PageHeader>
 
@@ -172,6 +180,48 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
               </Link>
             )}
           </form>
+
+          {/* News for me: grouped by what the reader needs */}
+          <div>
+            <div role="group" aria-label="Show news for" className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">
+              {[{ id: "all", label: "Everything" }, ...readerNeeds].map((n) => (
+                <Link
+                  key={n.id}
+                  href={buildHref(current, { need: n.id, category: "all", page: 1 })}
+                  aria-current={need === n.id ? "true" : undefined}
+                  className={cn(
+                    "inline-flex min-h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold transition-colors",
+                    need === n.id
+                      ? "border-transparent bg-accent text-accent-foreground"
+                      : "border-rule text-foreground hover:border-accent"
+                  )}
+                >
+                  {n.label}
+                </Link>
+              ))}
+              <span aria-hidden="true" className="mx-1 hidden w-px self-stretch bg-border md:block" />
+              {[
+                { id: "any", label: "Any time" },
+                { id: "today", label: "Today" },
+                { id: "week", label: "This week" },
+              ].map((w) => (
+                <Link
+                  key={w.id}
+                  href={buildHref(current, { when: w.id, page: 1 })}
+                  aria-current={when === w.id ? "true" : undefined}
+                  className={cn(
+                    "inline-flex min-h-10 shrink-0 items-center rounded-full border px-4 text-sm font-medium transition-colors",
+                    when === w.id
+                      ? "border-accent bg-accent-soft text-foreground"
+                      : "border-border text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {w.label}
+                </Link>
+              ))}
+            </div>
+            {activeNeed && <p className="mt-2 text-sm text-muted-foreground">{activeNeed.hint}.</p>}
+          </div>
 
           {/* Category chips */}
           <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0">

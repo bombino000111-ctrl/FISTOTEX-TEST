@@ -12,7 +12,7 @@ export interface RosettePoint {
 
   The pattern is the data. One ring per year; its radius grows with the
   square root of the balance (so the area it encloses tracks the money), and
-  its ink shifts from lavender (money you put in) to turmeric (growth) as
+  its ink shifts from taupe (money you put in) to gold (growth) as
   returns overtake contributions.
 */
 
@@ -34,7 +34,7 @@ function strand(radius: number, amp: number, petals: number, phase: number) {
   return d + "Z";
 }
 
-/** Ink for a ring: lavender at 0% growth, turmeric at 100%. */
+/** Ink for a ring: taupe at 0% growth, gold at 100%. */
 function ink(growthShare: number) {
   const pct = Math.round(Math.min(1, Math.max(0, growthShare)) * 100);
   return `color-mix(in oklab, var(--growth) ${pct}%, var(--principal))`;

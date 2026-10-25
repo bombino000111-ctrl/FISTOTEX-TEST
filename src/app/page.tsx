@@ -81,7 +81,7 @@ export default async function Home() {
             See what a monthly SIP becomes.
           </h1>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-2">
-            Move the sliders. Each ring is a year of saving: lavender for what you put in, turmeric
+            Move the sliders. Each ring is a year of saving: taupe for what you put in, gold
             for what it grows into. It&apos;s all worked out in your browser and never sent to us.
           </p>
         </HeroCalculator>

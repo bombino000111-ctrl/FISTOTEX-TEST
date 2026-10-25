@@ -15,6 +15,14 @@ export interface CompanyResult {
   market: EarningsMarket;
   /** Quarter the figures cover, e.g. "Q2 FY27" */
   quarter: string;
+  /** Last day of that quarter (YYYY-MM-DD) */
+  periodEnd: string;
+  /** NSE symbol, for live results dates (India) */
+  symbol?: string;
+  /** SEC company identifier, for live figures (US) */
+  cik?: number;
+  /** True when the figures came live from SEC filings rather than the hand-checked list */
+  live?: boolean;
   /** Banks report net interest income or total income instead of revenue */
   revenueLabel: "Revenue" | "NII" | "Total income";
   /** ₹ crore for India, US$ billion for the US */

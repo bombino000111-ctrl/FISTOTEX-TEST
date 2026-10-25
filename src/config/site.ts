@@ -81,13 +81,15 @@ export const siteConfig = {
   news: {
     cacheRevalidation: 300,
     itemsPerPage: 9,
-    maxArticles: 60,
+    maxArticles: 120,
     sources: [
       {
         id: "economic-times",
         name: "Economic Times",
         url: "https://economictimes.indiatimes.com",
         rssUrl: "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms",
+        // ET Wealth: savings, tax, loans — the news most households act on
+        extraRssUrls: ["https://economictimes.indiatimes.com/wealth/rssfeeds/837555174.cms"],
         enabled: true,
       },
       {
@@ -95,6 +97,7 @@ export const siteConfig = {
         name: "Mint",
         url: "https://www.livemint.com",
         rssUrl: "https://www.livemint.com/rss/markets",
+        extraRssUrls: ["https://www.livemint.com/rss/money"],
         enabled: true,
       },
       {
@@ -104,6 +107,14 @@ export const siteConfig = {
         rssUrl: "https://www.moneycontrol.com/rss/latestnews.xml",
         fallbackRssUrl:
           "https://news.google.com/rss/search?q=site%3Amoneycontrol.com%20(stock%20OR%20market%20OR%20Nifty%20OR%20Sensex)&hl=en-IN&gl=IN&ceid=IN%3Aen",
+        enabled: true,
+      },
+      {
+        id: "businessline",
+        name: "BusinessLine",
+        url: "https://www.thehindubusinessline.com",
+        rssUrl: "https://www.thehindubusinessline.com/markets/feeder/default.rss",
+        extraRssUrls: ["https://www.thehindubusinessline.com/portfolio/personal-finance/feeder/default.rss"],
         enabled: true,
       },
       {
@@ -122,6 +133,7 @@ export const siteConfig = {
       { id: "mutual-funds", name: "Mutual Funds" },
       { id: "personal-finance", name: "Personal Finance" },
       { id: "banking", name: "Banking" },
+      { id: "loans", name: "Loans & EMIs" },
       { id: "economy", name: "Economy" },
       { id: "business", name: "Business" },
       { id: "ipo", name: "IPO" },

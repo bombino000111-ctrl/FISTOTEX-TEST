@@ -61,7 +61,7 @@ const pillars = [
     kicker: "Transparent proofs",
     title: "Standard Indian math",
     icon: BookOpen,
-    tint: "#C26100",
+    tint: "#A65300",
     body: "We follow RBI reducing-balance guidelines, post office and bank quarterly compounding conventions, and PFRDA’s current annuity minimums (20% for most subscribers since December 2025). Every formula is printed on the page it powers.",
     proof: "Formula printed on every page",
   },
@@ -124,7 +124,7 @@ export default async function Home() {
         {/* Sub-masthead slug line */}
         <div className="rule-heavy-b mb-8 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pb-3 font-mono text-xs uppercase tracking-wider">
           <div className="flex flex-wrap items-center gap-2 font-bold text-foreground">
-            <span className="bg-foreground px-1.5 py-0.5 text-[10px] text-background">{today}</span>
+            <span className="bg-foreground px-1.5 py-0.5 text-[11px] text-background">{today}</span>
             <span className="hidden sm:inline">
               Household finance, tax discipline &amp; compounding
             </span>
@@ -298,7 +298,7 @@ export default async function Home() {
                       <Icon className="h-[18px] w-[18px]" />
                     </span>
                     <div>
-                      <p className="tint-text font-mono text-[10px] font-bold uppercase tracking-wider">
+                      <p className="tint-text font-mono text-[11px] font-bold uppercase tracking-wider">
                         {pillar.no}. {pillar.kicker}
                       </p>
                       <h3 className="font-display text-base font-bold text-foreground">

@@ -1,17 +1,21 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Compass, Home, Calculator } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false },
+};
 
 export default function NotFound() {
   return (
     <div className="container mx-auto flex min-h-[60vh] items-center px-4 py-20">
       <div className="mx-auto max-w-xl text-center">
         <p className="font-display text-8xl text-accent md:text-9xl">404</p>
-        <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-          Page not found
-        </h1>
+        <h1 className="font-display text-4xl text-foreground md:text-5xl">That page isn&apos;t here</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          The page you&apos;re looking for doesn&apos;t exist, may have moved, or the link is out of
-          date.
+          The link may be out of date, or the page has moved. Here are some good places to pick up
+          again.
         </p>
 
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

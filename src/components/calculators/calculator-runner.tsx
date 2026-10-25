@@ -187,7 +187,7 @@ export function CalculatorRunner({ id }: { id: string }) {
               onClick={save}
               disabled={!headline || !!validation}
               aria-label="Save this scenario in this browser"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground disabled:opacity-50"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-lg border border-border px-3 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground disabled:opacity-50"
             >
               {saved ? <BookmarkCheck className="h-3.5 w-3.5 text-accent" /> : <Bookmark className="h-3.5 w-3.5" />}
               <span className={saved ? undefined : "hidden sm:inline"}>{saved ? "Saved" : "Save"}</span>
@@ -196,7 +196,7 @@ export function CalculatorRunner({ id }: { id: string }) {
               type="button"
               onClick={copyLink}
               aria-label="Copy a link to this calculation"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-lg border border-border px-3 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
             >
               {copied === "done" ? <Check className="h-3.5 w-3.5 text-accent" /> : <Link2 className="h-3.5 w-3.5" />}
               <span className={copied === "idle" ? "hidden sm:inline" : undefined}>
@@ -207,7 +207,7 @@ export function CalculatorRunner({ id }: { id: string }) {
               type="button"
               onClick={reset}
               aria-label="Reset inputs"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-lg border border-border px-3 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Reset</span>
@@ -246,7 +246,7 @@ export function CalculatorRunner({ id }: { id: string }) {
                     <p className="text-xs font-bold uppercase tracking-wider text-[#7FD6B2]">
                       {headline.label}
                     </p>
-                    <p className="tnum mt-2 text-4xl font-bold tracking-tight md:text-5xl">
+                    <p className="font-display tnum mt-2 break-words text-4xl tracking-tight md:text-5xl">
                       {formatOutput(headline.value, headline.kind)}
                     </p>
                     {headline.kind === "currency" &&
@@ -393,7 +393,22 @@ function FieldControl({
         <p id={`${field.key}-label`} className="mb-3 block text-sm font-semibold text-foreground">
           {field.label}
         </p>
-        <div role="radiogroup" aria-labelledby={`${field.key}-label`} className="flex flex-wrap gap-2">
+        <div
+          role="radiogroup"
+          aria-labelledby={`${field.key}-label`}
+          className="flex flex-wrap gap-2"
+          onKeyDown={(e) => {
+            // Arrow keys move the selection, as in a native radio group
+            const opts = field.options ?? [];
+            const i = opts.findIndex((o) => o.value === String(value));
+            const delta = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+            if (!delta || opts.length === 0) return;
+            e.preventDefault();
+            const next = opts[(i + delta + opts.length) % opts.length];
+            onChange(next.value);
+            e.currentTarget.querySelector<HTMLElement>(`[data-value="${next.value}"]`)?.focus();
+          }}
+        >
           {field.options?.map((o) => {
             const active = String(value) === o.value;
             return (
@@ -402,9 +417,11 @@ function FieldControl({
                 type="button"
                 role="radio"
                 aria-checked={active}
+                tabIndex={active ? 0 : -1}
+                data-value={o.value}
                 onClick={() => onChange(o.value)}
                 className={cn(
-                  "rounded-lg border px-3.5 py-2 text-sm font-medium transition-all",
+                  "min-h-10 rounded-lg border px-3.5 py-2 text-sm font-medium transition-all",
                   active
                     ? "border-brand bg-brand/10 text-foreground shadow-[inset_0_0_0_1px_var(--brand)]"
                     : "border-border text-muted-foreground hover:border-brand/50 hover:text-foreground"

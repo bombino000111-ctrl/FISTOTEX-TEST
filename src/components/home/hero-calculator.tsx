@@ -16,9 +16,11 @@ function useTweened(target: number, ms = 450) {
   React.useEffect(() => {
     const start = performance.now();
     const initial = from.current;
+    // Respect reduced motion: jump straight to the new figure
+    const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
     let raf = 0;
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / ms);
+      const t = duration === 0 ? 1 : Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
       const v = initial + (target - initial) * eased;
       from.current = v;
@@ -73,9 +75,13 @@ export function HeroCalculator() {
             </p>
             <p
               className="font-display tnum mt-1 text-3xl font-bold tracking-tight text-white sm:text-4xl"
-              aria-live="polite"
+              aria-hidden="true"
             >
               {formatCurrency(shown)}
+            </p>
+            {/* Screen readers get the settled figure once, not every animation frame */}
+            <p className="sr-only" aria-live="polite">
+              {formatCurrency(result.futureValue)}
             </p>
           </div>
           <Wallet aria-hidden="true" className="h-6 w-6 shrink-0 text-panel-accent/60" />
@@ -110,7 +116,7 @@ export function HeroCalculator() {
             />
           </div>
 
-          <div className="mt-1 flex justify-between font-mono text-[10px] text-white/55">
+          <div className="mt-1 flex justify-between font-mono text-[11px] text-white/55">
             <span className="inline-flex items-center gap-1">
               <span aria-hidden="true" className="inline-block h-2 w-2 bg-amber-warm" />
               Principal invested
@@ -141,7 +147,7 @@ export function HeroCalculator() {
             className="range"
             style={{ "--pct": `${pctMonthly}%` } as React.CSSProperties}
           />
-          <div className="mt-1 flex justify-between font-mono text-[10px] text-muted-foreground">
+          <div className="mt-1 flex justify-between font-mono text-[11px] text-muted-foreground">
             <span>₹1,000</span>
             <span>₹50,000</span>
             <span>₹1,00,000</span>
@@ -166,7 +172,7 @@ export function HeroCalculator() {
             className="range"
             style={{ "--pct": `${pctYears}%` } as React.CSSProperties}
           />
-          <div className="mt-1 flex justify-between font-mono text-[10px] text-muted-foreground">
+          <div className="mt-1 flex justify-between font-mono text-[11px] text-muted-foreground">
             <span>1 Year</span>
             <span>15 Years</span>
             <span>30 Years</span>

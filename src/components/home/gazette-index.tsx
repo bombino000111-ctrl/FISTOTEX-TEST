@@ -27,36 +27,36 @@ const desks: Array<{
   tint: string;
   /** Registry categories filed under this desk, in print order. */
   categories: CategoryId[];
-  /** Plural noun for the count line, e.g. "5 Verified Instruments". */
+  /** Plural noun for the count line, e.g. "5 calculators". */
   unit: string;
 }> = [
   {
     no: "01",
-    title: "Wealth Compounding & Capital Market Investments",
-    tint: "#0A5C36",
+    title: "Investing & growth",
+    tint: "#0B6E4F",
     categories: ["investment"],
-    unit: "Verified Instruments",
+    unit: "calculators",
   },
   {
     no: "02",
-    title: "Borrowing, Eligibility & Amortisation Schedules",
-    tint: "#1B365D",
+    title: "Loans & borrowing",
+    tint: "#34507F",
     categories: ["loans"],
-    unit: "Loan Engines",
+    unit: "calculators",
   },
   {
     no: "03",
-    title: "Sovereign Guaranteed & Small Savings Schemes",
-    tint: "#8C3A00",
+    title: "Safe savings",
+    tint: "#A2560B",
     categories: ["savings"],
-    unit: "Statutory Schemes",
+    unit: "calculators",
   },
   {
     no: "04",
-    title: "Retirement, Pension Architecture & Purchasing Power",
-    tint: "#4B2354",
+    title: "Retirement & planning",
+    tint: "#7A3E6C",
     categories: ["retirement", "fixed-income", "planning"],
-    unit: "Planning Models",
+    unit: "calculators",
   },
 ];
 
@@ -105,8 +105,9 @@ function Entry({ calc }: { calc: CalculatorDef }) {
           {calc.name}
         </h4>
         {/* Tagline trimmed to one line — the stamp + name already tell most
-            readers what this does; the full sentence is a hover nicety. */}
-        <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-ink-2 transition-opacity group-hover:line-clamp-none">
+            readers what this does. It stays clamped on hover so the column
+            never jumps under the pointer. */}
+        <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-ink-2">
           {calc.tagline}
         </p>
       </div>
@@ -137,9 +138,9 @@ function PopularCard({ calc }: { calc: CalculatorDef }) {
           className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-[var(--tint-ink)]"
         />
       </div>
-      <h4 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-[var(--tint-ink)]">
+      <h3 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-[var(--tint-ink)]">
         {shortName(calc.name)}
-      </h4>
+      </h3>
       <p className="line-clamp-2 text-xs leading-relaxed text-ink-2">{calc.tagline}</p>
     </Link>
   );

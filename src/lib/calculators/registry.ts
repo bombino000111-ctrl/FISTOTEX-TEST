@@ -394,7 +394,7 @@ const xirr: CalculatorDef = {
       return [
         { label: "Total invested", value: r.totalInvested, kind: "currency", split: "base" },
         { label: "Current value", value: r.currentValue, kind: "currency" },
-        { label: "XIRR", value: r.error ? "Could not solve" : "—", kind: "number" },
+        { label: "XIRR", value: r.error ? "No steady rate fits" : "—", kind: "number" },
       ];
     }
 

@@ -13,7 +13,7 @@ export function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#262A4F",
+          background: "#2A2420",
         }}
       >
         <svg width="340" height="340" viewBox="0 0 64 64">

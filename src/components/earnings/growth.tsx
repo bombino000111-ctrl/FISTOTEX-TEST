@@ -1,7 +1,7 @@
 import { ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** "+11.2% vs last year" — turmeric when up, red when down, always with a sign and an arrow so colour is never the only cue. `flag` adds a footnote marker. */
+/** "+11.2% vs last year" — gold when up, red when down, always with a sign and an arrow so colour is never the only cue. `flag` adds a footnote marker. */
 export function Growth({ label, value, flag }: { label: "YoY" | "QoQ"; value: number; flag?: boolean }) {
   const Icon = value > 0 ? ArrowUpRight : value < 0 ? ArrowDownRight : Minus;
   const sign = value > 0 ? "+" : value < 0 ? "−" : "";

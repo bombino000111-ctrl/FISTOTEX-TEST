@@ -12,7 +12,7 @@ type Values = Record<string, number | string>;
 
 const noopSubscribe = () => () => {};
 
-/** Read any of this calculator's inputs from a query string (?key=value). */
+/** Read any of this calculator's inputs from a "key=value&…" string (hash, or a legacy query string). */
 function valuesFromSearch(search: string, fields: CalcField[], defaults: Values): Values {
   const params = new URLSearchParams(search);
   const out: Values = { ...defaults };
@@ -29,8 +29,13 @@ function valuesFromSearch(search: string, fields: CalcField[], defaults: Values)
   return out;
 }
 
+/** Years and ages are whole numbers: the formulas count whole deposits and periods. */
+function isWholeField(f: CalcField) {
+  return f.kind === "years" || f.kind === "age";
+}
+
 function clampToField(n: number, f: CalcField) {
-  let v = n;
+  let v = isWholeField(f) ? Math.round(n) : n;
   if (f.min !== undefined) v = Math.max(f.min, v);
   if (f.max !== undefined) v = Math.min(f.max, v);
   return v;
@@ -41,11 +46,18 @@ export function CalculatorRunner({ id }: { id: string }) {
   // functions directly — functions cannot cross the server/client boundary.
   const def = getCalculator(id);
 
-  // Shared scenario from the URL (empty on the server, so the static HTML shows defaults)
-  const search = React.useSyncExternalStore(noopSubscribe, () => window.location.search, () => "");
+  // Shared scenario from the URL (empty on the server, so the static HTML shows defaults).
+  // Scenarios live in the hash: browsers never send it to any server, so the
+  // numbers stay out of analytics, ad requests and referrers. Older links used
+  // the query string, which is still read.
+  const search = React.useSyncExternalStore(
+    noopSubscribe,
+    () => window.location.hash.slice(1) || window.location.search,
+    () => ""
+  );
   // null until the visitor changes something; then their edits take over
   const [edits, setEdits] = React.useState<Values | null>(null);
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = React.useState<"idle" | "done" | "failed">("idle");
   const tracked = React.useRef(false);
 
   const values = React.useMemo<Values>(
@@ -53,21 +65,33 @@ export function CalculatorRunner({ id }: { id: string }) {
     [edits, search, def]
   );
 
+  // Only values that differ from the defaults go into a shared link
+  const scenarioQuery = React.useMemo(() => {
+    if (!def) return "";
+    const params = new URLSearchParams();
+    for (const f of def.fields) {
+      if (String(values[f.key]) !== String(def.defaults[f.key])) {
+        params.set(f.key, String(values[f.key]));
+      }
+    }
+    return params.toString();
+  }, [def, values]);
+
+  // Move a legacy ?query scenario into the hash straight away
+  React.useEffect(() => {
+    if (window.location.search && !window.location.hash) {
+      window.history.replaceState(null, "", `${window.location.pathname}#${window.location.search.slice(1)}`);
+    }
+  }, []);
+
   // Keep the URL in sync so the current scenario can be shared or bookmarked
   React.useEffect(() => {
     if (!def || edits === null) return;
     const t = setTimeout(() => {
-      const params = new URLSearchParams();
-      for (const f of def.fields) {
-        if (String(values[f.key]) !== String(def.defaults[f.key])) {
-          params.set(f.key, String(values[f.key]));
-        }
-      }
-      const qs = params.toString();
-      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+      window.history.replaceState(null, "", `${window.location.pathname}${scenarioQuery ? `#${scenarioQuery}` : ""}`);
     }, 300);
     return () => clearTimeout(t);
-  }, [def, values, edits]);
+  }, [def, edits, scenarioQuery]);
 
   const setValue = (key: string, value: number | string) => {
     if (!tracked.current && def) {
@@ -82,13 +106,16 @@ export function CalculatorRunner({ id }: { id: string }) {
   };
 
   const copyLink = async () => {
+    // Built from the current values, so a copy right after an edit isn't a step behind the URL
+    const url = `${window.location.origin}${window.location.pathname}${scenarioQuery ? `#${scenarioQuery}` : ""}`;
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(url);
+      setCopied("done");
     } catch {
-      // Clipboard can be unavailable (e.g. insecure context); ignore.
+      // Clipboard can be unavailable (e.g. insecure context); the address bar still holds the link.
+      setCopied("failed");
     }
+    setTimeout(() => setCopied("idle"), 2500);
   };
 
   const validation = React.useMemo(() => (def?.validate ? def.validate(values) : null), [def, values]);
@@ -135,8 +162,10 @@ export function CalculatorRunner({ id }: { id: string }) {
               aria-label="Copy a link to this calculation"
               className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
             >
-              {copied ? <Check className="h-3.5 w-3.5 text-accent" /> : <Link2 className="h-3.5 w-3.5" />}
-              <span className="hidden sm:inline">{copied ? "Copied" : "Copy link"}</span>
+              {copied === "done" ? <Check className="h-3.5 w-3.5 text-accent" /> : <Link2 className="h-3.5 w-3.5" />}
+              <span className={copied === "idle" ? "hidden sm:inline" : undefined}>
+                {copied === "done" ? "Copied" : copied === "failed" ? "Copy from the address bar" : "Copy link"}
+              </span>
             </button>
             <button
               type="button"
@@ -163,9 +192,9 @@ export function CalculatorRunner({ id }: { id: string }) {
       </div>
 
       {/* ── Results ── */}
-      <div className="space-y-6" aria-live="polite">
+      <div className="space-y-6">
         {validation ? (
-          <div className="surface flex items-start gap-3 border-amber-500/40 bg-amber-500/10 p-6">
+          <div role="status" className="surface flex items-start gap-3 border-amber-500/40 bg-amber-500/10 p-6">
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
             <div>
               <p className="font-semibold text-foreground">Check your inputs</p>
@@ -177,7 +206,7 @@ export function CalculatorRunner({ id }: { id: string }) {
             {headline && (
               <div className="bg-panel px-6 py-7 text-white md:px-8">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
+                  <div aria-live="polite" aria-atomic="true">
                     <p className="text-xs font-bold uppercase tracking-wider text-[#7FD6B2]">
                       {headline.label}
                     </p>
@@ -217,7 +246,11 @@ export function CalculatorRunner({ id }: { id: string }) {
                     className={cn(
                       "tnum text-right font-semibold",
                       out.emphasis ? "text-lg" : "text-base",
-                      out.tone === "positive" ? "text-success" : "text-foreground"
+                      out.tone === "positive"
+                        ? typeof out.value === "number" && out.value < 0
+                          ? "text-destructive"
+                          : "text-success"
+                        : "text-foreground"
                     )}
                   >
                     {formatOutput(out.value, out.kind)}
@@ -363,9 +396,24 @@ function FieldControl({
   const commit = () => {
     if (draft === null) return;
     const n = Number(draft.replace(/,/g, ""));
-    onChange(clampToField(Number.isFinite(n) && draft.trim() !== "" ? n : field.min ?? 0, field));
+    // An empty or unreadable box keeps the last estimate rather than jumping to the minimum
+    if (Number.isFinite(n) && draft.trim() !== "") onChange(clampToField(n, field));
     setDraft(null);
   };
+
+  // A gentle note while the typed value can't be used as-is
+  const draftNumber = draft === null ? NaN : Number(draft.replace(/,/g, ""));
+  const hint =
+    draft === null
+      ? null
+      : draft.trim() === ""
+        ? "Type a number to update the estimate."
+        : !Number.isFinite(draftNumber)
+          ? "That doesn't look like a number yet."
+          : hasRange && (draftNumber < field.min! || draftNumber > field.max!)
+            ? `This calculator works between ${formatBound(field.min!, field.kind)} and ${formatBound(field.max!, field.kind)} — showing ${formatBound(clampToField(draftNumber, field), field.kind)} for now.`
+            : null;
+  const helpId = `${field.key}-help`;
 
   const unit =
     field.kind === "percent" ? "%" : field.kind === "years" ? "yrs" : field.kind === "age" ? "yrs" : null;
@@ -381,17 +429,18 @@ function FieldControl({
           <input
             id={field.key}
             type="text"
-            inputMode="decimal"
+            inputMode={isWholeField(field) ? "numeric" : "decimal"}
             autoComplete="off"
             value={shown}
+            aria-invalid={hint ? true : undefined}
+            aria-describedby={helpId}
             onChange={(e) => {
-              const raw = e.target.value.replace(/[^0-9.,]/g, "");
+              const raw = e.target.value.replace(isWholeField(field) ? /[^0-9,]/g : /[^0-9.,]/g, "");
               setDraft(raw);
               const n = Number(raw.replace(/,/g, ""));
-              // Update live while typing, but only with in-range values
-              if (raw !== "" && Number.isFinite(n) && (!hasRange || (n >= field.min! && n <= field.max!))) {
-                onChange(n);
-              }
+              // Update live while typing; out-of-range values use the nearest bound so the
+              // result always matches what the note says is being shown
+              if (raw !== "" && Number.isFinite(n)) onChange(clampToField(n, field));
             }}
             onBlur={commit}
             onKeyDown={(e) => e.key === "Enter" && commit()}
@@ -404,7 +453,9 @@ function FieldControl({
       {hasRange && (
         <input
           type="range"
-          aria-label={field.label}
+          aria-label={`${field.label} slider`}
+          aria-valuetext={`${formatBound(Number.isFinite(numericValue) ? numericValue : (field.min as number), field.kind)}${unit === "yrs" ? " years" : ""}`}
+          aria-describedby={helpId}
           min={field.min}
           max={field.max}
           step={field.step ?? 1}
@@ -419,7 +470,9 @@ function FieldControl({
       )}
 
       <div className="mt-2 flex items-start justify-between gap-3">
-        {field.help ? <p className="text-xs leading-relaxed text-muted-foreground">{field.help}</p> : <span />}
+        <p id={helpId} className={cn("text-xs leading-relaxed", hint ? "font-medium text-amber-700 dark:text-amber-400" : "text-muted-foreground")}>
+          {hint ?? field.help}
+        </p>
         {hasRange && (
           <span className="tnum shrink-0 text-[11px] text-muted-foreground">
             {formatBound(field.min as number, field.kind)} – {formatBound(field.max as number, field.kind)}

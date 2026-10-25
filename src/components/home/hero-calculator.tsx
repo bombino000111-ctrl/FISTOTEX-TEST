@@ -176,7 +176,7 @@ export function HeroCalculator() {
 
       <div className="mt-6 border-t border-border pt-4">
         <Link
-          href={`/calculators/sip?monthlyInvestment=${monthly}&years=${years}`}
+          href={`/calculators/sip#monthlyInvestment=${monthly}&years=${years}`}
           className="btn-ghost w-full bg-muted px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wide"
         >
           Open full mathematical breakdown

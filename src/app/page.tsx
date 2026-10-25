@@ -38,7 +38,7 @@ export const revalidate = 600;
 /** The four seals printed under the lead — what the reader is promised. */
 const seals = [
   { icon: BadgeCheck, label: "No account needed" },
-  { icon: KeyRound, label: "Zero telemetry" },
+  { icon: KeyRound, label: "Inputs stay private" },
   { icon: Sigma, label: "Formulas disclosed" },
   { icon: IndianRupee, label: "Lakhs & crores math" },
 ];
@@ -47,12 +47,12 @@ const seals = [
 const pillars = [
   {
     no: "01",
-    kicker: "Zero server transmission",
-    title: "100% client-side memory",
+    kicker: "Private by design",
+    title: "Your numbers stay on your device",
     icon: Lock,
     tint: "#0A5C36",
-    body: "Every loan amount, monthly SIP commitment or retirement assumption you enter stays inside your device's memory. There is no user database, no tracking cookie and no sales outreach.",
-    proof: "Auditable in your network tab",
+    body: "Every loan amount, SIP or retirement assumption you type is calculated in your browser and never sent to us. There are no accounts and no user database. We show ads to stay free and, only if you allow it, use Google Analytics — neither receives the numbers you enter.",
+    proof: "Calculated in your browser",
   },
   {
     no: "02",
@@ -60,8 +60,8 @@ const pillars = [
     title: "Standard Indian math",
     icon: BookOpen,
     tint: "#C26100",
-    body: "We follow RBI reducing-balance guidelines, post office and bank quarterly compounding conventions, and the PFRDA 40% annuity threshold. Every formula is printed on the page it powers.",
-    proof: "RBI / SEBI / PFRDA aligned",
+    body: "We follow RBI reducing-balance guidelines, post office and bank quarterly compounding conventions, and PFRDA’s current annuity minimums (20% for most subscribers since December 2025). Every formula is printed on the page it powers.",
+    proof: "Formula printed on every page",
   },
   {
     no: "03",
@@ -77,7 +77,7 @@ const pillars = [
 const homepageFaqs = [
   {
     q: "Why are Fistotex calculations completely free?",
-    a: "Fistotex is an open-access reference utility. We do not sell financial products, take commissions, or act as an insurance or credit agent. The tools run on your own device, so hosting costs stay negligible.",
+    a: "Fistotex is supported by ads. We do not sell financial products, take commissions, or act as an insurance or credit agent. The tools run on your own device, so hosting costs stay small.",
   },
   {
     q: "Does Fistotex recommend specific mutual funds or stocks?",
@@ -89,7 +89,7 @@ const homepageFaqs = [
   },
   {
     q: "Where are my inputs stored when I bookmark a calculation?",
-    a: "Scenarios are encoded into the browser URL itself, for example ?monthlyInvestment=10000&years=15. Nothing is stored on a server, so you can safely bookmark a link or send it to family.",
+    a: "Scenarios are saved in the part of the link after the # sign, for example #monthlyInvestment=10000&years=15. Browsers never send that part to any server — not to us, not to analytics or ads — so you can bookmark a link or send it to family.",
   },
 ];
 
@@ -127,7 +127,7 @@ export default async function Home() {
               Household finance, tax discipline &amp; compounding
             </span>
           </div>
-          <span className="text-muted-foreground">Verified computations · Independent utility</span>
+          <span className="text-muted-foreground">Independent · Free · No sign-up</span>
         </div>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
@@ -151,24 +151,24 @@ export default async function Home() {
             </h1>
 
             <p className="max-w-2xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              Transparent mathematics, standard Indian statutory formulas, zero telemetry, entirely
-              in your browser. Built for savers, homebuyers and wealth builders who want to verify
-              the exact math behind their future.
+              Clear formulas and standard Indian conventions, calculated entirely in your browser.
+              For savers, homebuyers and anyone who wants to see the exact math behind their
+              future.
             </p>
 
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
               <Link href="/calculators" className="btn-brand px-5 py-3 text-sm">
-                Inspect all {calculators.length} calculators
+                Explore all {calculators.length} calculators
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="#market-wire" className="btn-ghost px-5 py-3 text-sm">
+              <Link href="/news" className="btn-ghost px-5 py-3 text-sm">
                 <Newspaper className="h-[18px] w-[18px] text-brand-2" />
-                Read market wire
+                Today&apos;s market news
               </Link>
             </div>
 
             {/* Reassurance seals */}
-            <ul className="grid grid-cols-2 gap-3 border-t border-border pt-6 text-xs sm:grid-cols-4">
+            <ul className="hidden grid-cols-2 gap-3 border-t border-border pt-6 text-xs sm:grid sm:grid-cols-4">
               {seals.map((seal) => {
                 const Icon = seal.icon;
                 return (
@@ -369,29 +369,29 @@ export default async function Home() {
         <div className="ledger flex flex-col items-start justify-between gap-6 p-8 sm:p-10 md:flex-row md:items-center">
           <div>
             <p className="font-mono text-xs font-bold uppercase tracking-wider text-panel-accent">
-              Open reference ledger
+              Start anywhere
             </p>
             <h2 className="font-display mt-1 mb-2 text-2xl font-bold text-white sm:text-3xl">
               Your household money, in numbers you can independently verify.
             </h2>
             <p className="max-w-xl text-xs text-white/70 sm:text-sm">
-              No advertising trackers on your inputs, no phone-number gate. Plan a home purchase,
-              evaluate SIP compounding and read the wire unfiltered.
+              No sign-up, no phone-number gate, and your inputs never leave your browser. Plan a
+              home purchase, test a SIP, or catch up on the day&apos;s markets.
             </p>
           </div>
 
           <div className="flex shrink-0 flex-col items-start gap-3">
             <Link
               href="/calculators"
-              className="btn-brand px-5 py-2.5 font-mono text-xs font-bold uppercase"
+              className="btn-brand px-5 py-2.5 text-sm"
             >
-              Launch all {calculators.length} calculators
+              Explore all {calculators.length} calculators
             </Link>
             <Link
               href="/news"
               className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-white/70 transition-colors hover:text-white"
             >
-              Or read the market wire instead
+              Or read today&apos;s market news
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>

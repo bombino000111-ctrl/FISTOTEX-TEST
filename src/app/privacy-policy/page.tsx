@@ -8,12 +8,12 @@ import { PageHeader } from "@/components/layout/section";
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description:
-    "How Fistotex handles your data: calculators run in your browser, we store no inputs, and analytics are limited to anonymous usage. Read the full privacy policy.",
+    "How Fistotex handles your data: calculators run in your browser, we never receive your inputs, and analytics run only if you allow them. Read the full privacy policy.",
   path: "/privacy-policy",
 });
 
 // Update this date whenever the policy text changes.
-const lastUpdated = new Date("2026-09-26").toLocaleDateString("en-IN", {
+const lastUpdated = new Date("2026-10-25").toLocaleDateString("en-IN", {
   year: "numeric",
   month: "long",
   day: "numeric",
@@ -43,7 +43,7 @@ const sections = [
 
       <h3>2.2 Information Collected Automatically</h3>
       <ul>
-        <li><strong>Analytics Data:</strong> We use Google Analytics 4 (GA4) to collect anonymous usage data including pages visited, time on page, device type, browser, country (based on IP), and referral source. This data does not personally identify you.</li>
+        <li><strong>Analytics Data:</strong> Only if you choose "Allow" in our cookie banner, we use Google Analytics 4 (GA4) to collect usage data such as pages visited (the page path only — never the part of a link holding calculator values), time on page, device type, browser, approximate country (from IP) and referral source. GA4 sets cookies with a random identifier; we do not combine this with your name or email. If you choose "No thanks", Google Analytics is not loaded.</li>
         <li><strong>Calculator Usage:</strong> Our financial calculators run entirely in your browser. <strong>We do not collect, store, or transmit any data you enter into calculators.</strong> All calculations happen locally on your device.</li>
         <li><strong>Technical Data:</strong> IP address, browser type, operating system, referring URLs, and access times for security and performance monitoring.</li>
       </ul>
@@ -56,7 +56,7 @@ const sections = [
         <li><strong>Advertising cookies:</strong> Set by Google and its partners to serve and measure ads. See section 5 for full detail and how to opt out.</li>
       </ul>
       <p>You can control cookies through your browser settings. Disabling essential cookies may break Site functionality.</p>
-      <p>We operate Google Consent Mode: advertising and analytics storage are switched off by default for visitors in the European Economic Area, the United Kingdom and Switzerland until consent is given through the consent banner.</p>
+      <p>We operate Google Consent Mode: advertising and analytics storage are switched off by default for every visitor until you choose "Allow" in our cookie banner. You can change your choice at any time with the "Manage cookies" link in the footer. Your choice is remembered in your browser's local storage under the key <code>fx-consent</code>.</p>
     `,
   },
   {
@@ -69,7 +69,7 @@ const sections = [
         <li>Operating and maintaining the Site</li>
         <li>Responding to your inquiries and messages</li>
         <li>Improving Site performance and user experience</li>
-        <li>Analyzing usage trends via anonymous aggregated analytics</li>
+        <li>Analysing usage trends via aggregated analytics, when you have allowed it</li>
         <li>Ensuring Site security and preventing fraud</li>
         <li>Complying with legal obligations</li>
       </ul>
@@ -83,7 +83,7 @@ const sections = [
     content: `
       <p>We may share your information in the following circumstances:</p>
       <ul>
-        <li><strong>Service Providers:</strong> We use Vercel (hosting), Google Analytics (Google LLC) for anonymous website analytics, Google AdSense (Google LLC) to display advertising, and Resend to deliver contact-form messages to our inbox. Each provider's privacy policy governs its data handling.</li>
+        <li><strong>Service Providers:</strong> We use Vercel (hosting), Google Analytics (Google LLC) for website analytics (only with your consent), Google AdSense (Google LLC) to display advertising, and Resend to deliver contact-form messages to our inbox. Each provider's privacy policy governs its data handling.</li>
         <li><strong>Legal Requirements:</strong> If required by law, court order, or government request.</li>
         <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred.</li>
         <li><strong>With Your Consent:</strong> When you explicitly agree to share information.</li>
@@ -114,13 +114,13 @@ const sections = [
         <li>Opting out stops ads being <em>personalised</em>. You will still see ads, and they will be less relevant to you.</li>
       </ul>
 
-      <h3>5.3 Consent in the EEA, UK and Switzerland</h3>
-      <p>Visitors from the European Economic Area, the United Kingdom and Switzerland are shown a consent message before any advertising or analytics cookie is set. Advertising and analytics storage remain disabled until consent is given, and consent can be changed or withdrawn at any time through that message.</p>
+      <h3>5.3 Your consent</h3>
+      <p>Every visitor is shown a cookie choice before any advertising or analytics cookie is set. Until you choose "Allow", Google serves only non-personalised ads that do not use advertising cookies, and Google Analytics is not loaded. You can change or withdraw your choice at any time with the "Manage cookies" link in the footer.</p>
 
       <h3>5.4 What advertising does not touch</h3>
       <ul>
         <li>We do not share your name, email address or contact-form messages with advertisers.</li>
-        <li><strong>Calculator inputs are never shared with advertisers.</strong> Calculations run entirely in your browser and the figures you enter are never transmitted anywhere, including to Google.</li>
+        <li><strong>Calculator inputs are never shared with advertisers.</strong> Calculations run entirely in your browser. When you share or bookmark a calculation, the figures are kept after the # sign in the link, which browsers never send to any server — including ours and Google's.</li>
         <li>We do not place ads on pages aggregating third-party news content.</li>
       </ul>
     `,
@@ -247,9 +247,9 @@ export default function PrivacyPolicyPage() {
               <h3 className="font-semibold text-foreground mb-3">Summary</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex gap-2"><span className="text-accent">✓</span> Calculator data never leaves your browser (your light/dark theme choice is saved in your browser only)</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Only contact form data and anonymous analytics collected</li>
+                <li className="flex gap-2"><span className="text-accent">✓</span> Only contact form data, plus analytics if you allow it</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> No selling of personal information</li>
-                <li className="flex gap-2"><span className="text-accent">✓</span> Google Analytics 4 for anonymous usage stats</li>
+                <li className="flex gap-2"><span className="text-accent">✓</span> Google Analytics 4 and personalised ads only with your consent</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> Google AdSense ads on some pages — never on aggregated news, and never using your calculator inputs</li>
                 <li className="flex gap-2"><span className="text-accent">✓</span> You can request data deletion anytime</li>
               </ul>

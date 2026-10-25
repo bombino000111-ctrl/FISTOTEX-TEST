@@ -25,7 +25,7 @@ const sections = [
     title: "1. Acceptance of Terms",
     icon: FileText,
     content: `
-      <p>By accessing and using <strong>${siteConfig.name}</strong> ("the Site," "we," "us," or "our") at <strong>${siteConfig.url}</strong>, you ("User," "you," or "your") agree to be bound by these Terms and Conditions ("Terms"), including our <a href="/privacy-policy" className="underline">Privacy Policy</a> and <a href="/disclaimer" className="underline">Disclaimer</a>.</p>
+      <p>By accessing and using <strong>${siteConfig.name}</strong> ("the Site," "we," "us," or "our") at <strong>${siteConfig.url}</strong>, you ("User," "you," or "your") agree to be bound by these Terms and Conditions ("Terms"), including our <a href="/privacy-policy" class="underline">Privacy Policy</a> and <a href="/disclaimer" class="underline">Disclaimer</a>.</p>
       <p>If you do not agree with any part of these Terms, you must not use the Site.</p>
       <p>We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting with an updated "Last Updated" date. Your continued use of the Site after changes constitutes acceptance.</p>
     `,
@@ -219,10 +219,10 @@ const sections = [
     content: `
       <p>If you have questions about these Terms and Conditions, please contact us:</p>
       <ul>
-        <li>Email: <a href="mailto:${siteConfig.contactEmail}" className="underline">${siteConfig.contactEmail}</a></li>
-        <li>Website: <a href="${siteConfig.url}/contact" className="underline">${siteConfig.url}/contact</a></li>
+        <li>Email: <a href="mailto:${siteConfig.contactEmail}" class="underline">${siteConfig.contactEmail}</a></li>
+        <li>Website: <a href="${siteConfig.url}/contact" class="underline">${siteConfig.url}/contact</a></li>
       </ul>
-      <p>For privacy-related inquiries, see our <a href="/privacy-policy" className="underline">Privacy Policy</a>.</p>
+      <p>For privacy-related inquiries, see our <a href="/privacy-policy" class="underline">Privacy Policy</a>.</p>
     `,
   },
 ];

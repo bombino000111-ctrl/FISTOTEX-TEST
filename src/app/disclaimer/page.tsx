@@ -41,7 +41,7 @@ const sections = [
         <li>These estimates should not be considered as recommendations to buy, sell, or hold any financial product.</li>
         <li>You should not make any financial decisions based solely on the information or calculations from this Site.</li>
       </ul>
-      <p className="font-semibold">Always consult with a qualified financial advisor, certified financial planner (CFP), chartered accountant (CA), or tax professional before making any investment, insurance, tax, or financial planning decisions.</p>
+      <p class="font-semibold">Always consult with a qualified financial advisor, certified financial planner (CFP), chartered accountant (CA), or tax professional before making any investment, insurance, tax, or financial planning decisions.</p>
     `,
   },
   {
@@ -99,11 +99,11 @@ const sections = [
     title: "Market Risk Warning",
     icon: TrendingUp,
     content: `
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 my-6">
-        <h3 className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5" /> <strong>Mutual Fund Investments Are Subject to Market Risks</strong>
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 my-6">
+        <h3 class="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+          <strong>Mutual Fund Investments Are Subject to Market Risks</strong>
         </h3>
-        <p className="text-amber-700">Read all scheme-related documents carefully before investing.</p>
+        <p class="text-amber-700">Read all scheme-related documents carefully before investing.</p>
       </div>
 
       <ul>
@@ -126,7 +126,7 @@ const sections = [
         <li>Does not consider your specific tax situation, residential status, or deductions</li>
         <li>Should not be relied upon for tax filing or planning</li>
       </ul>
-      <p className="font-semibold">Consult a qualified chartered accountant (CA) or tax advisor for personalized tax advice.</p>
+      <p class="font-semibold">Consult a qualified chartered accountant (CA) or tax advisor for personalized tax advice.</p>
     `,
   },
   {
@@ -208,8 +208,8 @@ const sections = [
     content: `
       <p>If you have questions about this Disclaimer, please contact us:</p>
       <ul>
-        <li>Email: <a href="mailto:${siteConfig.contactEmail}" className="underline">${siteConfig.contactEmail}</a></li>
-        <li>Website: <a href="${siteConfig.url}/contact" className="underline">${siteConfig.url}/contact</a></li>
+        <li>Email: <a href="mailto:${siteConfig.contactEmail}" class="underline">${siteConfig.contactEmail}</a></li>
+        <li>Website: <a href="${siteConfig.url}/contact" class="underline">${siteConfig.url}/contact</a></li>
       </ul>
     `,
   },

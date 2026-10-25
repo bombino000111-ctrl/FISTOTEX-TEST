@@ -42,13 +42,6 @@ export const analytics = {
       calculator_name: calculatorName,
     }),
 
-  calculatorCalculate: (calculatorId: string, calculatorName: string, inputs: Record<string, number>) =>
-    trackEvent("calculator_calculate", {
-      calculator_id: calculatorId,
-      calculator_name: calculatorName,
-      ...inputs,
-    }),
-
   calculatorShare: (calculatorId: string, method: "copy" | "twitter" | "facebook" | "linkedin") =>
     trackEvent("calculator_share", {
       calculator_id: calculatorId,

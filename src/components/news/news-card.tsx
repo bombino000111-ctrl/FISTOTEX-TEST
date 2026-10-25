@@ -1,4 +1,6 @@
 import type * as React from "react";
+import Link from "next/link";
+import { calculatorsForTopic } from "@/lib/news/topics";
 import type { NewsArticle } from "@/types/news";
 import { publisherTint } from "@/lib/news/publishers";
 import { formatRelativeTime, cn } from "@/lib/utils";
@@ -19,6 +21,7 @@ const topic = (c?: string) => (c ? c.replace(/-/g, " ").replace(/^\w/, (m) => m.
  */
 export function NewsCard({ article, featured = false, className }: NewsCardProps) {
   const t = topic(article.category);
+  const tools = calculatorsForTopic(article.category);
 
   return (
     <article
@@ -59,6 +62,22 @@ export function NewsCard({ article, featured = false, className }: NewsCardProps
           )}
         >
           {article.summary}
+        </p>
+      )}
+
+      {tools.length > 0 && (
+        // Sits above the headline's full-card link so both stay clickable
+        <p className="relative z-20 mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Work out what it means for you:</span>
+          {tools.map((tool) => (
+            <Link
+              key={tool.id}
+              href={`/calculators/${tool.id}`}
+              className="inline-flex min-h-8 items-center rounded-full border border-rule px-3 font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            >
+              {tool.label}
+            </Link>
+          ))}
         </p>
       )}
     </article>

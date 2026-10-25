@@ -13,9 +13,9 @@ import { siteConfig } from "@/config/site";
 export const revalidate = 3600;
 
 export const metadata = pageMetadata({
-  title: "Market Calendar — Upcoming Events That Move Indian Markets",
+  title: "Market Calendar: RBI, CPI, GDP & Results Dates",
   description:
-    "Dates for RBI MPC decisions, the US Fed FOMC, India GDP, CPI and IIP releases, the Union Budget and earnings season — each with its official source.",
+    "Upcoming RBI rate decisions, inflation and GDP releases, the Budget and company results dates, with what each means for savers, borrowers and investors. Add any event to your calendar.",
   path: "/market-calendar",
 });
 

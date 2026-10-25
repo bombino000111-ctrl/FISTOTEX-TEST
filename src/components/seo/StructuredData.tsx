@@ -46,11 +46,6 @@ export function StructuredData({ type, data = {} }: StructuredDataProps) {
       description: siteConfig.description,
       inLanguage: "en-IN",
       publisher: { "@id": orgId },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: { "@type": "EntryPoint", urlTemplate: `${base}/news?q={search_term_string}` },
-        "query-input": "required name=search_term_string",
-      },
     }),
 
     Organization: () => ({

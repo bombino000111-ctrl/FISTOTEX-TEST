@@ -13,7 +13,7 @@ import { siteConfig } from "@/config/site";
 export const revalidate = 3600;
 
 export const metadata = pageMetadata({
-  title: "Earnings Results — Indian & US Companies, YoY and QoQ Growth",
+  title: "Quarterly Results: India & US Companies",
   description:
     "Latest quarterly results for TCS, Reliance, HDFC Bank, Infosys, Apple, Microsoft, Nvidia and more: revenue, net profit and EPS with year-on-year and quarter-on-quarter growth, sources and next results dates.",
   path: "/earnings",

@@ -1,0 +1,68 @@
+# Collects quarterly results for every NSE-listed company into the
+# `nse-data` branch, which the site reads (src/lib/nse-results.ts).
+# Data lives on its own branch so routine updates never redeploy the site
+# or clutter main's history.
+name: NSE results data
+
+on:
+  schedule:
+    # Every 3 hours; results cluster after market close in results season
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      max_filings:
+        description: "XBRL filings to read this run (about 1 per second)"
+        default: "1500"
+  push:
+    branches: [feature/gilt-and-live-data, main]
+    paths:
+      - "scripts/nse-results/**"
+      - ".github/workflows/nse-results.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nse-results
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check out the data branch
+        run: |
+          git config user.name "fistotex-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin nse-data >/dev/null; then
+            git fetch --depth=1 origin nse-data
+            git worktree add data FETCH_HEAD
+            git -C data switch -c nse-data
+          else
+            git worktree add --detach data
+            git -C data switch --orphan nse-data
+          fi
+
+      - name: Collect new and historical filings
+        env:
+          # Push and manual runs do a big backfill; scheduled runs top up
+          MAX_FILINGS: ${{ github.event.inputs.max_filings || (github.event_name == 'push' && '6000') || '1500' }}
+        run: node scripts/nse-results/collect.mjs data
+
+      - name: Publish
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No new filings."
+            exit 0
+          fi
+          git commit -q -m "data: NSE results $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git push origin nse-data

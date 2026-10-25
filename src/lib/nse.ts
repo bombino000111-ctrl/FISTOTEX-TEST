@@ -44,7 +44,15 @@ function parseNseDate(s: string): string | null {
 
 /** Tidy NSE's legal names for display: "Infosys Limited" → "Infosys". */
 export function shortCompanyName(name: string) {
-  return name.replace(/\s+(Limited|Ltd\.?)$/i, "").trim();
+  const short = name.replace(/\s+(Limited|Ltd\.?)$/i, "").trim();
+  // Some filings arrive in capitals ("TATA CONSUMER PRODUCTS"); keep short acronyms like NTPC
+  if (short !== short.toUpperCase()) return short;
+  return short
+    .split(/\s+/)
+    .map((w) =>
+      ["AND", "OF", "THE"].includes(w) ? w.toLowerCase() : w.length <= 4 ? w : w.charAt(0) + w.slice(1).toLowerCase()
+    )
+    .join(" ");
 }
 
 async function sessionCookie(): Promise<string | null> {

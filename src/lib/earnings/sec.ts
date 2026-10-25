@@ -41,8 +41,10 @@ async function concept(cik: number, tag: string, unit: string): Promise<Fact[]> 
       { headers: HEADERS, next: { revalidate: REVALIDATE }, signal: AbortSignal.timeout(10000) }
     );
     if (!res.ok) return [];
-    const data = (await res.json()) as { units?: Record<string, Fact[]> };
-    return data.units?.[unit] ?? [];
+    const data = (await res.json()) as { units?: Record<string, unknown> };
+    // Usually an array of facts, but some filers' concepts come back in another shape
+    const facts = data.units?.[unit];
+    return Array.isArray(facts) ? (facts as Fact[]) : [];
   } catch {
     return [];
   }

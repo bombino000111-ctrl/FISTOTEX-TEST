@@ -18,6 +18,8 @@ import { StructuredData } from "@/components/seo/StructuredData";
 import { HeroCalculator } from "@/components/home/hero-calculator";
 import { HeadlineTicker } from "@/components/home/headline-ticker";
 import { GazetteIndex } from "@/components/home/gazette-index";
+import { GoalJourneys } from "@/components/calculators/goal-journeys";
+import { RecentStrip } from "@/components/calculators/recent-strip";
 import { DispatchCard } from "@/components/news/dispatch-card";
 import { getNews } from "@/lib/news/rss";
 import type { NewsArticle } from "@/types/news";
@@ -193,20 +195,23 @@ export default async function Home() {
       <section className="container mx-auto px-4 py-16 sm:py-24">
         <div className="rule-heavy-b mb-10 flex flex-col gap-4 pb-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="eyebrow eyebrow-plain mb-1">Statutory calculation directory</p>
+            <p className="eyebrow eyebrow-plain mb-1">Calculators</p>
             <h2 className="font-display text-3xl font-normal text-foreground sm:text-4xl">
               All {calculators.length} financial calculators
             </h2>
             <p className="mt-1 max-w-xl text-sm text-ink-2">
-              Grouped by the household decision you are evaluating. Every computation prints its
-              formula and sends nothing to a server.
+              Grouped by the decision in front of you. Every one shows its formula and runs in your
+              browser.
             </p>
           </div>
           <p className="flex shrink-0 items-center gap-2 font-mono text-xs text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-accent" />
-            {calculators.length} of {calculators.length} active · FY 2025–26
+            FY 2025–26 assumptions
           </p>
         </div>
+
+        <RecentStrip className="mb-10" />
+        <GoalJourneys className="mb-14" />
 
         <GazetteIndex />
       </section>

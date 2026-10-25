@@ -1,12 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { RotateCcw, Link2, Check, AlertTriangle } from "lucide-react";
+import { RotateCcw, Link2, Check, AlertTriangle, Bookmark, BookmarkCheck } from "lucide-react";
 import { getCalculator, type CalcField } from "@/lib/calculators/registry";
 import { GrowthChart } from "@/components/calculators/growth-chart";
 import { formatCompactCurrency, cn } from "@/lib/utils";
 import { formatOutput } from "@/lib/calculators/format";
 import { trackEvent } from "@/lib/analytics";
+import { nextStepsFor } from "@/lib/calculators/next-steps";
+import { recordRecent, saveScenario } from "@/lib/scenarios";
+import { NextSteps, SavedScenarios } from "@/components/calculators/result-extras";
 
 type Values = Record<string, number | string>;
 
@@ -58,6 +61,7 @@ export function CalculatorRunner({ id }: { id: string }) {
   // null until the visitor changes something; then their edits take over
   const [edits, setEdits] = React.useState<Values | null>(null);
   const [copied, setCopied] = React.useState<"idle" | "done" | "failed">("idle");
+  const [saved, setSaved] = React.useState(false);
   const tracked = React.useRef(false);
 
   const values = React.useMemo<Values>(
@@ -89,6 +93,8 @@ export function CalculatorRunner({ id }: { id: string }) {
     if (!def || edits === null) return;
     const t = setTimeout(() => {
       window.history.replaceState(null, "", `${window.location.pathname}${scenarioQuery ? `#${scenarioQuery}` : ""}`);
+      // Remembered so the homepage can offer "pick up where you left off"
+      recordRecent({ calcId: def.id, calcName: def.name, query: scenarioQuery });
     }, 300);
     return () => clearTimeout(t);
   }, [def, edits, scenarioQuery]);
@@ -103,6 +109,10 @@ export function CalculatorRunner({ id }: { id: string }) {
 
   const reset = () => {
     if (def) setEdits(def.defaults);
+  };
+
+  const loadScenario = (query: string) => {
+    if (def) setEdits(valuesFromSearch(query, def.fields, def.defaults));
   };
 
   const copyLink = async () => {
@@ -144,6 +154,22 @@ export function CalculatorRunner({ id }: { id: string }) {
   // The last emphasised output is the headline figure
   const headline = [...outputs].reverse().find((o) => o.emphasis) ?? outputs[outputs.length - 1];
   const rest = outputs.filter((o) => o !== headline);
+  const headlineNumber = typeof headline?.value === "number" ? headline.value : 0;
+  const steps = validation || !headline ? [] : nextStepsFor(def.id, values, headlineNumber);
+
+  const save = () => {
+    if (!headline) return;
+    saveScenario({
+      calcId: def.id,
+      calcName: def.name,
+      query: scenarioQuery,
+      label: headline.label,
+      value: formatOutput(headline.value, headline.kind),
+    });
+    trackEvent("scenario_save", { calculator_name: def.id });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
   const base = outputs.find((o) => o.split === "base");
   const gain = outputs.find((o) => o.split === "gain");
   const showDonut =
@@ -156,6 +182,16 @@ export function CalculatorRunner({ id }: { id: string }) {
         <div className="mb-8 flex items-center justify-between gap-3">
           <h2 className="text-lg font-bold text-foreground">Your inputs</h2>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={save}
+              disabled={!headline || !!validation}
+              aria-label="Save this scenario in this browser"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground disabled:opacity-50"
+            >
+              {saved ? <BookmarkCheck className="h-3.5 w-3.5 text-accent" /> : <Bookmark className="h-3.5 w-3.5" />}
+              <span className={saved ? undefined : "hidden sm:inline"}>{saved ? "Saved" : "Save"}</span>
+            </button>
             <button
               type="button"
               onClick={copyLink}
@@ -275,6 +311,10 @@ export function CalculatorRunner({ id }: { id: string }) {
             />
           </div>
         )}
+
+        <NextSteps from={def.id} steps={steps} />
+
+        <SavedScenarios calcId={def.id} currentQuery={scenarioQuery} onLoad={loadScenario} />
 
         <p className="text-xs leading-relaxed text-muted-foreground">
           Figures are estimates based on the inputs and assumptions shown. Actual outcomes will

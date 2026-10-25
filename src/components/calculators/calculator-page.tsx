@@ -18,6 +18,7 @@ import {
 import { siteConfig } from "@/config/site";
 import { calculatorSeo } from "@/lib/calculators/seo-content";
 import { formatInput, formatOutput } from "@/lib/calculators/format";
+import { nextStepGraph } from "@/lib/calculators/next-steps";
 
 export function CalculatorPage({ id }: { id: string }) {
   const def = getCalculator(id);
@@ -35,13 +36,16 @@ export function CalculatorPage({ id }: { id: string }) {
   const base = siteConfig.url.replace(/\/$/, "");
   const pageUrl = `${base}${calculatorPath(def.id)}`;
 
-  const related = calculators
-    .filter((c) => c.id !== def.id && c.category === def.category)
+  // Where this calculator naturally leads first, then its category, then the rest
+  const leadsTo = (nextStepGraph()[def.id] ?? []).map((to) => getCalculator(to));
+  const suggestions = [
+    ...leadsTo,
+    ...calculators.filter((c) => c.category === def.category),
+    ...calculators,
+  ]
+    .filter((c): c is NonNullable<typeof c> => !!c && c.id !== def.id)
+    .filter((c, i, arr) => arr.findIndex((x) => x.id === c.id) === i)
     .slice(0, 3);
-  const extra = calculators.filter((c) => c.id !== def.id).slice(0, 3 - related.length);
-  const suggestions = [...related, ...extra].filter(
-    (c, i, arr) => arr.findIndex((x) => x.id === c.id) === i
-  );
 
   // The trail runs through the calculator's category even though the URL is
   // flat (/calculators/sip). That is deliberate: it gives every category page
@@ -202,6 +206,29 @@ export function CalculatorPage({ id }: { id: string }) {
         </div>
       </Section>
 
+      {/* Related */}
+      {suggestions.length > 0 && (
+        <Section
+          eyebrow="Keep going"
+          title="Related calculators"
+          action={
+            <Link
+              href="/calculators"
+              className="btn-ghost h-11 px-5 text-sm"
+            >
+              All calculators
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        >
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {suggestions.map((c) => (
+              <CalculatorCard key={c.id} calc={c} />
+            ))}
+          </div>
+        </Section>
+      )}
+
       {/* In-content ad: sits after the method explainer, so a visitor has
           reached real content before meeting an ad. */}
       <Section className="py-0">
@@ -227,33 +254,10 @@ export function CalculatorPage({ id }: { id: string }) {
         </Section>
       )}
 
-      {/* Ad above the related-calculator grid */}
+      {/* Ad after the FAQ, below everything a visitor came for */}
       <Section className="py-8">
         <AdUnit format="display" minHeight={280} />
       </Section>
-
-      {/* Related */}
-      {suggestions.length > 0 && (
-        <Section
-          eyebrow="Keep going"
-          title="Related calculators"
-          action={
-            <Link
-              href="/calculators"
-              className="btn-ghost h-11 px-5 text-sm"
-            >
-              All calculators
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          }
-        >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {suggestions.map((c) => (
-              <CalculatorCard key={c.id} calc={c} />
-            ))}
-          </div>
-        </Section>
-      )}
 
       {/* Disclaimer */}
       <Section className="py-12">
